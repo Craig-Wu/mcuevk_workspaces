@@ -6,6 +6,7 @@ ra/
 ra_cfg/
 ra_gen/
 JLinkLog.log
+build/
 Listings/
 Objects/
 JLinkLog.txt
