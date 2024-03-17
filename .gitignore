@@ -1,13 +1,13 @@
 # RA FSP Work Directories for e2studio and Keil/MDK
 
-/Debug
-/Release
-/ra
-/ra_cfg
-/ra_gen
+Debug/
+Release/
+ra/
+ra_cfg/
+ra_gen/
 JLinkLog.log
-/Listings
-/Objects
+Listings/
+Objects/
 JLinkLog.txt
 
 # Prerequisites
