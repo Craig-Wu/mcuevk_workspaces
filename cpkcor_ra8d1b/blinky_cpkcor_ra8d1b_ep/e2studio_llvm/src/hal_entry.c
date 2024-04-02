@@ -33,7 +33,7 @@ extern bsp_leds_t g_bsp_leds;
 void hal_entry (void)
 {
 #if BSP_TZ_SECURE_BUILD
-
+	// comment 1701 Jin
     /* Enter non-secure code */
     R_BSP_NonSecureEnter();
 #endif
