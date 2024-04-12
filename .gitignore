@@ -1,4 +1,4 @@
-# RA FSP Work Directories for e2studio and Keil/MDK
+# RA FSP Work Directories for e2studio and keil/mdk
 
 Debug/
 Release/
@@ -9,8 +9,11 @@ JLinkLog.log
 build/
 Listings/
 Objects/
-RTE/
 JLinkLog.txt
+.api_xml
+.gitignore
+.secure_azone
+.secure_xml
 
 # Prerequisites
 *.d
