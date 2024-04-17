@@ -138,11 +138,6 @@ vst1q_u8(…) | 在给定地址存储uint8x16_t的函数。 | 存储整个128位
 
 ![](pic_in_md/helium_result_4.jpg)
 
-#### 1.4.1 用户选择 opsi_b 模块的模式：SPI 1S-1S-1S 协议模式。
-#### 1.4.2 擦除QSPI FLASH 的一个扇区。
-#### 1.4.3 将数据写入 QSPI FLASH。
-#### 1.4.4 从QSPI FLASH读回数据，并进行比较，确认写入成功。也可以从Memory窗口看到写入的数据。
-![alt text](Picture4-1.png)
 
 ## 2. 支持的电路板：
 CPKCOR-RA8D1B
@@ -155,17 +150,3 @@ CPKCOR-RA8D1B
 ## 4. 硬件连接：
 通过Type-C USB 电缆将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC。
 
-## 5. 使用JFlash Lite对外部QSPI Flash进行操作：
-运行JFlash Lite
-
-添加需要烧录的.srec文件，可以在Log窗口看到改烧录文件中数据所在地址范围和大小。
-
-![alt text](Picture5-1.png)
-
-由于该核心板上QSPI Flash使用的的片选信号为CS1。
-
-![alt text](Picture6-2.png)
-
-所以，对应的QSPI. FLASH的地址范围为0x9000_0000~0x9FFF_FFFF。
-
-![alt text](Picture7-1.png)
