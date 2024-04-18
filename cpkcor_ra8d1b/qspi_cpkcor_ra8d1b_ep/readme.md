@@ -22,14 +22,19 @@
 	This example project demonstrates basic functionalities of OSPI_B driver on Renesas RA MCUs based on Renesas FSP. 
 
 2. Supported Boards:
+
 	CPKCOR-RA8D1B
    
 3. Hardware Requirement:
+
 	1 x Renesas RA core boards: CPKCOR-RA8D1B
+
 	1 x Micro USB cable
 
 4. Hardware Connections:
+
 	Connect the USB Debug port on the CPKCOR-RA8D1B board to the host PC via a type-C USB cable.
+
 
 For details, please refer to the following file.
 
