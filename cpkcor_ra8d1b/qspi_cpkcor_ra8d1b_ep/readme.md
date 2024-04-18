@@ -17,25 +17,36 @@
 * 
 **********************************************************************************************************************/
 
-1. Project Overview:
+1. 工程概述：
 
-	This example project demonstrates basic functionalities of OSPI_B driver on Renesas RA MCUs based on Renesas FSP. 
+	该示例工程演示了基于瑞萨 FSP的瑞萨RA MCU上OSPI_B驱动程序的基本功能。
 
-2. Supported Boards:
+2. 支持的电路板：
 
 	CPKCOR-RA8D1B
    
-3. Hardware Requirement:
+3. 硬件要求：
 
-	1 x Renesas RA core boards: CPKCOR-RA8D1B
+	1块Renesas RA8核心板：CPKCOR-RA8D1B
 
-	1 x Micro USB cable
+	1根Type-C USB线	
 
-4. Hardware Connections:
+4. 硬件连接：
 
-	Connect the USB Debug port on the CPKCOR-RA8D1B board to the host PC via a type-C USB cable.
+	通过 Type-C USB 电缆将 CPKCOR-RA8D1B 板上的 USB 调试端口连接到主机 PC。
 
+5. 硬件设置注意事项
+   
 
-For details, please refer to the following file.
+6. 软件环境：
+   
+    ● e2studio v2024-01
+
+    ● FSP v5.2.0
+
+	● LLVM Embedded Toolchain for Arm v17.0.1
+	   
+
+详细内容，请参考下面的文件。
 
 [qspi_cpkcor_ra8d1b_ep_readme](qspi_cpkcor_ra8d1b_ep_readme.md)
