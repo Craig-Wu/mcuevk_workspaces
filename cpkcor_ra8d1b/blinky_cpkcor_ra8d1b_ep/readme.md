@@ -1,10 +1,3 @@
-/*
-
-Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-
-SPDX-License-Identifier: BSD-3-Clause
-
-*/
 
 #### 工程概述:
 * 该示例工程演示了基于瑞萨FSP的RA MCU控制闪灯功能。
