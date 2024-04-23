@@ -1,21 +1,16 @@
 /***********************************************************************************************************************
  
-Copyright [2020-2024] Renesas Electronics Corporation and/or its affiliates.  All Rights Reserved.
+Copyright [2020-2024] Renesas Electronics Corporation and/or its affiliates.  保留所有权利。
 
-This software is supplied by Renesas Electronics China and may only be used with products of Renesas Electronics Corp. 
-and its affiliates (“Renesas”).  No other uses are authorized.  This software is protected under all applicable laws, 
-including copyright laws.
+本软件由瑞萨电子（中国）有限公司提供且仅可与Renesas Electronics Corporation及其关联方（“瑞萨”）的产品一起使用。
+未授权其他用途。本软件受所有适用法律的保护，包括著作权法。
 
-Renesas reserves the right to change or discontinue this software.
+瑞萨保留更改或终止软件的权利。
   
-THE SOFTWARE IS DELIVERED TO YOU “AS IS,” AND RENESAS MAKES NO REPRESENTATIONS OR WARRANTIES, AND TO THE FULLEST EXTENT 
-PERMISSIBLE UNDER APPLICABLE LAW,DISCLAIMS ALL WARRANTIES, WHETHER EXPLICITLY OR IMPLICITLY, INCLUDING WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT, WITH RESPECT TO THE SOFTWARE.  TO THE MAXIMUM 
-EXTENT PERMITTED BY LAW, IN NO EVENT WILL RENESAS BE LIABLE TO YOU IN CONNECTION WITH THE SOFTWARE (OR ANY PERSON OR 
-ENTITY CLAIMING RIGHTS DERIVED FROM YOU) FOR ANY LOSS, DAMAGES, OR CLAIMS WHATSOEVER, INCLUDING, WITHOUT LIMITATION, 
-ANY DIRECT, CONSEQUENTIAL, SPECIAL, INDIRECT, PUNITIVE, OR INCIDENTAL DAMAGES; ANY LOST PROFITS, OTHER ECONOMIC DAMAGE, 
-PROPERTY DAMAGE, OR PERSONAL INJURY; AND EVEN IF RENESAS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH LOSS,DAMAGES, 
-CLAIMS OR COSTS.
+该软件按“原样”提供，瑞萨在适用法律允许的最大范围内，不提供任何所有明示或暗示的陈述或保证，包括适销性、针对特定目的的
+适用性，和不侵权。 在法律允许的最大范围内，在任何情况下，瑞萨均不对您（或任何主张您的权利的任何个人或实体）承担与本软件
+相关的任何损失、损害或索赔的责任，包括但不限于任何直接、后果性、特殊、间接、惩罚性或附带损害； 任何利润损失、其他经济损失、
+财产损失或人身伤害；即使瑞萨已被告知发生此类损失、损害、索赔或费用的可能性。
   
 **********************************************************************************************************************/
 
