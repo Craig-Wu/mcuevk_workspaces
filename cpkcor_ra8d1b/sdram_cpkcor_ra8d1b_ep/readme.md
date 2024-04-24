@@ -32,12 +32,12 @@
 * 打开串口助手，设置波特率为115200，8bit 位宽，1bit停止位
 * 看输出结果：对SDRAM起始地址 0x68000000的4K空间进行读写测试，32bit位宽访问，所以总的大小是16Kbyte
 * SDRAM read/write test start!
-  SDRAM write 4096 bytes data finished!
-  SDRAM read 4096 bytes data finished!
-  SDRAM read back data:
-  xxxxxx
-  ...
-  xxxxxx
-  SDRAM test pass!
+* SDRAM write 4096 bytes data finished!
+* SDRAM read 4096 bytes data finished!
+* SDRAM read back data:
+* xxxxxx
+* ...
+* xxxxxx
+* SDRAM test pass!
 
 
