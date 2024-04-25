@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>qspi_cpkcor_ra8d1b_ep</name>
+	<name>qspi_cpkcor_ra8d1b_ep_llvm</name>
 	<comment></comment>
 	<projects>
 	</projects>
