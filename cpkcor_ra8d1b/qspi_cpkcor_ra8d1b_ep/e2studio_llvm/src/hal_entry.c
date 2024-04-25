@@ -1,3 +1,9 @@
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
+
 #include "hal_data.h"
 
 #define LED1_ON     R_PORT4->PCNTR3_b.POSR = (1 << 9)  // LED_LD9  On,  High
