@@ -1,2 +1,7 @@
-# workspaces
-Workspaces for Renesas MCU demo codes
+# 瑞萨MCU EVK 样例程序提交仓库
+
+本仓库专门用于EVK样例程序的提交，不作为对外发布用。 如果您希望为瑞萨的EVK提供样例程序或参考应用代码，可以向瑞萨申请本仓库的合作者权限。
+
+具体的样例程序提交流程，请参考以下文档。
+
+
