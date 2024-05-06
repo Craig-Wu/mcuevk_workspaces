@@ -1,4 +1,4 @@
-### GitHub准备（注册账号&安装GitHub Desktop）
+### I. GitHub准备（注册账号&安装GitHub Desktop）
 
 * 在[Github官网](https://github.com/) 注册账号
 * 记录登录名和密码
@@ -16,7 +16,7 @@
 
    ![alt text](images/github_ops/image-3.png)
 
-### Clone repo to local
+### II. Clone repo to local
 
 * File > Clone repository…
 * Clone a repository > URL
@@ -50,11 +50,9 @@
     ![alt text](images/github_ops/image-5.png)
 
 
-### 按照样例代码开发提交流程创建readme.md并开发样例工程
+### III. 按照样例代码开发提交流程创建readme.md并开发样例工程
 
-
-
-### 如果您使用非代码仓库目录进行样例工程的开发，请先将样例工程拷贝到本地代码仓库
+如果您使用非代码仓库目录进行样例工程的开发，请先将样例工程拷贝到本地代码仓库
 
 1. 在本地仓库的样例代码文件夹中添加示例工程文件夹
    
@@ -75,7 +73,7 @@
    ![alt text](images/github_ops/image-7.png)
 
 
-### Commit and Push 
+### IV. Commit and Push 
 
 1. 在GitHub Desktop Changes界面确认要上传的内容，红框内输入本次提交的相关说明，点击Commit to main
 
