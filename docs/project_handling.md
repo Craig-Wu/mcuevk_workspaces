@@ -32,7 +32,11 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
 
  ![alt text](images/project_handling/image-1.png)
 
-2. 创建工程。您可以在本地任意目录（例如e2studio的缺省Workspace目录）创建工程，也可以直接在本地代码仓库的存储位置创建工程。如果使用e2studio，请将工程名称定为`样例名称_开发板名称_ep_编译器`，使用非e2studio缺省的Workspace目录时需要手动指定工程目录。这主要是为了可以在e2studio中同时打开使用不同编译器的相同工程，在e2studio的界面上可读性也比较强。如果您创建的是RA8 MCU的示例工程，请选择FSP5.3.0或更高版本，使用LLVM编译器。
+2. 创建工程。您可以在本地任意目录（例如e2studio的缺省Workspace目录）创建工程，也可以直接在本地代码仓库的存储位置创建工程。
+   
+   如果使用e2studio，请将工程名称定为`样例名称_开发板名称_ep_编译器`，使用非e2studio缺省的Workspace目录时需要手动指定工程目录。这主要是为了可以在e2studio中同时打开使用不同编译器的相同工程，在e2studio的界面上可读性也比较强。
+   
+   如果您创建的是RA8 MCU的示例工程，请选择FSP5.3.0或更高版本，使用LLVM编译器。
 
    ![alt text](images/project_handling/image-3.png)
 
@@ -44,9 +48,6 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
    ![alt text](images/project_handling/image-5.png)
 
 4. 检查/添加样例代码的License信息。从FSP 5.3.0起，FSP代码改为使用BSD License，如果您的公司对License没有特别的要求，请也使用BSD License，在每个源文件的头部请确保有License信息，瑞萨的BSD License的样例如下，请对应进行修改
-   * 如果您公司对样例代码的License有特定的要求，请先联系瑞萨确认是否可以将放到本代码仓库
-   * 请不要在样例程序中使用GPL License的代码
-
    ```
     /*
     * Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
@@ -54,7 +55,9 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
     * SPDX-License-Identifier: BSD-3-Clause
     */
    ```
-
+   * 如果您公司对样例代码的License有特定的要求，请先联系瑞萨确认是否可以将放到本代码仓库
+   * 请不要在样例程序中使用GPL License的代码
+  
 5. 如有必要，编写示例工程及样例代码的说明文件和使用教程，文件名为`样例代码目录名_readme.md`，图片统一存放在images目录下。下图为QSPI Flash样例代码目录下的说明文件
    
    ![alt text](images/project_handling/image-6.png)
@@ -66,6 +69,6 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
 
    ![alt text](images/project_handling/image-2.png)
 
-瑞萨人员看到更新完成的readme文件(样例代码目录名_readme.md)，就会将项目搬移到[发布样例代码的Github仓库](https://github.com/renesas/cpk_examples)
+瑞萨人员看到更新完成的readme文件，就会将项目搬移到[发布样例代码的Github仓库](https://github.com/renesas/cpk_examples)
 
 如果您不熟悉Git的使用，请查看针对此样例代码开发流程的[Github使用教程](github_ops.md)
