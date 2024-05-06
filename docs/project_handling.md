@@ -58,9 +58,6 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
    * 如果您公司对样例代码的License有特定的要求，请先联系瑞萨确认是否可以将放到本代码仓库
    * 请不要在样例程序中使用GPL License的代码
   
-   * 如果您公司对样例代码的License有特定的要求，请先联系瑞萨确认是否可以将放到本代码仓库
-   * 请不要在样例程序中使用GPL License的代码
-  
 5. 如有必要，编写示例工程及样例代码的说明文件和使用教程，文件名为`样例代码目录名_readme.md`，图片统一存放在images目录下。下图为QSPI Flash样例代码目录下的说明文件
    
    ![alt text](images/project_handling/image-6.png)
@@ -70,7 +67,7 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
 开发测试完成后，更新readme.md，并推送样例代码到远程仓库。
    * 如果您不是在本地仓库目录直接开发，请先将示例工程导出到本地仓库对应的位置
 
-   ![alt text](images/project_handling/image-2.png)
+  ![alt text](images/project_handling/image-2.png)
 
 瑞萨人员看到更新完成的readme文件，就会将项目搬移到[发布样例代码的Github仓库](https://github.com/renesas/cpk_examples)
 
