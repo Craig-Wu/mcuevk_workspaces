@@ -497,10 +497,10 @@
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/qspi_cpkcor_ra8d1b_ep"/>
+			<resource resourceType="PROJECT" workspacePath="/qspi_cpkcor_ra8d1b_ep_llvm"/>
 		</configuration>
 		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/qspi_cpkcor_ra8d1b_ep"/>
+			<resource resourceType="PROJECT" workspacePath="/qspi_cpkcor_ra8d1b_ep_llvm"/>
 		</configuration>
 	</storageModule>
 </cproject>

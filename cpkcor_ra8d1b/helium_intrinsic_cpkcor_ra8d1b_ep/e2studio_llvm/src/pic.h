@@ -1,9 +1,8 @@
 /*
- * pic.h
- *
- *  Created on: 2024年2月5日
- *      Author: Renesas
- */
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 #ifndef PIC_H_
 #define PIC_H_

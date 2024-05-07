@@ -1,3 +1,9 @@
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
+
 #include "dwt.h"
 #define    DWT_CR               *(uint32_t*)0xE0001000
 #define    DWT_CYCCNT           *(uint32_t*)0xE0001004
