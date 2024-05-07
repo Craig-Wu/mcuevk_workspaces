@@ -1,8 +1,8 @@
-该示例工程由 瑞萨电子-徐晶 提供，2024年5月7日
+该示例工程由 瑞萨电子-王瑾 提供，2024年5月7日
 
 ### 工程概述
 
-该示例工程演示了基于瑞萨 FSP的瑞萨RA MCU上OSPI_B驱动程序的基本功能。
+该示例工程演示了基于瑞萨 FSP的瑞萨RA MCU上利用UART printf的基本功能。
 
 ### 支持的开发板 / 演示板：
 
@@ -34,4 +34,4 @@ CPKCOR-RA8D1B
 
 ### 详细的样例程序配置和使用，请参考下面的文件。
 
-[qspi_cpkcor_ra8d1b_ep_readme](qspi_cpkcor_ra8d1b_ep_readme.md)
+[printf_sci_uart_cpkcor_ra8d1b_ep_readme](printf_sci_uart_cpkcor_ra8d1b_ep_readme.md)
