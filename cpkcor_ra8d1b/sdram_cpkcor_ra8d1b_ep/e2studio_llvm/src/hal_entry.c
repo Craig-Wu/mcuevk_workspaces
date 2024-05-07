@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 #include "hal_data.h"
 #include "board_sdram.h"
 #include <stdio.h>
@@ -154,7 +159,7 @@ void SDRAMReadWrite32Bit(void)
        /* Compare the two buffers. */
        while (datalen--)
        {
-           printf("0x%x  ", sdram[datalen]);
+           printf("0x%3x  ", sdram[datalen]);
            if(datalen%16==0)
            {
                printf("\r\n");
