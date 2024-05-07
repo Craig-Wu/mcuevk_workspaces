@@ -1,14 +1,14 @@
-/*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
-
 /***********************************************************************************************************************
  * File Name    : hal_entry.c
  * Description  : Contains data structures and functions used in hal_entry.c.
  **********************************************************************************************************************/
  
+ /*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
+
 #include "hal_data.h"
 
 FSP_CPP_HEADER
