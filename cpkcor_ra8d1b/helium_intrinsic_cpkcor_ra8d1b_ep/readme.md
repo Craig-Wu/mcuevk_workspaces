@@ -2,7 +2,7 @@
 
 ### 工程概述
 
-该示例工程演示了基于瑞萨 FSP的瑞萨RA MCU上OSPI_B驱动程序的基本功能。
+该示例项目演示了基于瑞萨 FSP 的瑞萨 RA8 MCU 上 [heilum](https://www.arm.com/technologies/helium)的基本功能。
 
 ### 支持的开发板 / 演示板：
 
