@@ -154,7 +154,7 @@ void SDRAMReadWrite32Bit(void)
        /* Compare the two buffers. */
        while (datalen--)
        {
-           printf("0x%x  ", sdram[datalen]);
+           printf("0x%3x  ", sdram[datalen]);
            if(datalen%16==0)
            {
                printf("\r\n");
