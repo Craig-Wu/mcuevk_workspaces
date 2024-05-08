@@ -16,7 +16,7 @@
 #### 1.5.1 打开PC端设备管理器，找到Ports (COM & LPT)下面的JLink CDC UART Port (COM10)，记下该串口标号。
 ![alt text](images/com.jpg)
 #### 1.5.2 PC端打开串口工具，找到对应串口，将波特率设定为115200。
-#### 1.4.3 在e2 studio中调试代码，会在串口工具中看到Log打印如下所示：
+#### 1.5.3 在e2 studio中调试代码，会在串口工具中看到Log打印如下所示：
 ![alt text](images/log.jpg)
 
 ## 2. 支持的电路板：
