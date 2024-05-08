@@ -7,6 +7,7 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 */
+
 #include "pcdc_thread.h"
 #include "common_utils.h"
 #include "pcdc_freertos.h"

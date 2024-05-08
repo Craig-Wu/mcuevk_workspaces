@@ -19,10 +19,9 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
 预计完成日期： 
 ```
 将项目推送到远程仓库，确认代码仓库下已经有了您刚才建立的目录和readme文件。
-   * 如果您不熟悉Git的使用，请查看针对此样例代码开发流程的[Github使用教程](github_ops.md)中的`推送`部分
+- 如果您不熟悉Git的使用，请查看针对此样例代码开发流程的[Github使用教程](github_ops.md)中的`推送`部分
 
-![alt text](images/project_handling/image.png)
-
+   ![](images/project_handling/image.png "确认目录名和readme文件")
 
 ### II. 创建示例工程并开发样例代码
 
@@ -30,7 +29,7 @@ xxx （请填入您的名字和公司） 正在编写本示例工程
 
 1. 瑞萨的MCU支持多种开发环境和编译器，请为每个示例工程创建一个目录，以"集成环境 + 编译器"命名，第三方开发环境可能只支持一种编译器，此时可省略编译器名称。请在readme中注明具体的集成开发环境和编译器版本。
 
- ![alt text](images/project_handling/image-1.png)
+   ![alt text](images/project_handling/image-1.png)
 
 2. 创建工程。您可以在本地任意目录（例如e2studio的缺省Workspace目录）创建工程，也可以直接在本地代码仓库的存储位置创建工程。
    

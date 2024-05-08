@@ -2,6 +2,7 @@
  * File Name    : common_utils.h
  * Description  : Contains macros, data structures and functions used  common to the EP
  ***********************************************************************************************************************/
+
 /*
 * Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
 *

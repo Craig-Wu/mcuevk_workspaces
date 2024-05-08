@@ -2,7 +2,8 @@
  * File Name    : usb_hcdc_app.c
  * Description  : Contains data structures and functions used in usb_hcdc_app.c.
  **********************************************************************************************************************/
-/*
+ 
+ /*
 * Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
 *
 * SPDX-License-Identifier: BSD-3-Clause

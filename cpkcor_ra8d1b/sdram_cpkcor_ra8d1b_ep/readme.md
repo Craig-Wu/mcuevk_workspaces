@@ -1,3 +1,4 @@
+该示例工程由 瑞萨电子-黄国爵 提供，2024年5月7日
 
 #### 工程概述:
 * 该示例工程演示了基于CPKCOR-RA8D1B的SDRAM测试，SDRAM型号为W9825G6KH-6I。
@@ -40,4 +41,6 @@
    xxxxxx  
    SDRAM test pass!  
 
+### 详细的样例程序配置和使用，请参考下面的文件。
+[sdram_cpkcor_ra8d1b_ep_readme](sdram_cpkcor_ra8d1b_ep.md)
 

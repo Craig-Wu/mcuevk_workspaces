@@ -15,10 +15,14 @@ CPKCOR-RA8D1B
 1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）。
 1根USB Type-C->Type-C线。
 
+1根USB Type-C->Type-A Socket和1根USB Type-A->USB Type-C线接在一起。
+
 ### 硬件连接：
 
 1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）连接HCDC板的JDBG和调试所用PC。
 1根USB Type-C->Type-C线连接HCDC板的JUSB和PCDC板的JUSB。
+
+1根USB Type-C->Type-A Socket和1根USB Type-A->USB Type-C线接在一起，连接HCDC板的JUSB和PCDC板的JUSB。
 
 ### 硬件设置注意事项：
 

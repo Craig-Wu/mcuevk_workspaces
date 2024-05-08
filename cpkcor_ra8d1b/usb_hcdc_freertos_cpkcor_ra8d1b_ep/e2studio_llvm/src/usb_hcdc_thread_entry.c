@@ -2,6 +2,7 @@
  * File Name    : usb_thread_entry.c
  * Description  : Contains data structures and functions used in usb_thread_entry.c.
  **********************************************************************************************************************/
+ 
 /*
 * Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
 *

@@ -3,6 +3,7 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 */
+
 #include "hal_data.h"
 #include "board_sdram.h"
 #include <stdio.h>

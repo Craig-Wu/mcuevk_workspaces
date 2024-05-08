@@ -17,7 +17,8 @@ CPKCOR-RA8D1B
 ### 硬件连接：
 
 通过1根 USB Type-C 线连接 CPKCOR-RA8D1B 板上的 USB 调试端口和调试用主机。
-通过1根 USB Type-C线连接CPKCOR-RA8D1B板上的JUSB端口和调试用主机。
+
+通过1根 USB Type-C 线连接 CPKCOR-RA8D1B 板上的 JUSB 端口和调试用主机。
 
 ### 硬件设置注意事项：
 
