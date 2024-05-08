@@ -6,12 +6,12 @@
 
 样例代码的提交分为三个主要步骤。
 
-### I. 查看瑞萨已经发布的样例代码，避免重复发布，请先查看以下页面：**
+### I. 查看瑞萨已经发布的样例代码，避免重复发布，请先查看以下页面：
 1. [瑞萨官网](www.renesas.com)上各个产品页面上已经发布的样例代码
 2. [Github](https://github.com/renesas/ra-fsp-examples/tree/master/example_projects)和[Gitee](about:blank)上的RA FSP Example
-   * [RA FSP Example 的Github Release页面](https://github.com/renesas/ra-fsp-examples/releases)上还有对应FSP历史版本的样例代码
+   - [RA FSP Example 的Github Release页面](https://github.com/renesas/ra-fsp-examples/releases)上还有对应FSP历史版本的样例代码
 3. [Github](https://github.com/renesas/cpk_examples)和[Gitee](about:blank)上已发布的 CPK Example。
-   * CPK Example暂时还未添加[Github Release页面](about:blank)
+   - CPK Example暂时还未添加[Github Release页面](about:blank)
 4. 本代码仓库，以确认是否已经有人认领某个样例代码的开发
    
 ### II. 创建样例代码目录，声明该样例代码已有人在负责编写测试**
