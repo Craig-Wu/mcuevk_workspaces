@@ -40,4 +40,6 @@
    xxxxxx  
    SDRAM test pass!  
 
+### 详细的样例程序配置和使用，请参考下面的文件。
+[sdram_cpkcor_ra8d1b_ep_readme](sdram_cpkcor_ra8d1b_ep.md)
 
