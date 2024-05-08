@@ -3,15 +3,14 @@
 
 ### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“USB PCDC (r_usb_pcdc)”，详细的属性设置请参考例程
-![alt text](pic/Picture1-1.png)
+![alt text](images/Picture1-1.png)
 ### 1.3 利用一根USB线（A to C）将PC和板上的JUSB连接起来。
 
 ### 1.4 调试代码，打开PC的设备管理器，在Ports (COM & LPT)分类下可以看到两个端口，JLink CDC UART Port是板载J-Link OB对应的COM口，另外一个USB Serial Device则是RA8D1的PCDC USB端口。如下图所示：
-![alt text](pic/Picture2-1.jpg)
-### 1.5
-打开PC端的串口工具，以TeraTerm为例，分别打开COM45和COM41：
+![alt text](images/Picture2-1.jpg)
+### 1.5 打开PC端的串口工具，以TeraTerm为例，分别打开COM45和COM41：
 在其中任一一个窗口输入字符，则内容会在另一个端口上同时显示。如下图所示：
-![alt text](pic/Picture3-1.jpg)
+![alt text](images/Picture3-1.png)
 本示例代码中展示了将RA8D1作为USB-UART Bridge的功能，由于RA8D1的UART3连接到了J-Link OB，因此从PC端发出的数据经由MCU PCDC接口到MCU，然后在MCU内部通过PCDC口将数据发送至UART3，然后经过J-Link OB返回至PC端。
 
 ## 2. 支持的电路板：
