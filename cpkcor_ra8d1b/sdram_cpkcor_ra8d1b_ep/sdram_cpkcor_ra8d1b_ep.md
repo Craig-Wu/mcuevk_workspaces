@@ -6,11 +6,11 @@
 ![alt text](images/stack_uart.jpg)
 ### 1.3 需要将SCICLK使能，设置为24MHz，Clock配置如下图所示：
 
-![alt text](clock_uart.jpg)
+![alt text](images/clock_uart.jpg)
 
 ### 1.4 设置SDRAM引脚，具体参考例程中的引脚设置：
 
-![alt text](sdram_pin.jpg)
+![alt text](images/sdram_pin.jpg)
 
 ### 1.5 具体操作：
 #### 1.5.1 打开PC端设备管理器，找到Ports (COM & LPT)下面的JLink CDC UART Port (COM10)，记下该串口标号。
