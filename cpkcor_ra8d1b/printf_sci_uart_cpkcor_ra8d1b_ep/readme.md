@@ -27,7 +27,7 @@ CPKCOR-RA8D1B
 * FSP版本
   * FSP 5.3.0
 * 集成开发环境和编译器：
-  * e2studio v2024-04 + LLVM v17.0.1
+  * e2studio v2024-04 + LLVM v17.0.1 / IAR v8.0.0 / AC6 v6.19
 * 第三方软件
   * 无 
 	   
