@@ -8,6 +8,10 @@
 - 1块Renesas RA8开发板：EK-RA8D1
 - 1根USB Type A->Micro B 线
 - OV5640和OV7725 摄像头模组，如果使用OV5640需要一个转接板
+  转接板的信号连接如下：
+
+![alt text](images/adaptor_pin.jpg)
+
 - EK-RA8D1自带MIPI屏
 
 ### 硬件连接：
