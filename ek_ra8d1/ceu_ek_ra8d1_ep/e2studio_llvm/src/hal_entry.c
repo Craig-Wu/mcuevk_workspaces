@@ -121,6 +121,7 @@ void hal_entry(void)
 
     OV7725_Window_Set(VGA_WIDTH, VGA_HEIGHT, 1);
 #else
+	/* Initialize OV5640 camera sensor */
     ov5640_init();
     ov5640_set_output_format(OV5640_OUTPUT_FORMAT_RGB565);
     ov5640_auto_focus_init();
@@ -165,10 +166,8 @@ void hal_entry(void)
             handle_error(err, "** ceu_operation API failed ** \r\n");
 
 
-#if(0)
+#if(0)  //If format out is YUV, use this conversion function
             yuv422_to_rgb565(&g_image_vga_sram[0], &g_image_rgb565_sdram_buffer[0], VGA_WIDTH, VGA_HEIGHT);
-//            YUVtoRGB565(&g_image_vga_sram[0], &g_image_rgb565_sdram_buffer[0], VGA_WIDTH, VGA_HEIGHT);
-//            yuv422_to_rgb888(&g_image_vga_sram[0], &g_image_rgb565_sdram_buffer[0], VGA_WIDTH, VGA_HEIGHT);
             graphics_draw_frame(&g_image_rgb565_sdram_buffer[0], (uint8_t*) gp_frame_buffer, VGA_WIDTH, VGA_WIDTH, VGA_HEIGHT);
 #else
             graphics_draw_frame(&g_image_vga_sram[0], (uint8_t*) gp_frame_buffer, VGA_WIDTH, VGA_WIDTH, VGA_HEIGHT);
