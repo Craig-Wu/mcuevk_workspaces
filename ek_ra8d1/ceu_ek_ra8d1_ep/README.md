@@ -15,15 +15,8 @@
 - 连接 EK-RA8D1 和摄像头模块
 - 连接MIPI屏
   
-   整体连接如图所示：
-
-![alt text](images/connect.jpg)
-
-
 ### 硬件设置注意事项：
 - SW1-3 和 SW1-7 要切换到 "ON"
-
-![alt text](images/SW1.png)
 
 ### 软件开发环境：
 - FSP版本
@@ -36,27 +29,6 @@
 
 #### 操作步骤：
 
-1. 打开工程
-2. 注意 hal_entry.c 的代码：
-```
-    #if 0 
-        /* Initialize OV7725 camera sensor */ 
-        err = ov7725_open(); 
-        /* Handle error */
-        handle_error(err, "** ov7725_open API failed ** \r\n");
-        OV7725_Window_Set(VGA_WIDTH, VGA_HEIGHT, 1);
-    #else
-        /* Initialize OV7725 camera sensor */ 
-        ov5640_init();
-        ov5640_set_output_format(OV5640_OUTPUT_FORMAT_RGB565);
-        ov5640_auto_focus_init();
-    //    ov5640_set_test_pattern(OV5640_TEST_PATTERN_COLOR_BAR);
-        ov5640_set_output_size(VGA_WIDTH,VGA_HEIGHT);
-        ov5640_set_exposure_level(OV5640_EXPOSURE_LEVEL_8);
-    #endif
-```
-通过这部分代码选择对应的摄像头模组
-3. 编译，烧录，运行后MIPI可以显示摄像头采集到的图像：
-
-![alt text](images/show_pic.jpg)
+### 详细的样例程序配置和使用，请参考下面的文件。
+[ceu_ek_ra8d1_ep](ceu_ek_ra8d1_ep.md)
 
