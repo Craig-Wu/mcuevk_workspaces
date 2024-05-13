@@ -14,7 +14,7 @@
    - CPK Example暂时还未添加[Github Release页面](about:blank)
 4. 本代码仓库，以确认是否已经有人认领某个样例代码的开发
    
-### II. 创建样例代码目录，声明该样例代码已有人在负责编写测试**
+### II. 创建样例代码目录，声明该样例代码已有人在负责编写测试
 1. 直接clone本仓库，或拉取本仓库(确保您看到的是最新版本的代码)
 2. 在对应的目标板目录下(例如cpkcor_ra8d1b)创建样例代码的目录
 3. 在样例代码目录下创建readme.md，声明您已经在开发中，并先将readme.md推送到远程仓库
@@ -22,7 +22,7 @@
 
 详见[样例代码开发提交流程](docs/project_handling.md)
    
-### III. 上传/推送开发完成的样例代码**
+### III. 上传/推送开发完成的样例代码
 1. 编写详细的样例代码和示例工程使用指南，您可以参考代码仓库中的其他样例
 2. 修改readme.md，表示该样例代码已开发完成。
 3. 推送样例代码到远程仓库(本仓库)，开发完成
@@ -30,4 +30,6 @@
 
 详见[样例代码开发提交流程](docs/project_handling.md)
    
-瑞萨相关人员看到readme.md更新到完成状态后，会将该样例代码发布到[Github](https://github.com/renesas/cpk_examples)和[Gitee](about:blank)上的 CPK Examples，并删除本代码仓库下的样例代码目录。
+瑞萨相关人员看到readme.md更新到完成状态后，会将该样例代码发布到[Github](https://github.com/renesas/cpk_examples)和[Gitee](about:blank)上的 CPK Examples，并<font color= #FF0000> **删除本代码仓库下的样例代码目录**</font> 。
+
+如有必要，您可以在本地电脑保留一个样例代码备份，或去Github和Gitee上下载已发布的样例代码。
