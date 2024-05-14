@@ -30,6 +30,6 @@
 
 详见[样例代码开发提交流程](docs/project_handling.md)
    
-瑞萨相关人员看到readme.md更新到完成状态后，会将该样例代码发布到[Github](https://github.com/renesas/cpk_examples)和[Gitee](about:blank)上的 CPK Examples，并 ${\color{red}删除本代码仓库下的样例代码目录}$。
+瑞萨相关人员看到readme.md更新到完成状态后，会将该样例代码发布到[Github](https://github.com/renesas/cpk_examples)和[Gitee](about:blank)上的 CPK Examples，并 ${\color{red}{\text{删除本代码仓库下的样例代码目录}}}$。
 
 如有必要，您可以在本地电脑保留一个样例代码备份，或去Github和Gitee上下载已发布的样例代码。
