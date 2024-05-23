@@ -29,11 +29,13 @@ typedef enum
 ### 2.2 修改 FSP 中 glcdc stack 中的参数，具体要改分辨率大小，以及 glcdc 的 timing。这里列出 7inch 和 10inch 的配置，大家自行参考
 
 7inch:
+
 ![alt text](images/7inch_resolution.jpg)
 
 ![alt text](images/7inch_timing.jpg)
 
 10.1inch:
+
 ![alt text](images/10inch_resolution.jpg)
 ![alt text](images/10inch_timing.jpg)
 
