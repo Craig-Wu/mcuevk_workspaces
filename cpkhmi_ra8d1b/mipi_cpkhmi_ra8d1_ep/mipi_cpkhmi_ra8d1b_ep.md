@@ -37,6 +37,7 @@ typedef enum
 10.1inch:
 
 ![alt text](images/10inch_resolution.jpg)
+
 ![alt text](images/10inch_timing.jpg)
 
 
