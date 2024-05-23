@@ -3,15 +3,16 @@
 
 ### 1.1 打开工程
 ### 1.2 可以使用这三个参数显示不同的颜色 pattern
-`
+```
 typedef enum
 {
-    simple = 0,
+    simple = 0, 
     partition = 1,
     gradient = 2
 } color_pattern_t;
-`
+```
 ![alt text](images/code.jpg)
+
 ### 1.3 连接屏幕，如下：
 
 ![alt text](images/10inch.png)
@@ -29,6 +30,7 @@ typedef enum
 
 7inch:
 ![alt text](images/7inch_resolution.jpg)
+
 ![alt text](images/7inch_timing.jpg)
 
 10.1inch:
