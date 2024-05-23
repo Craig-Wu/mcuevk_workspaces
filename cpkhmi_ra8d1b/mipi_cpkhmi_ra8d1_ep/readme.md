@@ -30,7 +30,7 @@
 * 打开工程
 * 注意board_sdram.c中的宏：BSP_PRV_SDRAM_SDADR_ROW_ADDR_OFFSET 和 BSP_PRV_SDRAM_BUS_WIDTH，该板子分别对应的是 8 和 1，
   如果需要测试其他SDRAM，根据spec修改这两个宏
-* 工程默认使用10.1inch屏，若要测试7inch屏，需要修改配置参数，具体修改步骤，请看 mipi_cpkhmi_ra8d1b_ep.md
+* 工程默认使用10.1inch屏，若要测试7inch屏，需要修改配置参数，具体修改步骤，请看
 * 编译，烧录
 
 
