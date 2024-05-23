@@ -3,12 +3,14 @@
 
 ### 1.1 打开工程
 ### 1.2 可以使用这三个参数显示不同的颜色 pattern
-'typedef enum
+`
+typedef enum
 {
     simple = 0,
     partition = 1,
     gradient = 2
-} color_pattern_t;'
+} color_pattern_t;
+`
 ![alt text](images/code.jpg)
 ### 1.3 连接屏幕，如下：
 
