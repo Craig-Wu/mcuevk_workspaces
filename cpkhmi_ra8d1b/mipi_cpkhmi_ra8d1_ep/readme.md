@@ -21,7 +21,8 @@
 * FSP版本
   * FSP 5.3.0
 * 集成开发环境和编译器：
-  * e2studio v2024-04 + 12.2.1.arm-12-mpacbti-34
+  * e2studio v2024-04 + 13.2.1.arm-13-7 或者
+  * e2studio v2024-04 + LLVM for ARM 17.0.1
 
 #### 第三方软件
 * 无
