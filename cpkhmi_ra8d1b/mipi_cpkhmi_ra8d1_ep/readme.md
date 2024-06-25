@@ -9,7 +9,7 @@
 #### 硬件要求：
 * 1块 Renesas RA8开发板：CPKCOR-RA8D1B
 * 1根 USB Type A->Type C 或 Type-C->Type C 线 （支持 Type-C 2.0 即可）
-* 一块 10.1inch 屏，型号为：STL10.1-32-331-A，驱动 IC 为：Ilitek-ILI9881C。或者一块7inch屏，型号为：STL7.0-60-132-K，驱动IC为：EK79007AD2
+* 1块 10.1inch 屏，型号为：STL10.1-32-331-A，驱动 IC 为：Ilitek-ILI9881C。或者1块7inch屏，型号为：STL7.0-60-132-K，驱动IC为：EK79007AD2
 
 #### 硬件连接：
 * 通过 USB Type-C 线连接调试主机和 CPKCOR-RA8D1B 板上的 USB 调试端口。
@@ -31,7 +31,7 @@
 * 打开工程
 * 注意board_sdram.c中的宏：BSP_PRV_SDRAM_SDADR_ROW_ADDR_OFFSET 和 BSP_PRV_SDRAM_BUS_WIDTH，该板子分别对应的是 8 和 1，
   如果需要测试其他SDRAM，根据spec修改这两个宏
-* 工程默认使用10.1inch屏，若要测试7inch屏，需要修改配置参数，具体修改步骤，请看
+* 工程默认使用10.1inch屏，若要测试7inch屏，需要修改配置参数，具体修改步骤，请看详细的样例程序配置和使用文档
 * 编译，烧录
 
 
