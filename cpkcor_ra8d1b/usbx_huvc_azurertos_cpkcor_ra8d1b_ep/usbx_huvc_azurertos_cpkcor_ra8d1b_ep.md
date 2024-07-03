@@ -1,5 +1,3 @@
-# ra8d1_cpkhmi_usbx_yuv
-
 #### 介绍
 该工程是使用CPKCOR-RA8D1B的USBX UVC的例子。展示了使用RA8D1 MCU配合THREADX系统通过USBHS接口来接收UVC中图像数据流。
 当前例子用的YUV格式的图像数据。图像的分辨率为320x240，FPS为10。分辨率和FPS根据连接的USB摄像头支持的参数来配置下图所示的宏定义。
