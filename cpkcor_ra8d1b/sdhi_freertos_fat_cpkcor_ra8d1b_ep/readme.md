@@ -14,17 +14,17 @@ CPKCOR-RA8D1B
 
 1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）。
 
-1张SD卡。
+1张MicroSD卡。
 
 ### 硬件连接：
 
-板背面的卡槽JTF中插入一张Micro SD卡。
+板背面的卡槽JTF中插入一张MicroSD卡。
 
 1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）连接CPKCOR_RA8D1B板的JDBG和调试所用PC。
 
 ### 硬件设置注意事项：
 
-无
+请 ${\color{red}{\text{务必在断电情况下插拔MicroSD卡}}}$。
 
 ### 软件开发环境：
    

@@ -12,17 +12,17 @@ CPKCOR-RA8D1B
 
 1块Renesas RA8开发板：CPKCOR-RA8D1B。
 
-1根USB Type A->Type C线 （支持Type-C 2.0即可）。
+USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）。
 
-1跟USB Type C->Type C线。
+1跟USB Type C->Type C线 （支持Type-C 2.0即可）。
 
 1个烧录了usb_hvnd_freertos_cpkcor_ra8d1b_ep的CPKCOR-RA8D1B板子。
 
 ### 硬件连接：
 
-1根USB Type A->Type C线 （支持Type-C 2.0即可）连接CPKCOR-RA8D1B的JDBG和调试所用PC。
+USB Type A->Type C或Type-C->Type C线连接CPKCOR-RA8D1B的JDBG和调试所用PC。
 
-另一根线连接两块板子的JUSB。
+使用USB Type C->Type C线连接两块板子的JUSB。
 
 
 ### 硬件设置注意事项：

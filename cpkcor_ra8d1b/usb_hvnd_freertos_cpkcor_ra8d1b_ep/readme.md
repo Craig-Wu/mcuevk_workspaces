@@ -14,7 +14,7 @@ CPKCOR-RA8D1B
 
 1块Renesas RA8开发板烧录PVND代码：CPKCOR-RA8D1B。
 
-1根USB Type A->Type C线 （支持Type-C 2.0即可）。
+1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）。
 
 1个U盘。
 
@@ -22,7 +22,7 @@ CPKCOR-RA8D1B
 
 ### 硬件连接：
 
-1根USB Type A->Type C线 （支持Type-C 2.0即可）连接CPKCOR_RA8D1B板的JDBG和调试所用PC。
+USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）连接CPKCOR_RA8D1B板的JDBG和调试所用PC。
 
 烧录了usb_pvnd_freertos_cpkcor_ra8d1b_ep代码的另一块CPKCOR-RA8D1B通过Type-C -> Type-C线连接至JUSB。
 

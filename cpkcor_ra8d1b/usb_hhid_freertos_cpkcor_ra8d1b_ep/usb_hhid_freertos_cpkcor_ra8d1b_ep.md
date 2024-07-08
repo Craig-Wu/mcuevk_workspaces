@@ -17,7 +17,9 @@ CPKCOR-RA8D1B
 
 1根Type-C USB 数据线，用于连接JDBG和PC。
 
-1根Type-C -> Type-A母座，用于接入键盘到JUSB。一个USB键盘作为PHID设备接入。
+1根Type-C -> Type-A母座，用于接入键盘到JUSB。
+
+1个USB键盘作为PHID设备接入。
 
 ## 4. 硬件连接：
 通过Type-C USB 电缆将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC。

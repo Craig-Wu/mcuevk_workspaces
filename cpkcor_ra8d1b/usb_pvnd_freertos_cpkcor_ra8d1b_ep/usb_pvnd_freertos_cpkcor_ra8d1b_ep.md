@@ -5,7 +5,7 @@
 
 ### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“USB PVND”，详细的属性设置请参考例程
-### 1.3 利用一根USB Type A->Type C连接芯片的JDBG和PC，另外一根USB Type C->Type C线连接芯片的JUSB和HVND的JUSB。
+### 1.3 利用一根USB Type C连接芯片的JDBG和PC，另外一根USB Type C->Type C线连接芯片的JUSB和HVND的JUSB。
 ### 1.4 在e2 studio中调试代码，代码自由运行。打开RTT Viewer，可以看到如下Log打印，显示当前PVND和HVND通信的过程：
 ![alt text](images/Picture1-1.png)
 
@@ -17,10 +17,13 @@ CPKCOR-RA8D1B
 
 1块瑞萨 RA核心板，烧录usb_hvnd_freertos_cpkcor_ra8d1b_ep作为HVND。
 
-1根Type-C -> Type A USB 数据线，用于连接JDBG和PC。
+1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可），用于连接JDBG和PC。
 
-1跟Type-C -> Type C USB线用于连接两块板子的JUSB。
+1跟Type-C -> Type C USB线（支持Type-C 2.0即可）用于连接两块板子的JUSB。
 
 
 ## 4. 硬件连接：
-通过Type-C -> Type A USB 电缆将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC。另一根USB线缆连接两块板子的JUSB。
+
+USB Type A->Type C或Type-C->Type C线将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC。
+
+使用Type-C -> Type C USB线连接两块板子的JUSB。

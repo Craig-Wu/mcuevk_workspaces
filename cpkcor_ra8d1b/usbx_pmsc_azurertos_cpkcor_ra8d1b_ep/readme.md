@@ -12,22 +12,24 @@ CPKCOR-RA8D1B
 
 1块Renesas RA8开发板：CPKCOR-RA8D1B。
 
-2根USB Type A->Type C线 （支持Type-C 2.0即可）。
+1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）。
 
-1张SD卡
+1根USB Type A->Type C线 （支持USB 2.0即可）。
+
+1张MicroSD卡
 
 ### 硬件连接：
 
-一张SD插入板子背面的JTF插座。
+一张MicroSD插入板子背面的JTF插座。
 
-另一根线连接JUSB和PC。
+USB Type A->Type C或Type-C->Type C线连接CPKCOR-RA8D1B的JDBG和调试所用PC。
 
-1根USB Type A->Type C线 （支持Type-C 2.0即可）连接CPKCOR-RA8D1B的JDBG和调试所用PC。
+USB Type A->Type C连接CPKCOR-RA8D1B的JUSB和PC。
 
 
 ### 硬件设置注意事项：
 
-无
+请 ${\color{red}{\text{务必在断电情况下插拔MicroSD卡}}}$。
 
 ### 软件开发环境：
    
