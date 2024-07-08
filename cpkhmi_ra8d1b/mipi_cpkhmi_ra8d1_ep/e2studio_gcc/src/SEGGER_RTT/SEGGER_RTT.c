@@ -33,45 +33,10 @@
 * DISCLAIMED. IN NO EVENT SHALL SEGGER Microcontroller BE LIABLE FOR *
 * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR           *
 * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT  *
-* OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;    *
-* OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF      *
-* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT          *
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE  *
-* USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH   *
-* DAMAGE.                                                            *
-*                                                                    *
-**********************************************************************
-*                                                                    *
-*       RTT version: 7.92o                                           *
-*                                                                    *
-**********************************************************************
-
----------------------------END-OF-HEADER------------------------------
-File    : SEGGER_RTT.c
-Purpose : Implementation of SEGGER real-time transfer (RTT) which
-          allows real-time communication on targets which support
-          debugger memory accesses while the CPU is running.
-Revision: $Rev: 29668 $
-
-Additional information:
-          Type "int" is assumed to be 32-bits in size
-          H->T    Host to target communication
-          T->H    Target to host communication
-
-          RTT channel 0 is always present and reserved for Terminal usage.
-          Name is fixed to "Terminal"
-
-          Effective buffer size: SizeOfBuffer - 1
-
-          WrOff == RdOff:       Buffer is empty
-          WrOff == (RdOff - 1): Buffer is full
-          WrOff >  RdOff:       Free space includes wrap-around
-          WrOff <  RdOff:       Used space includes wrap-around
-          (WrOff == (SizeOfBuffer - 1)) && (RdOff == 0):
-                                Buffer full and wrap-around after next byte
-
-
-----------------------------------------------------------------------
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
 */
 
 #include "SEGGER_RTT.h"
