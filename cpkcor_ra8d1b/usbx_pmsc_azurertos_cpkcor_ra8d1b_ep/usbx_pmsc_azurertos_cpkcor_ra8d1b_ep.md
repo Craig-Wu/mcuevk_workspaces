@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU作为PMSC设备和PC通信，在PC端显示为USB drive，此例程验证需要一张SD卡支持。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择AzureRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择AzureRTOS。
 ### 1.2 Stack中添加“USB PMSC”，详细的属性设置请参考例程
 ### 1.3 在卡槽中插入MicroSD卡后，利用一根USB线连接芯片的JDBG和PC，另一根USB线连接芯片的JUSB和PC。
 ### 1.4 在e2 studio中调试代码，代码自由运行。PC端打开资源管理器，可以看到已经识别为USB Drive：

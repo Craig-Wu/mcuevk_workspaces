@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU作为PHID设备和PC通信，在PC端打开设备管理器，可以看到识别为HID设备。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“USB PHID”，详细的属性设置请参考例程
 ### 1.3 利用一根USB线连接芯片的JUSB和PC。
 ### 1.4 在e2 studio中调试代码，代码自由运行。PC端打开设备管理器，可以看到接入了HID设备，根据RTT Viewer中的提示信息，打开本地Notepad，在RTT Viewer中键入任一字符，则会在Notepad中打印a～z1～0：

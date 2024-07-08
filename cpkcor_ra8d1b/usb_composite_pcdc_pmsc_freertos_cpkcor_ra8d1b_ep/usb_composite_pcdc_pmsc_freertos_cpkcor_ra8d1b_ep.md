@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU会通过RTT Viewer打印一些Log，提示当前的通信过程，如枚举的过程以及和主机之间的数据交互。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“FreeRTOS+FAT”，详细的属性设置请参考例程
 ### 1.3 利用一根USB线连接芯片的JDBG和PC，另一根USB线连接芯片的JUSB和PC。
 ### 1.4 在e2 studio中调试代码，代码自由运行。PC端打开J-Link RTT Viewer，会显示如下Log打印：

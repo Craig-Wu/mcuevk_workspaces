@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU作为PVND设备和HVND通信，建立通信后，HVND向PVND写入15字节数据并都会，此例程验证需要一个HVND支持。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“USB PVND”，详细的属性设置请参考例程
 ### 1.3 利用一根USB Type C连接芯片的JDBG和PC，另外一根USB Type C->Type C线连接芯片的JUSB和HVND的JUSB。
 ### 1.4 在e2 studio中调试代码，代码自由运行。打开RTT Viewer，可以看到如下Log打印，显示当前PVND和HVND通信的过程：

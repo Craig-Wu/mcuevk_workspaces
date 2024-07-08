@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU作为PAUD设备和主机通信，建立通信后，PC通过该PAUD设备播放一段音频，PAUD设备录制后将音频文件返回给PC，通过PC端播放两个音频（原始视频和录制后的音频）并比较播放效果。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择AzureRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择AzureRTOS。
 ### 1.2 Stack中添加“USB PAUD”，详细的属性设置请参考例程
 ### 1.3 利用一根USB线连接芯片的JDBG和PC，另一根USB线连接芯片的JUSB和PC。
 ### 1.4 在e2 studio中调试代码，代码自由运行。打开RTT Viewer，可以看到如下Log打印，可以看到设备初始化成功：

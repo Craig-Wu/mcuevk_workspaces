@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU会通过RTT Viewer打印一些Log，提示支持的操作，可以根据提示信息，插入U盘，输入命令进行操作，如写入数据并读回验证，格式化，安全弹出等。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择AzureRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择AzureRTOS。
 ### 1.2 Stack中添加“USB HMSC”，详细的属性设置请参考例程
 
 ### 1.3 插入U盘（需要USB Type-C -> Type-A母座转接线支持）。

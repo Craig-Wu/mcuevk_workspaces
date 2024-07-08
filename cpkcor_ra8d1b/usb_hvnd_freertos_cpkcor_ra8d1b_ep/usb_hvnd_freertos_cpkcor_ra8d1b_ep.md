@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU会通过RTT Viewer打印一些Log，提示当前正在进行的和PVND之间的通信，如打开USB设备，列出通信所用的Pipe等信息。成功建立通信后，Vendor Host会给Vendor Peripheral写15字节并读回，可依据实际需要进行修改。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“USB HVND”，详细的属性设置请参考例程
 
 ### 1.3 接入已经烧录好usb_pvnd_freertos_cpkcor_ra8d1b_ep的CPKCOR-RA8D1B到JUSB。

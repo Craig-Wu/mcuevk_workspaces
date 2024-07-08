@@ -3,7 +3,7 @@
 代码流程说明如下：
 上电后，MCU会通过RTT Viewer打印一些Log，提示支持的操作，可以根据提示信息，键入相应的命令，如对SD卡进行格式化，写入数据并读出之后做比较，弹出SD卡等。
 
-### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
+### 1.1 创建新工程，BSP选择“CPKCOR-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“Azure RTOS FileX on Block Media”，详细的属性设置请参考例程
 ![alt text](images/Picture1-1.png)
 ### 1.3 在卡槽中插入MicroSD卡后，连接调试PC和JDBG。
