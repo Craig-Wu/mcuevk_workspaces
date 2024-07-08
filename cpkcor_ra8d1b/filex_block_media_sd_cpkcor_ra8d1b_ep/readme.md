@@ -2,7 +2,7 @@
 
 ### 工程概述
 
-该示例工程演示了基于瑞萨 FSP的瑞萨RA MCU基于FreeRTOS SD卡的基本功能。
+该示例工程演示了基于瑞萨 FSP的瑞萨RA MCU基于AzureRTOS SD卡的基本功能。
 
 ### 支持的开发板 / 演示板：
 
@@ -18,9 +18,9 @@ CPKCOR-RA8D1B
 
 ### 硬件连接：
 
-1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）连接HCDC板的JDBG和调试所用PC。
+1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）连接CPKCOR_RA8D1B板的JDBG和调试所用PC。
 
-板背面的卡槽JTF中插入一张Micro SD（提前格式化为FAT32格式）卡。
+板背面的卡槽JTF中插入一张Micro SD卡（提前格式化为FAT32格式）。
 
 ### 硬件设置注意事项：
 

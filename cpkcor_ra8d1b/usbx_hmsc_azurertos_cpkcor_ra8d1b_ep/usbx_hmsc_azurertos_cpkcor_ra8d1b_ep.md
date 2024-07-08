@@ -18,7 +18,7 @@ CPKCOR-RA8D1B
 ## 3. 硬件要求：
 1块瑞萨 RA核心板：CPKCOR-RA8D1B
 
-1根Type-C USB 数据线，用于连接JDBG和PC。
+1根Type-C -> Type-A USB 数据线，用于连接JDBG和PC。
 
 1个U盘。
 

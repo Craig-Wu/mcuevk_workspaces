@@ -18,7 +18,7 @@ CPKCOR-RA8D1B
 ## 3. 硬件要求：
 1块瑞萨 RA核心板：CPKCOR-RA8D1B
 
-1根Type-C USB 数据线，用于连接JDBG和PC。
+1根Type-C -> Type A USB 数据线，用于连接JDBG和PC。
 
 1个烧录了usb_pvnd_freertos_cpkcor_ra8d1b_ep的CPKCOR-RA8D1B板。
 
@@ -27,4 +27,4 @@ CPKCOR-RA8D1B
 ## 4. 硬件连接：
 通过Type-C USB 电缆将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC。
 
-将pvnd板连接至JUSB端口。
+通过Type-C -> Type-C线将pvnd板连接至JUSB端口。

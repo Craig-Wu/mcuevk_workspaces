@@ -18,9 +18,9 @@ CPKCOR-RA8D1B
 
 ### 硬件连接：
 
-1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）连接HCDC板的JDBG和调试所用PC。
-
 板背面的卡槽JTF中插入一张Micro SD卡。
+
+1根USB Type A->Type C或Type-C->Type C线 （支持Type-C 2.0即可）连接CPKCOR_RA8D1B板的JDBG和调试所用PC。
 
 ### 硬件设置注意事项：
 

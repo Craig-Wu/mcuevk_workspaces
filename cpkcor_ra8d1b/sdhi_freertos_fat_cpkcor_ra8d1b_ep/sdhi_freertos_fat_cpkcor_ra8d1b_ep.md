@@ -6,7 +6,7 @@
 ### 1.1 创建新工程，BSP选择“CPK-RA8D1B Core Board”，RTOS选择FreeRTOS。
 ### 1.2 Stack中添加“FreeRTOS+FAT”，详细的属性设置请参考例程
 ![alt text](images/Picture1-1.png)
-### 1.3 在卡槽中插入SD卡。
+### 1.3 在卡槽中插入SD卡后，连接调试PC和JDBG。
 ### 1.4 在e2 studio中调试代码，代码自由运行。PC端打开J-Link RTT Viewer，会显示如下Log打印：
 ![alt text](images/Picture2-1.jpg)
 ### 1.6 键入相应的指令，如“2”，格式化SD卡：
@@ -24,6 +24,6 @@ CPKCOR-RA8D1B
 1张Micro SD卡。
 
 ## 4. 硬件连接：
-通过Type-C USB 电缆将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC。
-
 将SD卡插入背面卡槽JTF中。
+
+通过Type-C USB 电缆将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC。
