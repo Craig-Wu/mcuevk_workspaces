@@ -257,10 +257,6 @@
       <description>External Interrupt</description>
       <originalPack>Renesas.RA.5.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_iic_master" variant="" vendor="Renesas" version="5.3.0">
-      <description>I2C Master Interface</description>
-      <originalPack>Renesas.RA.5.3.0.pack</originalPack>
-    </component>
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_mipi_dsi" variant="" vendor="Renesas" version="5.3.0">
       <description>MIPI DSI Host</description>
       <originalPack>Renesas.RA.5.3.0.pack</originalPack>
@@ -289,20 +285,6 @@
       <property id="module.driver.external_irq.clock_source_div" value="module.driver.external_irq.clock_source_div.clock_source_div_by_64"/>
       <property id="module.driver.external_irq.p_callback" value="external_irq_callback"/>
       <property id="module.driver.external_irq.ipl" value="board.icu.common.irq.priority12"/>
-    </module>
-    <module id="module.driver.i2c_on_iic_master.1855871606">
-      <property id="module.driver.i2c_master.name" value="g_i2c_master"/>
-      <property id="module.driver.i2c_master.channel" value="1"/>
-      <property id="module.driver.i2c_master.rate" value="module.driver.i2c_master.rate.rate_standard"/>
-      <property id="module.driver.i2c_master.rise_time_ns" value="120"/>
-      <property id="module.driver.i2c_master.fall_time_ns" value="120"/>
-      <property id="module.driver.i2c_master.duty" value="50"/>
-      <property id="module.driver.i2c_master.slave" value="0x14"/>
-      <property id="module.driver.i2c_master.addr_mode" value="module.driver.i2c_master.addr_mode.addr_mode_7bit"/>
-      <property id="module.driver.i2c_master.timeout_mode" value="module.driver.i2c_master.timeout_mode.short_mode"/>
-      <property id="module.driver.i2c_master.timeout_scl_low" value="module.driver.i2c_master.timeout_scl_low.enabled"/>
-      <property id="module.driver.i2c_master.p_callback" value="i2c_master_callback"/>
-      <property id="module.driver.i2c_master.ipl" value="board.icu.common.irq.priority12"/>
     </module>
     <module id="module.driver.timer_on_gpt.527922270">
       <property id="module.driver.timer.name" value="g_timer0"/>
@@ -605,7 +587,6 @@
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
       <stack module="module.driver.external_irq_on_icu.394889371"/>
-      <stack module="module.driver.i2c_on_iic_master.1855871606"/>
       <stack module="module.driver.timer_on_gpt.527922270"/>
       <stack module="module.driver.display_on_glcdc.564592352">
         <stack module="module.driver.mipi_dsi.975209795" requires="module.driver.display_on_glcdc.requires.dsi">
@@ -613,11 +594,6 @@
         </stack>
       </stack>
     </context>
-    <config id="config.driver.iic_master">
-      <property id="config.driver.iic_master.param_checking_enable" value="config.driver.iic_master.param_checking_enable.bsp"/>
-      <property id="config.driver.iic_master.dtc_enable" value="config.driver.iic_master.dtc_enable.disabled"/>
-      <property id="config.driver.iic_master.addr_mode_10_bit_enable" value="config.driver.iic_master.addr_mode_10_bit_enable.disabled"/>
-    </config>
     <config id="config.driver.gpt">
       <property id="config.driver.gpt.param_checking_enable" value="config.driver.gpt.param_checking_enable.bsp"/>
       <property id="config.driver.gpt.output_support_enable" value="config.driver.gpt.output_support_enable.disabled"/>

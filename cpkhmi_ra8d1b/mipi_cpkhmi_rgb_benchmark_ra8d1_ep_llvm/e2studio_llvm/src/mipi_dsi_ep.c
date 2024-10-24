@@ -20,7 +20,7 @@
  *
  * Copyright (C) 2023 Renesas Electronics Corporation. All rights reserved.
  ***********************************************************************************************************************/
-#include "gt911.h"
+//#include "gt911.h"
 #include "mipi_dsi_ep.h"
 #include "r_mipi_dsi.h"
 #include "hal_data.h"
@@ -56,7 +56,7 @@ uint16_t period_sec           = RESET_VALUE;
 volatile mipi_dsi_phy_status_t g_phy_status;
 timer_info_t timer_info = { .clock_frequency = RESET_VALUE, .count_direction = RESET_VALUE, .period_counts = RESET_VALUE };
 volatile bool g_vsync_flag, g_message_sent, g_ulps_flag, g_irq_state, g_timer_overflow  = RESET_FLAG;
-coord_t touch_coordinates[5];
+//coord_t touch_coordinates[5];
 
 
 void DWT_init();
@@ -888,8 +888,6 @@ void mipi_dsi_push_table (const lcd_table_setting_t *table)
 #define RGB_565_BLUE   (0x1F << 0)
 #define RGB_565_WHITE   (0xFFFF)
 
-//uint16_t color[4] = {RGB_565_RED, RGB_565_GREEN, RGB_565_BLUE, RGB_565_WHITE };
-//uint16_t color[4+8] = {RGB_565_RED,RGB_565_GREEN,RGB_565_BLUE,RGB_565_WHITE,0xe6d7, 0xcee7,0xe5c0,0xd1cf,0x67FC,0xCE7F,0xFEA0,0xC618 } ;
 uint16_t color[4+8] = {RGB_565_RED,RGB_565_GREEN,RGB_565_BLUE,RGB_565_WHITE,0xe6d7, 0xcee7,0xe5c0,0xd1cf,0x67FC,0xCE7F,0xFEA0,0xC618 };
 uint32_t color_32bit[8] = {0xffffffff,0xffff0000,0xff00ff00,0xff0000ff,0xFFFF00,0xFF00FF,0x00FFFF,0x808080};
 typedef enum
@@ -925,16 +923,6 @@ void show_pattern(color_pattern_t pattern)
     {
         count=0;
     }
-//    while(!g_irq_state)
-//    {
-//
-//    }
-//    g_irq_state = false;
-//    color_p ++;
-//    if(color_p >= 3 )
-//    {
-//        color_p = simple;
-//    }
 
     switch(pattern){
         case simple:
@@ -961,7 +949,6 @@ void show_pattern(color_pattern_t pattern)
                     p[y+x*g_hz_size] = color[0];
 #endif
                 }
-                //R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MILLISECONDS);
             }
             for(x=0;x<g_vr_size/2;x++)
             {
@@ -973,7 +960,6 @@ void show_pattern(color_pattern_t pattern)
                     p[y+x*g_hz_size] = color[1];
 #endif
                 }
-                //R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MILLISECONDS);
             }
             for(x=g_vr_size/2;x<g_vr_size;x++)
             {
@@ -985,7 +971,6 @@ void show_pattern(color_pattern_t pattern)
                     p[y+x*g_hz_size] = color[2];
 #endif
                 }
-                //R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MILLISECONDS);
             }
             for(x=g_vr_size/2;x<g_vr_size;x++)
             {
@@ -997,7 +982,6 @@ void show_pattern(color_pattern_t pattern)
                     p[y+x*g_hz_size] = color[3];
 #endif
                 }
-                //R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MILLISECONDS);
             }
 
 
@@ -1009,7 +993,6 @@ void show_pattern(color_pattern_t pattern)
             {
                 for(y=0;y<g_hz_size;y++)
                 {
-//                    p[y+x*g_hz_size] = temp_color;//(x+y+0x8410)%256;//0x8410;
 #if(DISPLAY_BITS_PER_PIXEL_INPUT0==32)
                     p[y+x*g_hz_size] = temp_color_32bit;
 #else
@@ -1059,7 +1042,6 @@ void show_pattern(color_pattern_t pattern)
 void mipi_dsi_start_display(void)
 {
     fsp_err_t err = FSP_SUCCESS;
-    uint8_t color_count;
 
     /* Get LCDC configuration */
     g_hz_size = (g_display_cfg.input[0].hsize);
@@ -1091,7 +1073,7 @@ void mipi_dsi_start_display(void)
 
     DWT_delta = DWT_post_count - DWT_pre_count;
 
-    APP_PRINT("\r\n");
+    APP_PRINT("************************************\r\n");
     APP_PRINT("Before start GLCDC, DWT count:%d\r\n", DWT_delta);
     APP_PRINT("Before start GLCDC, time:%d\r\n", DWT_count_to_us(DWT_delta) );
 
@@ -1102,8 +1084,6 @@ void mipi_dsi_start_display(void)
     APP_PRINT("Color format is RGB565\r\n");
     APP_PRINT("Before start GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*2)/(DWT_count_to_us(DWT_delta)) );
 #endif
-
-//    APP_PRINT("Before start GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*4)/(DWT_count_to_us(DWT_delta)) ); // 32bit
 
 
     /* Initialize buffer pointers */
@@ -1138,7 +1118,6 @@ void mipi_dsi_start_display(void)
     R_BSP_SoftwareDelay(500,1000);
 
 
-//    uint16_t * p = (uint16_t *)&fb_background[0][0];
     DWT_clean_count();
     DWT_pre_count = DWT_get_count();
         for(uint32_t x=0;x<g_vr_size;x++) //g_vr_size
@@ -1153,27 +1132,22 @@ void mipi_dsi_start_display(void)
             }
         }
 
-
-
      DWT_post_count = DWT_get_count();
      DWT_delta = DWT_post_count - DWT_pre_count;
 
+     APP_PRINT("************************************\r\n");
      APP_PRINT("After start GLCDC, DWT count:%d\r\n", DWT_delta);
      APP_PRINT("After start GLCDC, time:%d\r\n", DWT_count_to_us(DWT_delta) );
 
 #if(DISPLAY_BITS_PER_PIXEL_INPUT0==32)
     APP_PRINT("Color format is RGB888\r\n");
-    APP_PRINT("Before start GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*4)/(DWT_count_to_us(DWT_delta)) );
+    APP_PRINT("After start GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*4)/(DWT_count_to_us(DWT_delta)) );
 #else
     APP_PRINT("Color format is RGB565\r\n");
-    APP_PRINT("Before start GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*2)/(DWT_count_to_us(DWT_delta)) );
+    APP_PRINT("After start GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*2)/(DWT_count_to_us(DWT_delta)) );
 #endif
-//     APP_PRINT("After start GLCDC, FPS:%d\r\n", 1000000/DWT_count_to_us(DWT_delta) );
-     R_BSP_SoftwareDelay(500,1000);
-     show_pattern(partition);  //gradient  // partition
+
 while(1){
-//        show_pattern(simple);     //gradient  // partition
-//        R_BSP_SoftwareDelay(500,1000);
         show_pattern(partition);  //gradient  // partition
         R_BSP_SoftwareDelay(500,1000);
         show_pattern(gradient);  //gradient  // partition
@@ -1360,7 +1334,7 @@ static void mipi_dsi_ulps_exit(void)
     err = wait_for_mipi_dsi_event(MIPI_DSI_PHY_STATUS_DATA_LANE_ULPS_EXIT);
     handle_error (err, "** MIPI DSI phy event timeout ** \r\n");
     g_ulps_flag = RESET_FLAG;
-    APP_PRINT("\r\nExited Ultra-low Power State (ULPS) due to touch with co-ordinates x: %u, ; y: %u. \r\n", touch_coordinates[0].x, touch_coordinates[0].y);
+ //   APP_PRINT("\r\nExited Ultra-low Power State (ULPS) due to touch with co-ordinates x: %u, ; y: %u. \r\n", touch_coordinates[0].x, touch_coordinates[0].y);
 
     /* Display On */
     R_IOPORT_PinWrite (&g_ioport_ctrl, PIN_DISPLAY_BACKLIGHT, BSP_IO_LEVEL_HIGH);
@@ -1454,13 +1428,13 @@ void handle_error (fsp_err_t err,  const char * err_str)
         }
 
         /* Close opened IIC master module*/
-        if(RESET_VALUE != g_i2c_master_ctrl.open)
-        {
-            if(FSP_SUCCESS != R_IIC_MASTER_Close(&g_i2c_master_ctrl))
-            {
-                APP_ERR_PRINT("IIC MASTER Close API failed\r\n");
-            }
-        }
+//        if(RESET_VALUE != g_i2c_master_ctrl.open)
+//        {
+//            if(FSP_SUCCESS != R_IIC_MASTER_Close(&g_i2c_master_ctrl))
+//            {
+//                APP_ERR_PRINT("IIC MASTER Close API failed\r\n");
+//            }
+//        }
 
         APP_ERR_TRAP(err);
     }
@@ -1545,8 +1519,6 @@ void mipi_dsi_entry(void)
 
     /* Project information printed on the Console */
     APP_PRINT(BANNER_INFO, EP_VERSION, version.version_id_b.major, version.version_id_b.minor, version.version_id_b.patch);
-    APP_PRINT(EP_INFO);
-    APP_PRINT(MIPI_DSI_MENU);
 
     /* Initialize SDRAM. */
     bsp_sdram_init();
@@ -1556,39 +1528,39 @@ void mipi_dsi_entry(void)
     uint16_t * p = (uint16_t *)&fb_background[0][0];
 #endif
     /* Get LCDC configuration */
-        g_hz_size = (g_display_cfg.input[0].hsize);
-        g_vr_size = (g_display_cfg.input[0].vsize);
-        g_hstride = (g_display_cfg.input[0].hstride);
+    g_hz_size = (g_display_cfg.input[0].hsize);
+    g_vr_size = (g_display_cfg.input[0].vsize);
+    g_hstride = (g_display_cfg.input[0].hstride);
 
-        DWT_init();
-        DWT_clean_count();
+    DWT_init();
+    DWT_clean_count();
 
 //        SCB_EnableDCache();
-        DWT_pre_count = DWT_get_count();
-            for(uint32_t x=0;x<g_vr_size;x++) //g_vr_size
+    DWT_pre_count = DWT_get_count();
+        for(uint32_t x=0;x<g_vr_size;x++) //g_vr_size
+        {
+            for(uint32_t y=0;y<g_hz_size;y++)
             {
-                for(uint32_t y=0;y<g_hz_size;y++)
-                {
 #if(DISPLAY_BITS_PER_PIXEL_INPUT0==32)
-                    p[y+x*g_hz_size] = x;
+                p[y+x*g_hz_size] = x;
 #else
-                    p[y+x*g_hz_size] = color[0];
+                p[y+x*g_hz_size] = color[0];
 #endif
-                }
             }
-        DWT_post_count = DWT_get_count();
+        }
+    DWT_post_count = DWT_get_count();
 
-        DWT_delta = DWT_post_count - DWT_pre_count;
+    DWT_delta = DWT_post_count - DWT_pre_count;
 
-        APP_PRINT("\r\n");
-        APP_PRINT("11Before open GLCDC, DWT count:%d\r\n", DWT_delta);
-        APP_PRINT("11Before open GLCDC, time:%d\r\n", DWT_count_to_us(DWT_delta) );
+    APP_PRINT("************************************\r\n");
+    APP_PRINT("Before open GLCDC, DWT count:%d\r\n", DWT_delta);
+    APP_PRINT("Before open GLCDC, time:%d\r\n", DWT_count_to_us(DWT_delta) );
 #if(DISPLAY_BITS_PER_PIXEL_INPUT0==32)
-        APP_PRINT("Color format is RGB888\r\n" );
-        APP_PRINT("11Before open GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*4)/(DWT_count_to_us(DWT_delta)) );
+    APP_PRINT("Color format is RGB888\r\n" );
+    APP_PRINT("Before open GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*4)/(DWT_count_to_us(DWT_delta)) );
 #else
-        APP_PRINT("Color format is RGB565\r\n" );
-        APP_PRINT("11Before open GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*2)/(DWT_count_to_us(DWT_delta)) );
+    APP_PRINT("Color format is RGB565\r\n" );
+    APP_PRINT("Before open GLCDC, speed:%dMB/s\r\n", (g_hz_size*g_vr_size*2)/(DWT_count_to_us(DWT_delta)) );
 #endif
 
 
@@ -1607,7 +1579,7 @@ void mipi_dsi_entry(void)
     touch_screen_reset();
 
     /* Initialize IIC MASTER module */
-    err = R_IIC_MASTER_Open(&g_i2c_master_ctrl, &g_i2c_master_cfg);
+//    err = R_IIC_MASTER_Open(&g_i2c_master_ctrl, &g_i2c_master_cfg);
     /* Handle error */
     handle_error(err, "** IIC MASTER Open API failed ** \r\n");
 
