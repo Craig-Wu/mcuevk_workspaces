@@ -1,13 +1,13 @@
-该示例工程由 瑞萨电子-黄国爵 提供，2024年5月23日
+该示例工程由 瑞萨电子-黄国爵 提供，2024年10月24日
 
 #### 工程概述:
-* 该示例工程演示了基于CPKCOR-RA8D1B的 MIPI 驱动测试，支持 10.1inch 和 7inch 触摸屏
+* 该示例工程演示了基于CPKHMI-RA8D1B的 MIPI 驱动测试，支持 10.1inch 和 7inch 触摸屏
 
 #### 支持的开发板 / 演示板：
 * CPKCOR-RA8D1B
 
 #### 硬件要求：
-* 1块 Renesas RA8开发板：CPKCOR-RA8D1B
+* 1块 Renesas RA8开发板：CPKHMI-RA8D1B
 * 1根 USB Type A->Type C 或 Type-C->Type C 线 （支持 Type-C 2.0 即可）
 * 1块 10.1inch 屏，型号为：STL10.1-32-331-A，驱动 IC 为：Ilitek-ILI9881C。或者1块7inch屏，型号为：STL7.0-60-132-K，驱动IC为：EK79007AD2
 
@@ -36,5 +36,5 @@
 
 
 ### 详细的样例程序配置和使用，请参考下面的文件。
-[mipi_cpkhmi_ra8d1b_ep_readme](mipi_cpkhmi_ra8d1b_ep_readme.md)
+[mipi_cpkhmi_rgb_benchmark_ra8d1b_ep_readme](mipi_cpkhmi_rgb_benchmark_ra8d1b_ep_readme.md)
 
