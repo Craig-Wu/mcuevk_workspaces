@@ -59,7 +59,7 @@ typedef enum
 
 测试RGB565结果如下：
 
-![alt text](images/RGB565_benchmark.png)
+![alt text](images/RGB565_benchmark.jpg)
 
 ## 3. 支持的电路板：
 CPKHMI-RA8D1B
