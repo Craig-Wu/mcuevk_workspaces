@@ -13,11 +13,10 @@
 
 2. 硬件要求：
 - RA8D1-CPKCOR开发板 x1
-- Micro USB 设备电缆 x1
+- USB Type-C 设备电缆 x1
 
 3. 硬件连接：
-将 micro USB 设备电缆的 micro USB 端连接到相应板的 micro-AB USB（DEBUG USB）
-端口。将此电缆的另一端连接到主机 PC 的 USB 端口。
+将Type-C 电缆连接到CPKCOR-RA8D1B的调试USB口（JDBG）端口。将此电缆的另一端连接到主机 PC 的 USB 端口。
 
 4. 使用方法：
 1) 在运行示例项目之前，使用 Renesas 设备分区管理器将设备初始化回出厂默认设置。
