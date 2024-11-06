@@ -1,62 +1,71 @@
 ## 1.参考例程概述
-该示例项目演示了基于瑞萨 RA8D1 HDMI 实时显示摄像头数据的功能
+该示例项目演示了基于瑞萨 RA8D1 HDMI 和 CEU 摄像头采集和实时显示的功能
 
 ### 1.1 打开工程
-### 1.2 可以打开 /src 下的 lv_conf.h 对 LVGL V9 进行配置，比如 LVGL 官网的 demo usage 配置：
+### 1.2 可以打开 /src 下的 sii902_linux.c 对 HDMI 的输出格式进行配置，这个配置需要和 GLCDC 的配置对应起来，比如这里配的是 720P，那么在 GLCDC stack 中配置的也应该是 720P：
 ```
-/*===================
- * DEMO USAGE
- ====================*/
-
-/*Show some widget. It might be required to increase `LV_MEM_SIZE` */
-#define LV_USE_DEMO_WIDGETS 1//0
-#if LV_USE_DEMO_WIDGETS
-    #define LV_DEMO_WIDGETS_SLIDESHOW 0
-#endif
-
-/*Demonstrate the usage of encoder and keyboard*/
-#define LV_USE_DEMO_KEYPAD_AND_ENCODER 0
-
-/*Benchmark your system*/
-#define LV_USE_DEMO_BENCHMARK 1//0
-#if LV_USE_DEMO_BENCHMARK
-    /*Use RGB565A8 images with 16 bit color depth instead of ARGB8565*/
-    #define LV_DEMO_BENCHMARK_RGB565A8 0
-#endif
-
-/*Stress test for LVGL*/
-#define LV_USE_DEMO_STRESS 0
-
-/*Music player demo*/
-#define LV_USE_DEMO_MUSIC 0//1
+siHdmiTx_VideoSel(HDMI_720P60);
+```
+改函数对应的参数如下，这些参数可以在 sii902_linux.h 中找到。由于目前RA8D1最高只支持720P，所以这里对应最高为720P
+```
+//====================================================
+// Video mode define
+#define HDMI_480I60_4X3	1
+#define HDMI_576I50_4X3	2
+#define HDMI_480P60_4X3	3
+#define HDMI_576P50_4X3	4
+#define HDMI_720P60			5
+#define HDMI_720P50			6
+#define HDMI_1080I60		7
+#define HDMI_1080I50		8
+#define HDMI_1080P60		9
+#define HDMI_1080P50		10
+//zhy+ Begin
+#define HDMI_1080P25		11
+#define HDMI_1080P30		12
+#define HDMI_1080P24		13
 ```
 
-### 1.3 连接屏幕，如下：
+![alt text](images/glcdc_config.jpg)
 
-![alt text](images/10inch_connect.jpg)
+### 1.3 连接摄像头，如下：
 
-### 1.4 编译，下载，运行
+![alt text](images/OV7725.jpg)
+
+### 1.4 连接显示器，需要使用支持刷新率在 30Hz~60Hz 的显示器。这里推荐一个HP的一款显示器，或是使用老式电视机做显示器。
+
+![alt text](images/information.jpg)
+
+直接用 HDMI 线连接：
+
+![alt text](images/monitor_connect.jpg)
 
 
-## 2. 如果需要使用 7 寸屏，可以参考 mipi_cpkhmi_ra8d1_ep 的配置，更换工程中 /src 下 dsi_configuration_data.c 的 lcd_init_focuslcd[]
+### 1.5 编译，下载，运行
+
+
+## 2. 显示结果
 
 ### 2.1 最后显示如下
 
-![alt text](images/lvgl_v9.jpg)
+![alt text](images/display_result.jpg)
 
 
 
 
 ## 3. 支持的电路板：
-CPKHMI-RA8D1B
+CPKDIS-RA8D1B
 
 ## 4. 硬件要求：
-1块瑞萨 RA8D1 HMI板：CPKHMI-RA8D1B
+1块瑞萨 RA8D1 HMI板：CPKDIS-RA8D1B
 
 1根 Type-C USB 数据线
 
-1块 10.1inch 屏，或者 7inch 屏
+1块 显示器
+
+1个 OV7725 摄像头
 
 ## 5. 硬件连接：
-通过Type-C USB 数据线将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC
-连接屏幕到板子
+1. 通过Type-C USB 数据线将 CPKDIS-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC
+2. 连接显示器
+3. 连接OV7725到板子
