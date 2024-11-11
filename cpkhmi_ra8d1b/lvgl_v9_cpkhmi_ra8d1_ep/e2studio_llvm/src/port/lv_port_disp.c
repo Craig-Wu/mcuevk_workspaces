@@ -1,7 +1,8 @@
-/**
- * @file lv_port_disp_templ.c
- *
- */
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 
 
 /*********************
@@ -35,6 +36,7 @@ static void disp_init(void);
 static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map);
 static void vsync_wait_cb(struct _lv_display_t * disp);
 
+volatile bool v_sync_flag = false;
 
 /**********************
  *  STATIC VARIABLES
@@ -58,7 +60,7 @@ void lv_port_disp_init(void)
     /*------------------------------------
      * Create a display and set a flush_cb
      * -----------------------------------*/
-    lv_display_t * disp = lv_display_create(DISPLAY_HSIZE_INPUT0, DISPLAY_VSIZE_INPUT0);
+    lv_display_t * disp = lv_display_create(DISPLAY_HSIZE_INPUT0, 1024);
 
     lv_display_set_flush_cb(disp, disp_flush);
     lv_display_set_flush_wait_cb(disp, vsync_wait_cb);
@@ -138,6 +140,7 @@ void glcdc_callback(display_callback_args_t *p_args)
 {
     if (DISPLAY_EVENT_LINE_DETECTION == p_args->event)
     {
+        v_sync_flag = true;
 #if BSP_CFG_RTOS == 2               // FreeRTOS
        BaseType_t context_switch;
 
@@ -171,6 +174,12 @@ void glcdc_callback(display_callback_args_t *p_args)
 static void vsync_wait_cb(lv_display_t * display)
 {
     if(!lv_display_flush_is_last(display)) return;
+
+    v_sync_flag = false;
+    while(v_sync_flag!=true)
+    {
+        ;
+    }
 
 #if BSP_CFG_RTOS == 2              // FreeRTOS
     //

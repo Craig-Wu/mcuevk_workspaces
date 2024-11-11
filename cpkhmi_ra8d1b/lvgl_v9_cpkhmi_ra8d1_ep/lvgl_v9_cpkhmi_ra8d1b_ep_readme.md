@@ -31,11 +31,20 @@
 #define LV_USE_DEMO_MUSIC 0//1
 ```
 
-### 1.3 连接屏幕，如下：
+### 1.3 使能2DG，如下：
+
+![alt text](images/enable_2d.jpg)
+
+### 1.3 使能layer2，如下：
+
+![alt text](images/layer2.jpg)
+
+
+### 1.4 连接屏幕，如下：
 
 ![alt text](images/10inch_connect.jpg)
 
-### 1.4 编译，下载，运行
+### 1.5 编译，下载，运行
 
 
 ## 2. 如果需要使用 7 寸屏，可以参考 mipi_cpkhmi_ra8d1_ep 的配置，更换工程中 /src 下 dsi_configuration_data.c 的 lcd_init_focuslcd[]

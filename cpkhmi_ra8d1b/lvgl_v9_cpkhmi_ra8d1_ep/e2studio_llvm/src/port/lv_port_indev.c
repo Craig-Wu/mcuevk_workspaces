@@ -1,8 +1,8 @@
-/**
- * @file lv_port_indev_templ.c
- *
- */
-
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 /*Copy this file as "lv_port_indev.c" and set this value to "1" to enable content*/
 #if 1
 

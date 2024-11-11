@@ -144,7 +144,7 @@ static void perf_monitor_disp_event_cb(lv_event_t * e)
             break;
     }
 }
-uint32_t lv_os_get_idle_percent(void);
+//uint32_t lv_os_get_idle_percent(void);
 
 static void perf_update_timer_cb(lv_timer_t * t)
 {

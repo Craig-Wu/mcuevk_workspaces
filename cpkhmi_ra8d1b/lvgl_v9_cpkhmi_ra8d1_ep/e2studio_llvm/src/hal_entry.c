@@ -9,7 +9,9 @@
 #include "port/lv_port_indev.h"
 #include "lvgl/demos/lv_demos.h"
 #include "board_sdram.h"
+//#include "renesas_logo.c"
 
+extern const unsigned char gImage_renesas_logo[];
 
 static uint32_t idle_time_sum;
 static uint32_t non_idle_time_sum;
@@ -28,6 +30,21 @@ FSP_CPP_FOOTER
 #define RGB_565_GREEN  (0x3F << 5)
 #define RGB_565_BLUE   (0x1F << 0)
 
+
+void lv_freertos_task_switch_in(const char * name)
+{
+    if(strcmp(name, "IDLE")) idle_task_running = false;
+    else idle_task_running = true;
+
+    task_switch_timestamp = lv_tick_get();
+}
+
+void lv_freertos_task_switch_out(void)
+{
+    uint32_t elaps = lv_tick_elaps(task_switch_timestamp);
+    if(idle_task_running) idle_time_sum += elaps;
+    else non_idle_time_sum += elaps;
+}
 uint32_t lv_os_get_idle_percent(void)
 {
     if(non_idle_time_sum + idle_time_sum == 0) {
@@ -48,6 +65,21 @@ void timer_tick_callback(timer_callback_args_t *p_args)
     FSP_PARAMETER_NOT_USED(p_args);
     lv_tick_inc(1);
 }
+
+extern volatile bool v_sync_flag;
+
+void lv_example_bar_21(void);
+void lv_example_bar_21(void)
+{
+    lv_obj_t * bar1 = lv_bar_create(lv_screen_active());
+    lv_obj_set_size(bar1, 200, 20);
+    lv_obj_center(bar1);
+    lv_bar_set_value(bar1, 70, LV_ANIM_OFF);
+}
+
+
+
+
 /* New Thread entry function */
 /* pvParameters contains TaskHandle_t */
 void hal_entry(void)
@@ -55,6 +87,8 @@ void hal_entry(void)
 
     fsp_err_t err;
     uint32_t count;
+    uint32_t x , y;
+    uint16_t temp_image, temp_imageH, temp_imageL;
 
 
     lv_init();
@@ -63,20 +97,27 @@ void hal_entry(void)
 
     lv_port_indev_init();
 
-    uint16_t * p = (uint16_t *)&fb_background[0][0];
-//    for (count = 0; count < sizeof(fb_background)/2; count++)
-//    {
-//        *p++ = RGB_565_REG;
-//    }
-//    for (count = 0; count < sizeof(fb_background)/2; count++)
-//        {
-//            *p++ = RGB_565_GREEN;
-//        }
-    for (count = 0; count < sizeof(fb_background)/2; count++)
+    uint16_t * p_fb = (uint16_t *)&fb_foreground[0][0];
+
+
+    for( x=0;x<256;x++)
         {
-            *p++ = RGB_565_BLUE;
+            for( y=0;y<800;y++)
+            {
+                temp_imageH = (uint16_t)( (gImage_renesas_logo[2*y+(x)*800*2]<<8)&0xFF00 ); //取像素的高8bit
+                temp_imageL = (uint16_t)(  gImage_renesas_logo[2*y+1+(x)*800*2]&0x00FF );   //取像素的低8bit
+                temp_image = temp_imageH|temp_imageL;
+                p_fb[y+x*(800)] = temp_image ; //(uint16_t)( ( (gImage_renesas_logo[2*y]<<8)&0xFF00 ) | (gImage_renesas_logo[2*y+1]&0x00FF)) ;
+//               fb_background[0][y+x*(800)] = 0xF000+y;
+
+            }
+
         }
-    R_BSP_SoftwareDelay(500,1000);
+    R_GLCDC_BufferChange (&g_display0_ctrl, (uint8_t*) p_fb, DISPLAY_FRAME_LAYER_1);
+    while(v_sync_flag!=true)
+    {
+        ;
+    }
 
 #if (1 == LV_USE_DEMO_BENCHMARK)
     lv_demo_benchmark();
@@ -97,7 +138,7 @@ void hal_entry(void)
 
 #if (1 == LV_USE_DEMO_WIDGETS && 0 == LV_USE_DEMO_BENCHMARK)
     lv_demo_widgets();
-//    lv_example_anim_1();
+//    lv_example_bar_21();
 //    lv_example_anim_timeline_2();
 #endif
 
@@ -116,7 +157,9 @@ void hal_entry(void)
     /* TODO: add your own code here */
     while (1)
     {
+//        lv_freertos_task_switch_in("lvgl");
         lv_timer_handler();
+//        lv_freertos_task_switch_out();
         R_BSP_SoftwareDelay(3, BSP_DELAY_UNITS_MILLISECONDS);
     }
 }
