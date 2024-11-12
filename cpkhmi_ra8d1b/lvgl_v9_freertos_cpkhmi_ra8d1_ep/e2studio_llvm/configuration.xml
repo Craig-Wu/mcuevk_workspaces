@@ -329,18 +329,18 @@
       <property id="module.driver.display.layer0.color.byte.b" value="255"/>
       <property id="module.driver.display.input0.buffer_name" value="fb_background"/>
       <property id="module.driver.display.input0.buffer_number" value="2"/>
-      <property id="module.driver.display.input0.section" value=".sdram"/>
+      <property id="module.driver.display.input0.section" value=".nocache_sdram"/>
       <property id="module.driver.display.input0.format" value="module.driver.display.input0.format.in_format_16bits_rgb565"/>
       <property id="module.driver.display.input0.line_descending_enable" value="module.driver.display.input0.line_descending_enable.false"/>
       <property id="module.driver.display.input0.lines_repeat_enable" value="module.driver.display.input0.lines_repeat_enable.false"/>
       <property id="module.driver.display.input0.lines_repeat_times" value="0"/>
       <property id="module.driver.display.layer0.fade_control" value="module.driver.display.layer0.fade_control.fade_control_none"/>
       <property id="module.driver.display.layer0.fade_speed" value="0"/>
-      <property id="module.driver.display.input1.enable" value="module.driver.display.input1.enable.false"/>
-      <property id="module.driver.display.input1.hsize" value="20"/>
-      <property id="module.driver.display.input1.vsize" value="85"/>
+      <property id="module.driver.display.input1.enable" value="module.driver.display.input1.enable.true"/>
+      <property id="module.driver.display.input1.hsize" value="800"/>
+      <property id="module.driver.display.input1.vsize" value="256"/>
       <property id="module.driver.display.layer1.coordinate.x" value="0"/>
-      <property id="module.driver.display.layer1.coordinate.y" value="0"/>
+      <property id="module.driver.display.layer1.coordinate.y" value="1024"/>
       <property id="module.driver.display.layer1.color.byte.a" value="255"/>
       <property id="module.driver.display.layer1.color.byte.r" value="255"/>
       <property id="module.driver.display.layer1.color.byte.g" value="255"/>
@@ -348,7 +348,7 @@
       <property id="module.driver.display.input1.buffer_name" value="fb_foreground"/>
       <property id="module.driver.display.input1.buffer_number" value="1"/>
       <property id="module.driver.display.input1.section" value=".sdram"/>
-      <property id="module.driver.display.input1.format" value="module.driver.display.input1.format.in_format_32bits_rgb888"/>
+      <property id="module.driver.display.input1.format" value="module.driver.display.input1.format.in_format_16bits_rgb565"/>
       <property id="module.driver.display.input1.line_descending_enable" value="module.driver.display.input1.line_descending_enable.false"/>
       <property id="module.driver.display.input1.lines_repeat_enable" value="module.driver.display.input1.lines_repeat_enable.false"/>
       <property id="module.driver.display.input1.lines_repeat_times" value="0"/>
@@ -379,7 +379,7 @@
       <property id="module.driver.display.tcon_vsync" value="module.driver.display.tcon_vsync.tcon_pin_0"/>
       <property id="module.driver.display.tcon_de" value="module.driver.display.tcon_de.tcon_pin_2"/>
       <property id="module.driver.display.clksrc" value="module.driver.display.clksrc.clk_src_internal"/>
-      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_6"/>
+      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_8"/>
       <property id="module.driver.display.correction_proc_order" value="module.driver.display.correction_proc_order.correction_proc_order_brightness_contrast2gamma"/>
       <property id="module.driver.display.output.brightness.enable" value="module.driver.display.output.brightness.false"/>
       <property id="module.driver.display.output.brightness.r" value="512"/>

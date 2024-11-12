@@ -63,7 +63,7 @@ void lv_port_disp_init(void)
     /*------------------------------------
      * Create a display and set a flush_cb
      * -----------------------------------*/
-    lv_display_t * disp = lv_display_create(DISPLAY_HSIZE_INPUT0, DISPLAY_VSIZE_INPUT0);
+    lv_display_t * disp = lv_display_create(DISPLAY_HSIZE_INPUT0, 1024);//DISPLAY_VSIZE_INPUT0
 
     lv_display_set_flush_cb(disp, disp_flush);
     lv_display_set_flush_wait_cb(disp, vsync_wait_cb);

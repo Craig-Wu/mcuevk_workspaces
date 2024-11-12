@@ -62,7 +62,7 @@ void vApplicationMallocFailedHook( void )
 #define RGB_565_GREEN  (0x3F << 5)
 #define RGB_565_BLUE   (0x1F << 0)
 
-
+extern const unsigned char gImage_renesas_logo[];
 /* New Thread entry function */
 /* pvParameters contains TaskHandle_t */
 void LVGL_thread_entry(void *pvParameters)
@@ -70,7 +70,8 @@ void LVGL_thread_entry(void *pvParameters)
     FSP_PARAMETER_NOT_USED (pvParameters);
     fsp_err_t err;
     uint32_t count;
-
+    uint32_t x , y;
+    uint16_t temp_image, temp_imageH, temp_imageL;
 
     lv_init();
 
@@ -78,19 +79,24 @@ void LVGL_thread_entry(void *pvParameters)
 
     lv_port_indev_init();
 
-    uint16_t * p = (uint16_t *)&fb_background[0][0];
-//    for (count = 0; count < sizeof(fb_background)/2; count++)
-//    {
-//        *p++ = RGB_565_REG;
-//    }
-//    for (count = 0; count < sizeof(fb_background)/2; count++)
-//        {
-//            *p++ = RGB_565_GREEN;
-//        }
-    for (count = 0; count < sizeof(fb_background)/2; count++)
+    uint16_t * p_fb = (uint16_t *)&fb_foreground[0][0];
+
+
+    for( x=0;x<256;x++)
         {
-            *p++ = RGB_565_BLUE;
+            for( y=0;y<800;y++)
+            {
+                temp_imageH = (uint16_t)( (gImage_renesas_logo[2*y+(x)*800*2]<<8)&0xFF00 ); //取像素的高8bit
+                temp_imageL = (uint16_t)(  gImage_renesas_logo[2*y+1+(x)*800*2]&0x00FF );   //取像素的低8bit
+                temp_image = temp_imageH|temp_imageL;
+                p_fb[y+x*(800)] = temp_image ; //(uint16_t)( ( (gImage_renesas_logo[2*y]<<8)&0xFF00 ) | (gImage_renesas_logo[2*y+1]&0x00FF)) ;
+//               fb_background[0][y+x*(800)] = 0xF000+y;
+
+            }
+
         }
+    R_GLCDC_BufferChange (&g_display0_ctrl, (uint8_t*) p_fb, DISPLAY_FRAME_LAYER_1);
+
     R_BSP_SoftwareDelay(500,1000);
 
 #if (1 == LV_USE_DEMO_BENCHMARK)

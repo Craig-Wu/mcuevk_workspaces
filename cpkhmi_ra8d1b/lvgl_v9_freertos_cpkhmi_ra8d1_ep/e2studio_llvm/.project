@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>lvgl_v9_freertos_cpkhmi_ra8d1_ep</name>
+	<name>lvgl_v9_freertos_cpkhmi_ra8d1_ep_llvm</name>
 	<comment></comment>
 	<projects>
 	</projects>
