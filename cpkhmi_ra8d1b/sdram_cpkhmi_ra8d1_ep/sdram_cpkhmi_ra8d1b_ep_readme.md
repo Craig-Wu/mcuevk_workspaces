@@ -20,10 +20,10 @@
 CPKHMI-RA8D1B
 
 ## 5. 硬件要求：
-1块瑞萨 RA8D1 HMI板：CPKCOR-RA8D1B
+1块瑞萨 RA8D1 HMI板：CPKHMI-RA8D1B
 
 1根 Type-C USB 数据线
 
 
 ## 6. 硬件连接：
-通过Type-C USB 数据线将 CPKCOR-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC
+通过Type-C USB 数据线将 CPKHMI-RA8D1B板上的 USB 调试端口（JDBG）连接到主机 PC

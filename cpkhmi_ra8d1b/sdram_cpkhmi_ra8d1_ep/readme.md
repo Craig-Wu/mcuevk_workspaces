@@ -1,13 +1,13 @@
 该示例工程由 瑞萨电子-黄国爵 提供，2024年11月20日
 
 #### 工程概述:
-* 该示例工程演示了基于CPKCOR-RA8D1B的SDRAM驱动测试。
+* 该示例工程演示了基于CPKHMI-RA8D1B的SDRAM驱动测试。
 
 #### 支持的开发板 / 演示板：
-* CPKCOR-RA8D1B
+* CPKHMI-RA8D1B
 
 #### 硬件要求：
-* 1块 Renesas RA8开发板：CPKCOR-RA8D1B
+* 1块 Renesas RA8开发板：CPKHMI-RA8D1B
 * 1根 USB Type A->Type C 或 Type-C->Type C 线 （支持 Type-C 2.0 即可）
 
 
@@ -35,5 +35,5 @@
 
 
 ### 详细的样例程序配置和使用，请参考下面的文件。
-[sdram_cpkcor_ra8d1b_ep_readme](sdram_cpkcor_ra8d1b_ep_readme.md)
+[sdram_cpkhmi_ra8d1b_ep_readme](sdram_cpkhmi_ra8d1b_ep_readme.md)
 
