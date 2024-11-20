@@ -62,8 +62,8 @@ volatile uint32_t dtcm_write_buffer[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(
 volatile uint32_t dtcm_read_buffer[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".dtcm_data");
 
 
-volatile uint32_t sdram_cache[SDRAM_EXAMPLE_DATALEN] BSP_ALIGN_VARIABLE(8) BSP_PLACE_IN_SECTION(".sdram");
-volatile uint32_t sdram_nocache[SDRAM_EXAMPLE_DATALEN] BSP_ALIGN_VARIABLE(8) BSP_PLACE_IN_SECTION(".nocache_sdram");
+volatile uint32_t sdram_cache[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".sdram");
+volatile uint32_t sdram_nocache[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".nocache_sdram");
 
 
 
@@ -81,12 +81,14 @@ uint8_t timer1s_flag = 0;
 
 
 uint32_t sdram_write_count = 0;
-/* SRAM<--->SDRAM 写测试，SRAM cache<-->SDRAM cache, SRAM cache<-->SDRAM Non cache, SRAM Non cache<-->SDRAM Non cache  */
+/* SRAM<--->SDRAM 读写测试，SRAM cache<-->SDRAM cache, SRAM cache<-->SDRAM Non cache, SRAM Non cache<-->SDRAM Non cache  */
 void SDRAMReadWrite32Bit_test(void)
 {
        uint32_t index;
        uint32_t datalen = SDRAM_EXAMPLE_DATALEN ;
        uint32_t i = 0;
+
+//       uint32_t *sdram = EXAMPLE_SDRAM_START_ADDRESS;
 
        APP_PRINT("##############################################################\r\n");
        APP_PRINT("##############################################################\r\n");
@@ -144,7 +146,7 @@ void SDRAMReadWrite32Bit_test(void)
 
        for (index = 0; index < datalen; index++)
        {
-           sdram_nocache[index]  = SRAM_write_buff_Cache[0];  //source 为 SRAM
+           sdram_nocache[index]  = SRAM_write_buff_Cache[index];  //source 为 SRAM
        }
 
 
@@ -213,7 +215,7 @@ void SDRAMReadWrite32Bit_test(void)
 
         for (index = 0; index < datalen; index++)
         {
-            SRAM_write_buff_Cache[index] = sdram_cache[index];  //读SDRAM
+            SRAM_read_buff_Nocache[index] = sdram_cache[index];  //读SDRAM
         }
 
         DWT_post_count = DWT_get_count();
@@ -236,7 +238,7 @@ void SDRAMReadWrite32Bit_test(void)
 
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
 
-        SCB_CleanInvalidateDCache_by_Addr(sdram_cache, datalen);
+
         APP_PRINT("**********SRAM cacheable SDRAM non cacheable read Start! **********\r\n");
         DWT_init();
         DWT_clean_count();
@@ -244,7 +246,7 @@ void SDRAMReadWrite32Bit_test(void)
 
         for (index = 0; index < datalen; index++)
         {
-            SRAM_write_buff_Nocache[index] = sdram_cache[index];  //读SDRAM
+            SRAM_read_buff_Cache[index] = sdram_nocache[index];  //读SDRAM, SDRAM 放在noncacheable段
         }
 
         DWT_post_count = DWT_get_count();
@@ -294,13 +296,9 @@ void SDRAMReadWrite32Bit_test(void)
          while(1){;}
         }
 #endif
-//        APP_PRINT("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
-//        APP_PRINT("**********SRAM non cacheable SDRAM non cacheable read End! **********\r\n");
+
 
 }
-
-
-
 
 
 /*******************************************************************************************************************//**
@@ -313,10 +311,6 @@ void hal_entry(void)
     APP_PRINT("SDRAM read/write test start!\r\n");
     /* Initialize SDRAM. */
     bsp_sdram_init();          //See BSP_PRV_SDRAM_BUS_WIDTH to define bus width of SDRAM
-
-
-
-
 
     SDRAMReadWrite32Bit_test();
 

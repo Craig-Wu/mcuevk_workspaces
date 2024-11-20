@@ -6,6 +6,7 @@
 #include "hal_data.h"
 #include "board_sdram.h"
 #include <stdio.h>
+#include "common_utils.h"
 FSP_CPP_HEADER
 void R_BSP_WarmStart(bsp_warm_start_event_t event);
 FSP_CPP_FOOTER
@@ -52,28 +53,19 @@ volatile uint32_t DWT_delta=0;
 
 #define SDRAM_EXAMPLE_DATALEN    4*1024
 
-volatile uint32_t SRAM_write_buff_Cache[SDRAM_EXAMPLE_DATALEN];// BSP_PLACE_IN_SECTION(".nocache");
-volatile uint32_t SRAM_read_buff_Cache[SDRAM_EXAMPLE_DATALEN];// BSP_PLACE_IN_SECTION(".nocache");
+volatile uint32_t SRAM_write_buff_Cache[SDRAM_EXAMPLE_DATALEN];
+volatile uint32_t SRAM_read_buff_Cache[SDRAM_EXAMPLE_DATALEN];
 volatile uint32_t SRAM_write_buff_Nocache[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".nocache");
 volatile uint32_t SRAM_read_buff_Nocache[SDRAM_EXAMPLE_DATALEN]  BSP_PLACE_IN_SECTION(".nocache");
 
 volatile uint32_t dtcm_write_buffer[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".dtcm_data");
 volatile uint32_t dtcm_read_buffer[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".dtcm_data");
-//uint32_t dtcm_read_buff[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".dtcm_data");
-//uint32_t sdram_read_buff[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".sdram");
-//uint32_t sdram_write_buff[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".sdram");
 
-volatile uint32_t sdram_cache[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".sdram");
+
+volatile uint32_t sdram_cache[SDRAM_EXAMPLE_DATALEN]  BSP_PLACE_IN_SECTION(".sdram");
 volatile uint32_t sdram_nocache[SDRAM_EXAMPLE_DATALEN] BSP_PLACE_IN_SECTION(".nocache_sdram");
 
-/* SRAM<--->SDRAM 读写测试，不开cache  */
-void SDRAMReadWrite32Bit_SRAM_NonCache(void) ;
-/* SRAM<--->SDRAM 读写测试，开cache  */
-void SDRAMReadWrite32Bit_SRAM_Cache(void) ;
-/* DTCM<--->SDRAM 读写测试，不开cache  */
-void SDRAMReadWrite32Bit_DTCM_NonCache(void);
-/* DTCM<--->SDRAM 读写测试，开cache  */
-void SDRAMReadWrite32Bit_DTCM_Cache(void);
+
 
 /*******************************************************************************
  *
@@ -83,40 +75,36 @@ void SDRAMReadWrite32Bit_DTCM_Cache(void);
 #define EXAMPLE_SRAM_START_ADDRESS  (0x220B0000U)
 
 
+uint8_t timer1s_flag = 0;
+/* Callback function */
 
-/* SRAM<--->SDRAM 写测试，SRAM cache<-->SDRAM cache, SRAM cache<-->SDRAM Non cache, SRAM Non cache<-->SDRAM Non cache  */
-void SDRAMWrite32Bit_test(void)
+
+
+uint32_t sdram_write_count = 0;
+/* SRAM<--->SDRAM 读写测试，SRAM cache<-->SDRAM cache, SRAM cache<-->SDRAM Non cache, SRAM Non cache<-->SDRAM Non cache  */
+void SDRAMReadWrite32Bit_test(void)
 {
        uint32_t index;
        uint32_t datalen = SDRAM_EXAMPLE_DATALEN ;
-//       uint32_t *sdram  = (uint32_t *)sdram_nocache;//EXAMPLE_SDRAM_START_ADDRESS; /* SDRAM start address. */
-//       uint32_t *sdram  = (uint32_t *)EXAMPLE_SDRAM_START_ADDRESS; /* SDRAM start address. */
+       uint32_t i = 0;
 
-//       uint32_t *dtcm_buffer  = (uint32_t *)EXAMPLE_DTCM_START_ADDRESS;
-//       uint32_t *write_buff = (uint32_t *)EXAMPLE_SRAM_START_ADDRESS;
-       printf("##############################################################\r\n");
-       printf("##############################################################\r\n");
-       printf("##############################################################\r\n");
-       printf("**********Write to SDRAM! **********\r\n");
-       printf("**********SRAM cacheable SDRAM cacheable Start! **********\r\n");
+//       uint32_t *sdram = EXAMPLE_SDRAM_START_ADDRESS;
+
+       APP_PRINT("##############################################################\r\n");
+       APP_PRINT("##############################################################\r\n");
+       APP_PRINT("##############################################################\r\n");
+       APP_PRINT("**********Write to SDRAM! **********\r\n");
+       APP_PRINT("**********SRAM cacheable SDRAM cacheable Start! **********\r\n");
 
        memset((uint32_t *)SRAM_write_buff_Cache, 0 ,datalen);
        memset((uint32_t *)sdram_cache, 0 ,datalen);
        memset((uint32_t *)SRAM_write_buff_Nocache, 0 ,datalen);
        memset((uint32_t *)sdram_nocache, 0 ,datalen);
-       for(uint16_t i=0; i<datalen; i++)
+       for( i=0; i<datalen; i++)
        {
            SRAM_write_buff_Cache[i] = i;
            SRAM_write_buff_Nocache[i] = i;
-       }
-       for (index = 0; index < datalen; index++)
-       {
-#if DTCM_Used
-        dtcm_buffer[index]  = SRAM_write_buff[index];       //index;
-//        sdram_write_buff[index] = write_buff[index];
-#else
-
-#endif
+           dtcm_write_buffer[i] = i;
        }
 
        DWT_init();
@@ -125,174 +113,163 @@ void SDRAMWrite32Bit_test(void)
 
        for (index = 0; index < datalen; index++)
        {
-#if DTCM_Used
-        sdram[index]  = dtcm_buffer[index];  //source 为 DTCM
-//        sdram_read_buff[index] = sdram_write_buff[index];
-#else
-        sdram_cache[index]  = SRAM_write_buff_Cache[index];  //source 为 SRAM
-#endif
+
+           sdram_cache[index]  = SRAM_write_buff_Cache[index];  //source 为 SRAM
        }
 
        DWT_post_count = DWT_get_count();
        DWT_delta = DWT_post_count - DWT_pre_count;
        if(DWT_delta==0)
        {
-           printf("DWT count error! \r\n");
+           APP_PRINT("DWT count error! \r\n");
        }
        time_sdram_access = DWT_count_to_us(DWT_delta);
 
-       printf("sdram write DWT count:%d \r\n", DWT_delta);
-       printf("sdram write time:%dus \r\n", time_sdram_access);
-       printf("sram cache sdram cache write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
+//       APP_PRINT("sdram write DWT count:%d \r\n", DWT_delta);
+//       APP_PRINT("sdram write time:%dus \r\n", time_sdram_access);
+       APP_PRINT("sram cache sdram cache write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
        if(time_sdram_access==0)
        {
            while(1){;}
        }
 
-       printf("**********SRAM cacheable SDRAM cacheable End! **********\r\n");
+       APP_PRINT("**********SRAM cacheable SDRAM cacheable End! **********\r\n");
 
        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
 
 
-       printf("**********SRAM cacheable SDRAM Non cacheable Start! **********\r\n");
+       APP_PRINT("**********SRAM cacheable SDRAM Non cacheable Start! **********\r\n");
+
        DWT_init();
        DWT_clean_count();
        DWT_pre_count = DWT_get_count();
 
        for (index = 0; index < datalen; index++)
        {
-#if DTCM_Used
-        sdram[index]  = dtcm_buffer[index];  //source 为 DTCM
-//        sdram_read_buff[index] = sdram_write_buff[index];
-#else
-        sdram_nocache[index]  = SRAM_write_buff_Cache[index];  //source 为 SRAM
-#endif
+           sdram_nocache[index]  = SRAM_write_buff_Cache[index];  //source 为 SRAM
        }
+
 
        DWT_post_count = DWT_get_count();
        DWT_delta = DWT_post_count - DWT_pre_count;
        if(DWT_delta==0)
        {
-           printf("DWT count error! \r\n");
+           APP_PRINT("DWT count error! \r\n");
        }
        time_sdram_access = DWT_count_to_us(DWT_delta);
 
-       printf("sdram write DWT count:%d \r\n", DWT_delta);
-       printf("sdram write time:%dus \r\n", time_sdram_access);
-       printf("sram cache sdram non cache write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
+//       APP_PRINT("sdram write DWT count:%d \r\n", DWT_delta);
+//       APP_PRINT("sdram write time:%dus \r\n", time_sdram_access);
+       APP_PRINT("sram cache sdram non cache write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
        if(time_sdram_access==0)
        {
            while(1){;}
        }
-//       printf("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
-       printf("**********SRAM cacheable SDRAM Non cacheable End! **********\r\n");
+//       APP_PRINT("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
+       APP_PRINT("**********SRAM cacheable SDRAM Non cacheable End!   **********\r\n");
 
        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
 
-
-       printf("**********SRAM Non acheable SDRAM Non cacheable Start! **********\r\n");
+#if 0
+       APP_PRINT("**********SRAM Non acheable SDRAM Non cacheable Start! **********\r\n");
        DWT_init();
        DWT_clean_count();
        DWT_pre_count = DWT_get_count();
 
        for (index = 0; index < datalen; index++)
        {
-#if DTCM_Used
-        sdram[index]  = dtcm_buffer[index];  //source 为 DTCM
-//        sdram_read_buff[index] = sdram_write_buff[index];
-#else
-        sdram_nocache[index]  = SRAM_write_buff_Nocache[index];  //source 为 SRAM
-#endif
+
+           sdram_nocache[index]  = SRAM_write_buff_Nocache[index];  //source 为 SRAM
+
        }
 
        DWT_post_count = DWT_get_count();
        DWT_delta = DWT_post_count - DWT_pre_count;
        if(DWT_delta==0)
        {
-           printf("DWT count error! \r\n");
+           APP_PRINT("DWT count error! \r\n");
        }
        time_sdram_access = DWT_count_to_us(DWT_delta);
 
-       printf("sdram write DWT count:%d \r\n", DWT_delta);
-       printf("sdram write time:%dus \r\n", time_sdram_access);
-       printf("sdram non cache write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
+//       APP_PRINT("sdram write DWT count:%d \r\n", DWT_delta);
+//       APP_PRINT("sdram write time:%dus \r\n", time_sdram_access);
+       APP_PRINT("sdram non cache write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
        if(time_sdram_access==0)
        {
            while(1){;}
        }
-       printf("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
-       printf("**********SRAM Non cacheable SDRAM Non cacheable End! **********\r\n");
+#endif
 
        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
 
 
-       printf("##############################################################\r\n");
-       printf("##############################################################\r\n");
-       printf("##############################################################\r\n");
-       printf("**********Read from SDRAM! **********\r\n");
-       printf("**********SRAM cacheable SDRAM cacheable read Start! **********\r\n");
+       APP_PRINT("##############################################################\r\n");
+       APP_PRINT("##############################################################\r\n");
+       APP_PRINT("##############################################################\r\n");
+       APP_PRINT("**********Read from SDRAM! **********\r\n");
+       APP_PRINT("**********SRAM cacheable SDRAM cacheable read Start! **********\r\n");
         DWT_init();
         DWT_clean_count();
         DWT_pre_count = DWT_get_count();
 
         for (index = 0; index < datalen; index++)
         {
-            SRAM_write_buff_Cache[index] = sdram_cache[index];  //读SDRAM
+            SRAM_read_buff_Cache[index] = sdram_cache[index];  //读SDRAM
         }
 
         DWT_post_count = DWT_get_count();
         DWT_delta = DWT_post_count - DWT_pre_count;
         if(DWT_delta==0)
         {
-         printf("DWT count error! \r\n");
+         APP_PRINT("DWT count error! \r\n");
         }
         time_sdram_access = DWT_count_to_us(DWT_delta);
 
-        printf("sdram read DWT count:%d \r\n", DWT_delta);
-        printf("sdram read time:%dus \r\n", time_sdram_access);
-        printf("sram cache sdram cache read speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
+//        APP_PRINT("sdram read DWT count:%d \r\n", DWT_delta);
+//        APP_PRINT("sdram read time:%dus \r\n", time_sdram_access);
+        APP_PRINT("sram cache sdram cache read speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
         if(time_sdram_access==0)
         {
          while(1){;}
         }
-        //       printf("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
-        printf("**********SRAM cacheable SDRAM cacheable read End! **********\r\n");
+        //       APP_PRINT("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
+        APP_PRINT("**********SRAM cacheable SDRAM cacheable read End! **********\r\n");
 
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
 
 
-        printf("**********SRAM cacheable SDRAM non cacheable read Start! **********\r\n");
+        APP_PRINT("**********SRAM cacheable SDRAM non cacheable read Start! **********\r\n");
         DWT_init();
         DWT_clean_count();
         DWT_pre_count = DWT_get_count();
 
         for (index = 0; index < datalen; index++)
         {
-            SRAM_write_buff_Nocache[index] = sdram_cache[index];  //读SDRAM
+            SRAM_read_buff_Cache[index] = sdram_nocache[index];  //读SDRAM, SDRAM 放在noncacheable段
         }
 
         DWT_post_count = DWT_get_count();
         DWT_delta = DWT_post_count - DWT_pre_count;
         if(DWT_delta==0)
         {
-         printf("DWT count error! \r\n");
+         APP_PRINT("DWT count error! \r\n");
         }
         time_sdram_access = DWT_count_to_us(DWT_delta);
 
-        printf("sdram read DWT count:%d \r\n", DWT_delta);
-        printf("sdram read time:%dus \r\n", time_sdram_access);
-        printf("sram cache sdram non read write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
+//        APP_PRINT("sdram read DWT count:%d \r\n", DWT_delta);
+//        APP_PRINT("sdram read time:%dus \r\n", time_sdram_access);
+        APP_PRINT("sram cache sdram non cache read speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
         if(time_sdram_access==0)
         {
          while(1){;}
         }
-        //       printf("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
-        printf("**********SRAM cacheable SDRAM non cacheable read End! **********\r\n");
+        //       APP_PRINT("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
+        APP_PRINT("**********SRAM cacheable SDRAM non cacheable read End!   **********\r\n");
 
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
 
-
-        printf("**********SRAM non cacheable SDRAM non cacheable read Start! **********\r\n");
+#if 0
+        APP_PRINT("**********SRAM non cacheable SDRAM non cacheable read Start! **********\r\n");
         DWT_init();
         DWT_clean_count();
         DWT_pre_count = DWT_get_count();
@@ -306,28 +283,20 @@ void SDRAMWrite32Bit_test(void)
         DWT_delta = DWT_post_count - DWT_pre_count;
         if(DWT_delta==0)
         {
-         printf("DWT count error! \r\n");
+         APP_PRINT("DWT count error! \r\n");
         }
         time_sdram_access = DWT_count_to_us(DWT_delta);
 
-        printf("sdram read DWT count:%d \r\n", DWT_delta);
-        printf("sdram read time:%dus \r\n", time_sdram_access);
-        printf("sram non cache sdram non read write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
+//        APP_PRINT("sdram read DWT count:%d \r\n", DWT_delta);
+//        APP_PRINT("sdram read time:%dus \r\n", time_sdram_access);
+        APP_PRINT("sram non cache sdram non read write speed:%dMB/s \r\n", SDRAM_EXAMPLE_DATALEN*4 / time_sdram_access);
         if(time_sdram_access==0)
         {
          while(1){;}
         }
-        //       printf("SDRAM write %d bytes data finished! \r\n" , SDRAM_EXAMPLE_DATALEN*4);
-        printf("**********SRAM non cacheable SDRAM non cacheable read End! **********\r\n");
-
-        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
-
-
-
-
+#endif
 
 }
-
 
 
 
@@ -338,17 +307,11 @@ void SDRAMWrite32Bit_test(void)
 void hal_entry(void)
 {
     /* TODO: add your own code here */
-    fsp_err_t err;
-    err = R_SCI_B_UART_Open(&g_uart3_ctrl, &g_uart3_cfg);
-    if(FSP_SUCCESS != err)
-    {
-        while(1);
-    }
-    printf("SDRAM read/write test start!\r\n");
+    APP_PRINT("SDRAM read/write test start!\r\n");
     /* Initialize SDRAM. */
     bsp_sdram_init();          //See BSP_PRV_SDRAM_BUS_WIDTH to define bus width of SDRAM
 
-    SDRAMWrite32Bit_test();
+    SDRAMReadWrite32Bit_test();
 
 #if BSP_TZ_SECURE_BUILD
     /* Enter non-secure code */
