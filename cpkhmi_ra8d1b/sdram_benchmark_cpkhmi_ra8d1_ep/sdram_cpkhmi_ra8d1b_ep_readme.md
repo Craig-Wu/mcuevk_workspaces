@@ -13,7 +13,7 @@
 把SRAM cacheable的数据写到SDRAM，SDRAM在 non-cacheable时，速度是最快的。所以如果需要写SDRAM时，最好是enable D-Cache，并且把目标SDRAM的buffer放到.noncache_sdram 这个 section
 
 
-![alt text](images/sdram_benchmark.jpg)
+![alt text](images/sdram_benchmark_1.jpg)
 
 
 ## 4. 支持的电路板：
