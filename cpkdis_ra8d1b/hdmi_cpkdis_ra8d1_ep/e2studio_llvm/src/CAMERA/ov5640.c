@@ -1,8 +1,3 @@
-/*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
 #include "ov5640.h"
 #include "ov5640_cfg.h"
 //#include "ov5640_sccb.h"

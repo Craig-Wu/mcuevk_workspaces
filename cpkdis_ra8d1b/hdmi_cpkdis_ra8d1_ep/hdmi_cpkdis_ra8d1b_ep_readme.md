@@ -48,7 +48,7 @@ siHdmiTx_VideoSel(HDMI_720P60);
 
 ### 2.1 最后显示如下
 
-![alt text](images/display_result.jpg)
+![alt text](images/display_result_1.jpg)
 
 
 

@@ -1,9 +1,4 @@
 /*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
-/*
  * graphics.h
  *
  *  Created on: Sep 5, 2023
@@ -15,14 +10,14 @@
 
 #define BYTES_PER_PIXEL                              (4)
 #define COLOR_BAND_COUNT                             (8)
-//#define BLUE                                         (0x000000FF)
-//#define LIME                                         (0xFF00FF00)
-//#define RED                                          (0x00FF0000)
-//#define BLACK                                        (0x00000000)
-//#define WHITE                                        (0xFFFFFFFF)
-//#define YELLOW                                       (0xFFFFFF00)
-//#define AQUA                                         (0xFF00FFFF)
-//#define MAGENTA                                      (0x00FF00FF)
+#define BLUE                                         (0x000000FF)
+#define LIME                                         (0xFF00FF00)
+#define RED                                          (0x00FF0000)
+#define BLACK                                        (0x00000000)
+#define WHITE                                        (0xFFFFFFFF)
+#define YELLOW                                       (0xFFFFFF00)
+#define AQUA                                         (0xFF00FFFF)
+#define MAGENTA                                      (0x00FF00FF)
 
 
 extern uint32_t * gp_single_buffer;

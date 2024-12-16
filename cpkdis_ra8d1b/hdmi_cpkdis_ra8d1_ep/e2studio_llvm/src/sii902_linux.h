@@ -1,10 +1,4 @@
 //------------------------------------------------------------------------------
-/*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
-
 // File Name: siHdmiTx_902x_TPI.h
 // File Description: this file is a header file.
 //
@@ -460,7 +454,7 @@ enum AV_ConfigErrorCodes
 // DE Generator Masks
 //====================================================
 #define BIT_EN_DE_GEN       0x40
-//#define SDE 					0x00
+#define SDE 					0x00
 #define DeDataNumBytes 		12
 
 // Embedded Sync Masks

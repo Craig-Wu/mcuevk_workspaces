@@ -1,8 +1,3 @@
-/*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
 /***********************************************************************************************************************
  * File Name    : ceu.c
  * Description  : Contains data structures and functions used in hal_entry.c.

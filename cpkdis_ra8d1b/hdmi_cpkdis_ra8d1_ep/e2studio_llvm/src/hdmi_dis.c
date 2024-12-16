@@ -1,8 +1,3 @@
-/*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
 #include "hdmi_dis.h"
 #include "common_utils.h"
 #include "hal_data.h"

@@ -1,13 +1,3 @@
-/*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
-/*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
 /***********************************************************************************************************************
  * File Name    : ov7725.c
  * Description  : Contains data structures and functions setup ov7725 camera used in hal_entry.c.
@@ -233,7 +223,7 @@ static fsp_err_t ov7725_camera_write_array(uint8_t const * p_array)
 static fsp_err_t ov7725_software_reset (void)
 {
     fsp_err_t err = FSP_SUCCESS;
-//    uint8_t pid;
+    uint8_t pid;
 
     err = ov7725_camera_write_reg (COM7, COM7_RESET);
 
@@ -332,7 +322,7 @@ void OV7725_Window_Set(uint16_t width,uint16_t height,uint8_t mode)
     uint8_t raw,temp;
     uint16_t sx,sy;
 
-//    uint16_t i=0;
+    uint16_t i=0;
     //OV7725_default_regs
 
     APP_PRINT("window set\r\n");

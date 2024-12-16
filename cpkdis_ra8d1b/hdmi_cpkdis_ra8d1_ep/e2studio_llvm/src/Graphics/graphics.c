@@ -1,9 +1,4 @@
 /*
-* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
-*
-* SPDX-License-Identifier: BSD-3-Clause
-*/
-/*
  * graphics.c
  *
  *  Created on: Sep 5, 2023
@@ -95,21 +90,21 @@ void graphics_draw_frame(const void * pSrc, void * pDst, int PitchSrc, int Width
                 HeightSrc,
                 0,
                 0,
-                (d2_width) (1280/2 << 4),
+                (d2_width) (1024 << 4),
                 (d2_width) (720 << 4),
-                0,
+                (d2_width) (((1280-1024)/2) << 4), // 起始位置偏移，不适用2个buff显示
                 0,
                 0);
-    d2_blitcopy(*_d2_handle_user,
-                WidthSrc,
-                HeightSrc,
-                0,
-                0,
-                (d2_width) (1280/2 << 4),
-                (d2_width) (720 << 4),
-                (d2_width) (1280/2 << 4),
-                0,
-                0);
+//    d2_blitcopy(*_d2_handle_user,
+//                WidthSrc,
+//                HeightSrc,
+//                0,
+//                0,
+//                (d2_width) (1280/2 << 4),
+//                (d2_width) (720 << 4),
+//                (d2_width) (1280/2 << 4),
+//                0,
+//                0);
 
 //    d2_blitcopy(*_d2_handle_user,
 //                    WidthSrc,
