@@ -1,4 +1,9 @@
 /*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
+/*
  * graphics.c
  *
  *  Created on: Sep 5, 2023
@@ -90,9 +95,9 @@ void graphics_draw_frame(const void * pSrc, void * pDst, int PitchSrc, int Width
                 HeightSrc,
                 0,
                 0,
-                (d2_width) (1024 << 4),
+                (d2_width) (1024 << 4),  //2D copy buffer 最大1024
                 (d2_width) (720 << 4),
-                (d2_width) (((1280-1024)/2) << 4), // 起始位置偏移，不适用2个buff显示
+                (d2_width) (128 << 4),  //从第128个像素开始画，前后留出128像素
                 0,
                 0);
 //    d2_blitcopy(*_d2_handle_user,

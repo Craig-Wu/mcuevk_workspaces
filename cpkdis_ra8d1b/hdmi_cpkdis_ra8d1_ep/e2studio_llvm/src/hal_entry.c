@@ -1,10 +1,15 @@
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 #include "hal_data.h"
 #include "common_utils.h"
 #include "wave_data111.h"
 #include <stdio.h>
 #include "ov7725.h"
 #include "ceu.h"
-
+#include "board_sdram.h"
 #include "graphics.h"
 
 
@@ -397,40 +402,40 @@ void sci_b_i2c_master_callback(i2c_master_callback_args_t *p_args)
        gI2CTxCplt = true;
    }
 }
-static void I2C4WaitTxCplt(void)
-{
-   uint16_t wTimeout = 50;
-   while(!gI2CTxCplt && wTimeout)
-   {
-       R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MILLISECONDS);
-       wTimeout--;
-   }
-   gI2CTxCplt = false;
-}
-static void I2C4WaitRxCplt(void)
-{
-   uint16_t wTimeout = 50;
-   while(!gI2CRxCplt && wTimeout)
-   {
-       R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MILLISECONDS);
-       wTimeout--;
-   }
-   gI2CRxCplt = false;
-}
+//static void I2C4WaitTxCplt(void)
+//{
+//   uint16_t wTimeout = 50;
+//   while(!gI2CTxCplt && wTimeout)
+//   {
+//       R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MILLISECONDS);
+//       wTimeout--;
+//   }
+//   gI2CTxCplt = false;
+//}
+//static void I2C4WaitRxCplt(void)
+//{
+//   uint16_t wTimeout = 50;
+//   while(!gI2CRxCplt && wTimeout)
+//   {
+//       R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MILLISECONDS);
+//       wTimeout--;
+//   }
+//   gI2CRxCplt = false;
+//}
 
 
-static int EEPROMDrvRead( unsigned char ucAddr, unsigned char* rbuf, unsigned int dwSize)
-{
-
-   /* 发送一个字节的地址数据 */
-   g_i2c_master1.p_api->write(g_i2c_master1.p_ctrl, (unsigned char*)&ucAddr, (unsigned int)1, true);
-   I2C4WaitTxCplt();
-   R_BSP_SoftwareDelay(300, BSP_DELAY_UNITS_MICROSECONDS);
-   /* 读取该地址的一个字节数据 */
-   g_i2c_master1.p_api->read(g_i2c_master1.p_ctrl, (unsigned char*)rbuf, (unsigned int)dwSize, false);
-   I2C4WaitRxCplt();
-   return 0;
-}
+//static int EEPROMDrvRead( unsigned char ucAddr, unsigned char* rbuf, unsigned int dwSize)
+//{
+//
+//   /* 发送一个字节的地址数据 */
+//   g_i2c_master1.p_api->write(g_i2c_master1.p_ctrl, (unsigned char*)&ucAddr, (unsigned int)1, true);
+//   I2C4WaitTxCplt();
+//   R_BSP_SoftwareDelay(300, BSP_DELAY_UNITS_MICROSECONDS);
+//   /* 读取该地址的一个字节数据 */
+//   g_i2c_master1.p_api->read(g_i2c_master1.p_ctrl, (unsigned char*)rbuf, (unsigned int)dwSize, false);
+//   I2C4WaitRxCplt();
+//   return 0;
+//}
 
 
 #include "hdmi_dis.h"
@@ -465,14 +470,14 @@ void glcdc_callback (display_callback_args_t * p_args)
 uint32_t * gp_frame_buffer = NULL;
 
 #define COLOR_BAND_COUNT                             (8)
-#define BLUE                                         (0x000000FF)
-#define LIME                                         (0xFF00FF00)
-#define RED                                          (0x00FF0000)
-#define BLACK                                        (0x00000000)
-#define WHITE                                        (0xFFFFFFFF)
-#define YELLOW                                       (0xFFFFFF00)
-#define AQUA                                         (0xFF00FFFF)
-#define MAGENTA                                      (0x00FF00FF)
+#define BLUE_LCD                                         (0x000000FF)
+#define LIME_LCD                                         (0xFF00FF00)
+#define RED_LCD                                          (0x00FF0000)
+#define BLACK_LCD                                        (0x00000000)
+#define WHITE_LCD                                        (0xFFFFFFFF)
+#define YELLOW_LCD                                       (0xFFFFFF00)
+#define AQUA_LCD                                         (0xFF00FFFF)
+#define MAGENTA_LCD                                      (0x00FF00FF)
 
 /*******************************************************************************************************************//**
 * @brief      User-defined function to draw the current display to a framebuffer.
@@ -483,7 +488,7 @@ uint32_t * gp_frame_buffer = NULL;
 static void display_draw (uint32_t * framebuffer)
 {
    /* Draw buffer */
-   uint32_t color[COLOR_BAND_COUNT]= {BLUE, LIME, RED, BLACK, WHITE, YELLOW, AQUA, MAGENTA};
+   uint32_t color[COLOR_BAND_COUNT]= {BLUE_LCD, LIME_LCD, RED_LCD, BLACK_LCD, WHITE_LCD, YELLOW_LCD, AQUA_LCD, MAGENTA_LCD};
    uint16_t bit_width = g_hz_size / COLOR_BAND_COUNT;
    for (uint32_t y = 0; y < g_vr_size; y++)
    {
@@ -521,7 +526,7 @@ void i2s_callback(i2s_callback_args_t *p_args)
 **********************************************************************************************************************/
 static void deinit_ssi(void)
 {
-   fsp_err_t err = FSP_SUCCESS;
+//   fsp_err_t err = FSP_SUCCESS;
    /* Close SSI Module */
    err = R_SSI_Close(&g_i2s_ctrl);
    /* Handle error */
@@ -537,7 +542,7 @@ static void deinit_ssi(void)
 **********************************************************************************************************************/
 static void deinit_gpt(void)
 {
-   fsp_err_t err = FSP_SUCCESS;
+//   fsp_err_t err = FSP_SUCCESS;
    /* Close GPT module */
    err = R_GPT_Close(&g_timer_ctrl);
    /* Handle error */
@@ -570,7 +575,6 @@ void R_BSP_WarmStart(bsp_warm_start_event_t event) {
 void hal_entry(void)
 {
    /* TODO: add your own code here */
-   volatile uint32_t time_out = MAX_TIME;                 // time_out value which is used to break the infinite loop
 
    /* Initialize SDRAM. */
    bsp_sdram_init();
@@ -646,12 +650,18 @@ void hal_entry(void)
    /* Initialize GLCDC module */
    err = R_GLCDC_Open(&g_display_ctrl, &g_display_cfg);
    /* Handle error */
-   APP_ERR_RETURN(err, "** GLCDC driver initialization FAILED ** \r\n");
+   if (FSP_SUCCESS != err)
+   {
+       APP_PRINT("** GLCDC driver initialization FAILED ** \r\n");
+   }
 
    /* Start video mode */
    err = R_GLCDC_Start(&g_display_ctrl);
    /* Handle error */
-   APP_ERR_RETURN(err, "** GLCDC Start API failed ** \r\n");
+   if (FSP_SUCCESS != err)
+   {
+       APP_PRINT("** GLCDC Start API failed ** \r\n");
+   }
    R_BSP_SoftwareDelay(1000,1000);
 
    /* Get LCDC configuration */
@@ -660,8 +670,8 @@ void hal_entry(void)
    g_hstride = (g_display_cfg.input[0].hstride);
 
    /* Initialize buffer pointers */
-   g_buffer_size = (uint32_t) (g_hz_size * g_vr_size * 2);
-   gp_single_buffer = (uint16_t*)g_display_cfg.input[0].p_base;
+   g_buffer_size = (uint32_t) (g_hz_size * g_vr_size * 4);
+   gp_single_buffer = (uint32_t*)g_display_cfg.input[0].p_base;
 
    /* Double buffer for drawing color bands with good quality */
    gp_double_buffer = gp_single_buffer + g_buffer_size;
@@ -674,12 +684,15 @@ void hal_entry(void)
 
    /* Now that the framebuffer is ready, update the GLCDC buffer pointer on the next Vsync */
    err = R_GLCDC_BufferChange (&g_display_ctrl, (uint8_t*) gp_frame_buffer, DISPLAY_FRAME_LAYER_1);
-   APP_ERR_RETURN (err, "** GLCD BufferChange API failed ** \r\n");
+   if (FSP_SUCCESS != err)
+   {
+       APP_PRINT ("** GLCD BufferChange API failed ** \r\n");
+   }
    // APP_ERR_RETURN(err, "** GLCD BufferChange API failed **\r\n");
    /* Wait for a Vsync event */
    g_vsync_flag = RESET_FLAG;
    while (g_vsync_flag);
-               APP_PRINT("temp1:num\r\n");
+   APP_PRINT("temp1:num\r\n");
    hdmi_init();
    APP_PRINT("temp2:num\r\n");
 

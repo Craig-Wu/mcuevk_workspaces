@@ -1,4 +1,9 @@
 /*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
+/*
  * ov5640_cfg.h
  *
  *  Created on: Nov 17, 2023

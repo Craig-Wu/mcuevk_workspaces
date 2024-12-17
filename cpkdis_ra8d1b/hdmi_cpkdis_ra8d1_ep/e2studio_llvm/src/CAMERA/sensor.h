@@ -1,4 +1,9 @@
 /*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
+/*
  * This file is part of the OpenMV project.
  *
  * Copyright (c) 2013-2021 Ibrahim Abdelkader <iabdalkader@openmv.io>

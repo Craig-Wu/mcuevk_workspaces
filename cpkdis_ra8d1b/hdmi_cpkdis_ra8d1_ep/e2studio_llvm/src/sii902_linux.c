@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 //------------------------------------------------------------------------------
 // File Name: siHdmiTx_902x_TPI.c
 // File Description: this file is used to call initalization of 902x, including HDMI TX TPI,

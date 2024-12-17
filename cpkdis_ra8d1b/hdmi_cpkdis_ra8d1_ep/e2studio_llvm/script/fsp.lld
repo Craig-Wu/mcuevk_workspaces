@@ -2,7 +2,7 @@
                   Linker File for Renesas FSP
 */
 
-INCLUDE memory_regions.ld
+INCLUDE memory_regions.lld
 
 /* Uncomment and set XIP_SECONDARY_SLOT_IMAGE to 1 below for the secondary XIP application image.*/
 /*
@@ -16,18 +16,18 @@ OSPI_DEVICE_1_PRV_LENGTH = DEFINED(OSPI_DEVICE_1_SIZE) ? ABSOLUTE(OSPI_DEVICE_1_
 /* If a flat (secure) project has DEFINED RAM_NS_BUFFER_LENGTH, then emit IDAU symbols to allocate non-secure RAM. */
 __RESERVE_NS_RAM = !DEFINED(PROJECT_NONSECURE) && DEFINED(RAM_NS_BUFFER_LENGTH) && (OPTION_SETTING_S_LENGTH != 0);
 
-ITCM_START = DEFINED(ITCM_START)? ITCM_START : 0;
-ITCM_LENGTH = DEFINED(ITCM_LENGTH)? ITCM_LENGTH : 0;
-DTCM_START = DEFINED(DTCM_START)? DTCM_START : 0;
-DTCM_LENGTH = DEFINED(DTCM_LENGTH)? DTCM_LENGTH : 0;
+__ITCM_START = DEFINED(ITCM_START)? ITCM_START : 0;
+__ITCM_LENGTH = DEFINED(ITCM_LENGTH)? ITCM_LENGTH : 0;
+__DTCM_START = DEFINED(DTCM_START)? DTCM_START : 0;
+__DTCM_LENGTH = DEFINED(DTCM_LENGTH)? DTCM_LENGTH : 0;
 RAM_NS_BUFFER_BLOCK_LENGTH = DEFINED(RAM_NS_BUFFER_LENGTH) ? ALIGN(RAM_NS_BUFFER_LENGTH, 8192) : 0;
-RAM_NS_BUFFER_LENGTH = DEFINED(RAM_NS_BUFFER_LENGTH) ? RAM_NS_BUFFER_LENGTH : 0;
-RAM_NS_BUFFER_START = RAM_START + RAM_LENGTH - RAM_NS_BUFFER_LENGTH;
+__RAM_NS_BUFFER_LENGTH = DEFINED(RAM_NS_BUFFER_LENGTH) ? RAM_NS_BUFFER_LENGTH : 0;
+RAM_NS_BUFFER_START = RAM_START + RAM_LENGTH - __RAM_NS_BUFFER_LENGTH;
 RAM_NS_BUFFER_BLOCK_START = RAM_START + RAM_LENGTH - RAM_NS_BUFFER_BLOCK_LENGTH;
 
 OPTION_SETTING_START_NS = DEFINED(PROJECT_NONSECURE) ? OPTION_SETTING_START : OPTION_SETTING_START + 0x80;
-OPTION_SETTING_DATA_FLASH_S_START = DEFINED(OPTION_SETTING_DATA_FLASH_S_START) ? OPTION_SETTING_DATA_FLASH_S_START : 0;
-OPTION_SETTING_DATA_FLASH_S_LENGTH = DEFINED(OPTION_SETTING_DATA_FLASH_S_LENGTH) ? OPTION_SETTING_DATA_FLASH_S_LENGTH : 0;
+__OPTION_SETTING_DATA_FLASH_S_START = DEFINED(OPTION_SETTING_DATA_FLASH_S_START) ? OPTION_SETTING_DATA_FLASH_S_START : 0;
+__OPTION_SETTING_DATA_FLASH_S_LENGTH = DEFINED(OPTION_SETTING_DATA_FLASH_S_LENGTH) ? OPTION_SETTING_DATA_FLASH_S_LENGTH : 0;
 
 /* This definition is used to avoid moving the counter in OPTION_SETTING regions for projects that should not configure option settings.
  * Bootloader images do not configure option settings because they are owned by the bootloader.
@@ -36,7 +36,7 @@ __bl_FSP_BOOTABLE_IMAGE = 1;
 __bln_FSP_BOOTABLE_IMAGE = 1;
 PROJECT_SECURE_OR_FLAT = (!DEFINED(PROJECT_NONSECURE) || DEFINED(PROJECT_SECURE)) && OPTION_SETTING_LENGTH && !DEFINED(FSP_BOOTABLE_IMAGE);
 USE_OPTION_SETTING_NS = DEFINED(PROJECT_NONSECURE) && !DEFINED(FSP_BOOTABLE_IMAGE);
-USE_OPTION_SETTING_DATA_FLASH = PROJECT_SECURE_OR_FLAT && (OPTION_SETTING_DATA_FLASH_S_LENGTH != 0);
+USE_OPTION_SETTING_DATA_FLASH = PROJECT_SECURE_OR_FLAT && (__OPTION_SETTING_DATA_FLASH_S_LENGTH != 0);
 
 __bl_FLASH_IMAGE_START = !DEFINED(FLASH_BOOTLOADER_LENGTH) ? 0 :
                          FLASH_APPLICATION_IMAGE_NUMBER == 1 ? FLASH_START + FLASH_BOOTLOADER_LENGTH + FLASH_BOOTLOADER_HEADER_LENGTH :
@@ -68,9 +68,9 @@ __bln_FLASH_IMAGE_LENGTH = !DEFINED(FLASH_BOOTLOADER_LENGTH) ? 0 :
                            FLASH_APPLICATION_NS_LENGTH == 0 ? __bl_FLASH_IMAGE_END :
                            FLASH_APPLICATION_NS_LENGTH - FLASH_BOOTLOADER_HEADER_LENGTH_2;
 
-XIP_SECONDARY_SLOT_IMAGE = DEFINED(XIP_SECONDARY_SLOT_IMAGE) ? XIP_SECONDARY_SLOT_IMAGE : 0;
+__XIP_SECONDARY_SLOT_IMAGE = DEFINED(XIP_SECONDARY_SLOT_IMAGE) ? XIP_SECONDARY_SLOT_IMAGE : 0;
 FLASH_ORIGIN = !DEFINED(FLASH_IMAGE_START) ? FLASH_START :
-                XIP_SECONDARY_SLOT_IMAGE == 1 ? XIP_SECONDARY_FLASH_IMAGE_START :
+                __XIP_SECONDARY_SLOT_IMAGE == 1 ? XIP_SECONDARY_FLASH_IMAGE_START :
                 FLASH_IMAGE_START;
 LIMITED_FLASH_LENGTH = DEFINED(FLASH_IMAGE_LENGTH) ? FLASH_IMAGE_LENGTH :
                        DEFINED(FLASH_BOOTLOADER_LENGTH) ? FLASH_BOOTLOADER_LENGTH :
@@ -83,27 +83,27 @@ OPTION_SETTING_SAS_LENGTH = !DEFINED(OPTION_SETTING_LENGTH) ? 0 :
 /* Define memory regions. */
 MEMORY
 {
-  ITCM (rx)                       : ORIGIN = ITCM_START, LENGTH = ITCM_LENGTH
-  DTCM (rwx)                      : ORIGIN = DTCM_START, LENGTH = DTCM_LENGTH
-  FLASH (rx)                      : ORIGIN = FLASH_ORIGIN, LENGTH = LIMITED_FLASH_LENGTH
-  RAM (rwx)                       : ORIGIN = RAM_START, LENGTH = RAM_LENGTH
-  DATA_FLASH (rx)                 : ORIGIN = DATA_FLASH_START, LENGTH = DATA_FLASH_LENGTH
-  QSPI_FLASH (rx)                 : ORIGIN = QSPI_FLASH_START, LENGTH = QSPI_FLASH_PRV_LENGTH
-  OSPI_DEVICE_0 (rx)              : ORIGIN = OSPI_DEVICE_0_START, LENGTH = OSPI_DEVICE_0_PRV_LENGTH
-  OSPI_DEVICE_1 (rx)              : ORIGIN = OSPI_DEVICE_1_START, LENGTH = OSPI_DEVICE_1_PRV_LENGTH
-  OSPI_DEVICE_0_RAM (rwx)         : ORIGIN = OSPI_DEVICE_0_START, LENGTH = OSPI_DEVICE_0_PRV_LENGTH
-  OSPI_DEVICE_1_RAM (rwx)         : ORIGIN = OSPI_DEVICE_1_START, LENGTH = OSPI_DEVICE_1_PRV_LENGTH
-  SDRAM (rwx)                     : ORIGIN = SDRAM_START, LENGTH = SDRAM_LENGTH
-  OPTION_SETTING (r)              : ORIGIN = OPTION_SETTING_START, LENGTH = OPTION_SETTING_LENGTH
-  OPTION_SETTING_OFS (r)          : ORIGIN = OPTION_SETTING_START, LENGTH = 0x18
-  OPTION_SETTING_SAS (r)          : ORIGIN = OPTION_SETTING_START + OPTION_SETTING_SAS_SIZE, LENGTH = OPTION_SETTING_SAS_LENGTH
-  OPTION_SETTING_S (r)            : ORIGIN = OPTION_SETTING_S_START, LENGTH = OPTION_SETTING_S_LENGTH
-  OPTION_SETTING_DATA_FLASH_S (r) : ORIGIN = OPTION_SETTING_DATA_FLASH_S_START, LENGTH = OPTION_SETTING_DATA_FLASH_S_LENGTH
-  ID_CODE (rx)                    : ORIGIN = ID_CODE_START, LENGTH = ID_CODE_LENGTH
+  ITCM (rx)               : ORIGIN = __ITCM_START, LENGTH = __ITCM_LENGTH
+  DTCM (rwx)              : ORIGIN = __DTCM_START, LENGTH = __DTCM_LENGTH
+  FLASH (rx)              : ORIGIN = FLASH_ORIGIN, LENGTH = LIMITED_FLASH_LENGTH
+  RAM (rwx)               : ORIGIN = RAM_START, LENGTH = RAM_LENGTH
+  DATA_FLASH (rx)         : ORIGIN = DATA_FLASH_START, LENGTH = DATA_FLASH_LENGTH
+  QSPI_FLASH (rx)         : ORIGIN = QSPI_FLASH_START, LENGTH = QSPI_FLASH_PRV_LENGTH
+  OSPI_DEVICE_0 (rx)      : ORIGIN = OSPI_DEVICE_0_START, LENGTH = OSPI_DEVICE_0_PRV_LENGTH
+  OSPI_DEVICE_1 (rx)      : ORIGIN = OSPI_DEVICE_1_START, LENGTH = OSPI_DEVICE_1_PRV_LENGTH
+  OSPI_DEVICE_0_RAM (rwx) : ORIGIN = OSPI_DEVICE_0_START, LENGTH = OSPI_DEVICE_0_PRV_LENGTH
+  OSPI_DEVICE_1_RAM (rwx) : ORIGIN = OSPI_DEVICE_1_START, LENGTH = OSPI_DEVICE_1_PRV_LENGTH
+  SDRAM (rwx)             : ORIGIN = SDRAM_START, LENGTH = SDRAM_LENGTH
+  OPTION_SETTING (r)      : ORIGIN = OPTION_SETTING_START, LENGTH = OPTION_SETTING_LENGTH
+  OPTION_SETTING_OFS (r)  : ORIGIN = OPTION_SETTING_START, LENGTH = 0x18
+  OPTION_SETTING_SAS (r)  : ORIGIN = OPTION_SETTING_START + OPTION_SETTING_SAS_SIZE, LENGTH = OPTION_SETTING_SAS_LENGTH
+  OPTION_SETTING_S (r)    : ORIGIN = OPTION_SETTING_S_START, LENGTH = OPTION_SETTING_S_LENGTH
+  OPTION_SETTING_DATA_FLASH_S (r) : ORIGIN = __OPTION_SETTING_DATA_FLASH_S_START, LENGTH = __OPTION_SETTING_DATA_FLASH_S_LENGTH
+  ID_CODE (rx)            : ORIGIN = ID_CODE_START, LENGTH = ID_CODE_LENGTH
 }
 
 /* Library configurations */
-GROUP(libgcc.a libc.a libm.a)
+GROUP(libc.a libm.a)
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -221,22 +221,31 @@ SECTIONS
         KEEP(*(.eh_frame*))
 
         __ROM_End = .;
-    } > FLASH = 0xFF
+    } > FLASH = 0xFFFFFFFF
 
     __Vectors_Size = __Vectors_End - __Vectors;
 
     . = .;
     __itcm_data_pre_location = .;
 
+    /* There is an inconsistency with how LLVM handles the ALIGN() directive for itcm_data.
+    For GCC, the ALIGN directive on an empty section does not modify LMA. However, LLVM does.
+    This leads to the __etext symbol to point to the correct location but the LMA of .data
+    (or the next non-empty section) to be aligned. This causes garbage/fill data to be copied into RAM.
+    To workaround this, the ALIGN value is conditional on whether or not ITCM is present/used.
+    */
+    ITCM_BYTE_ALIGN_VALUE = (__ITCM_LENGTH > 0) ? 16 : 4;
     /* Initialized ITCM data. */
     /* Aligned to FCACHE2 for RA8. */
-    .itcm_data : ALIGN(16)
+    .itcm_data : ALIGN(ITCM_BYTE_ALIGN_VALUE)
     {
         /* Start of ITCM Secure Trustzone region. */
-        __tz_ITCM_S = ABSOLUTE(ITCM_START);
+        __tz_ITCM_S = ABSOLUTE(__ITCM_START);
 
         /* All ITCM data start */
         __itcm_data_start = .;
+        /* Dummy byte to work with LLVM linker bug. Without this, the ALIGN for this section will carry through and affect the next if this section ends up empty */
+        BYTE(0xFF);
 
         KEEP(*(.itcm_data*))
 
@@ -251,7 +260,7 @@ SECTIONS
          * ITCM_NS_START can be used to set a fixed address for non-secure ITCM in secure projects or flat projects.
          */
         __tz_ITCM_N = DEFINED(ITCM_NS_START) ? ABSOLUTE(ITCM_NS_START) : ALIGN(__itcm_data_end, 8192);
-    } > ITCM AT > FLASH = 0x00
+    } > ITCM AT > FLASH = 0x00000000
 
     /* Addresses exported for ITCM initialization. */
     __itcm_data_init_start = LOADADDR(.itcm_data);
@@ -259,7 +268,7 @@ SECTIONS
 
     ASSERT(ORIGIN(ITCM) % 8 == 0, "ITCM memory region origin must be aligned to 8 bytes.")
     ASSERT(LENGTH(ITCM) % 8 == 0, "ITCM memory region length must be a multiple of 8 bytes.")
-    ASSERT(LOADADDR(.itcm_data) % 16 == 0, ".itcm_data section must be aligned to 16 bytes.")
+    ASSERT(LOADADDR(.itcm_data) % ITCM_BYTE_ALIGN_VALUE == 0, ".itcm_data section must be aligned to 4 or 16 bytes.")
     ASSERT(SIZEOF(.itcm_data) % 8 == 0, ".itcm_data section size must be a multiple of 8 bytes.")
 
     /* Restore location counter. */
@@ -308,8 +317,6 @@ SECTIONS
         __zero_table_end__ = .;
     } > FLASH
     */
-
-    __etext = .;
 
     __tz_RAM_S = ORIGIN(RAM);
 
@@ -366,16 +373,61 @@ SECTIONS
         __data_end__ = .;
 
     } > RAM AT > FLASH
+    __etext = LOADADDR(.data);
+
+    /*
+     * Needs to be in its own segment with the PLT entries first
+     * so that the linker will compute the offsets to those
+     * entries correctly.
+     */
+    .got : {
+        *(.got.plt)
+        *(.got)
+    } > FLASH
+
+    .tdata :  {
+        *(.tdata .tdata.* .gnu.linkonce.td.*)
+        /* Dummy byte to work with LLVM linker bug. Without this, the ALIGN for this section will carry through and affect the next if this section ends up empty */
+        BYTE(0xFF);
+        PROVIDE(__tdata_end = .);
+    } > RAM AT > FLASH
+	PROVIDE( __tls_base = ADDR(.tdata));
+	PROVIDE( __tdata_start = ADDR(.tdata));
+	PROVIDE( __tdata_source = LOADADDR(.tdata) );
+	PROVIDE( __tdata_size = SIZEOF(.tdata) );
+	PROVIDE( __tls_align = MAX(ALIGNOF(.tdata),ALIGNOF(.tbss)) );
+
+    .tbss (NOLOAD):
+    {
+		*(.tbss .tbss.* .gnu.linkonce.tb.*)
+		*(.tcommon)
+		PROVIDE( __tls_end = . );
+		PROVIDE( __tbss_end = . );
+    } > RAM AT > RAM
+	PROVIDE( __tbss_start = ADDR(.tbss));
+	PROVIDE( __tbss_offset = ADDR(.tbss) - ADDR(.tdata) );
+	PROVIDE( __tbss_size = SIZEOF(.tbss) );
+	PROVIDE( __tls_size = __tls_end - __tls_base );
+	PROVIDE( __tls_align = MAX(ALIGNOF(.tdata), ALIGNOF(.tbss)) );
+	PROVIDE( __arm32_tls_tcb_offset = MAX(8, __tls_align) );
+	PROVIDE( __arm64_tls_tcb_offset = MAX(16, __tls_align) );
 
     . = .;
-    __dtcm_data_pre_location = LOADADDR(.data) + SIZEOF(.data);
+    __dtcm_data_pre_location = LOADADDR(.tdata) + SIZEOF(.tdata);
 
+    /* There is an inconsistency with how LLVM handles the ALIGN() directive for dtcm_data.
+    For GCC, the ALIGN directive on an empty section does not modify LMA. However, LLVM does.
+    This leads to the __etext symbol to point to the correct location but the LMA of .data
+    (or the next non-empty section) to be aligned. This causes garbage/fill data to be copied into RAM.
+    To workaround this, the ALIGN value is conditional on whether or not DTCM is present/used.
+    */
+    DTCM_BYTE_ALIGN_VALUE = (__DTCM_LENGTH > 0) ? 16 : 4;
     /* Initialized DTCM data. */
     /* Aligned to FCACHE2 for RA8. */
-    .dtcm_data : ALIGN(16)
+    .dtcm_data : ALIGN(DTCM_BYTE_ALIGN_VALUE)
     {
         /* Start of DTCM Secure Trustzone region. */
-        __tz_DTCM_S = ABSOLUTE(DTCM_START);
+        __tz_DTCM_S = ABSOLUTE(__DTCM_START);
 
         /* Initialized DTCM data start */
         __dtcm_data_start = .;
@@ -387,7 +439,7 @@ SECTIONS
 
         /* Initialized DTCM data end */
         __dtcm_data_end = .;
-    } > DTCM AT > FLASH = 0x00
+    } > DTCM AT > FLASH = 0x00000000
 
     . = __dtcm_data_end;
     /* Uninitialized DTCM data. */
@@ -419,7 +471,7 @@ SECTIONS
     ASSERT(ORIGIN(DTCM) % 8 == 0, "DTCM memory region origin must be aligned to 8 bytes.")
     ASSERT(LENGTH(DTCM) % 8 == 0, "DTCM memory region length must be a multiple of 8 bytes.")
     ASSERT(LOADADDR(.dtcm_bss) == ADDR(.dtcm_bss), ".dtcm_bss has (VMA != LMA) but should be NOLOAD (VMA == LMA).")
-    ASSERT(LOADADDR(.dtcm_data) % 16 == 0, ".dtcm_data section must be aligned to 16 bytes.")
+    ASSERT(LOADADDR(.dtcm_data) % DTCM_BYTE_ALIGN_VALUE == 0, ".dtcm_data section must be aligned to 4 or 16 bytes.")
     ASSERT(SIZEOF(.dtcm_data) % 8 == 0, ".dtcm_data section size must be a multiple of 8 bytes.")
     ASSERT(LOADADDR(.dtcm_bss) % 8 == 0, ".dtcm_bss section must be aligned to 8 bytes.")
     ASSERT(SIZEOF(.dtcm_bss) % 8 == 0, ".dtcm_bss section size must be a multiple of 8 bytes.")
@@ -447,7 +499,6 @@ SECTIONS
     } > FLASH
 
     __tz_FLASH_N = DEFINED(FLASH_NS_START) ? ABSOLUTE(FLASH_NS_START) : __RESERVE_NS_RAM ? ABSOLUTE(FLASH_START + FLASH_LENGTH) : FLASH_LENGTH < 32768 ? FLASH_LENGTH : ALIGN(32768);
-    FLASH_NS_IMAGE_START = DEFINED(FLASH_NS_IMAGE_START) ? FLASH_NS_IMAGE_START : __tz_FLASH_N;
 
     /* Note: There are no secure/non-secure boundaries for QSPI.  These symbols are provided for the RA configuration tool. */
     __tz_QSPI_FLASH_S = ORIGIN(QSPI_FLASH);
@@ -601,6 +652,10 @@ SECTIONS
         __HeapLimit = .;
     } > RAM
 
+	PROVIDE (__heap_start = __HeapBase);
+	PROVIDE (__heap_end = __HeapLimit);
+	PROVIDE (__heap_size = __heap_end - __heap_start);
+
     /* Stacks are stored in this section. */
     .stack_dummy (NOLOAD):
     {
@@ -629,7 +684,7 @@ SECTIONS
      * RAM_NS_BUFFER_BLOCK_LENGTH is used to allocate non-secure buffers in a flat project. If it is not
      * specified, the address for NSC RAM is the end of RAM aligned to an 8K boundary.
      * In flat projects that require non-secure RAM, this variable is set to the start of non-secure RAM. */
-    __tz_RAM_N = DEFINED(FLASH_BOOTLOADER_LENGTH) ? (RAM_START + RAM_LENGTH - RAM_APPLICATION_NS_LENGTH) : DEFINED(RAM_NS_START) ? ABSOLUTE(RAM_NS_START - RAM_NS_BUFFER_BLOCK_LENGTH) : __RESERVE_NS_RAM ? ABSOLUTE(RAM_NS_BUFFER_BLOCK_START) : ALIGN(__RAM_NSC_START, 8192);
+    __tz_RAM_N = DEFINED(RAM_NS_START) ? ABSOLUTE(RAM_NS_START - RAM_NS_BUFFER_BLOCK_LENGTH) : __RESERVE_NS_RAM ? ABSOLUTE(RAM_NS_BUFFER_BLOCK_START) : ALIGN(__RAM_NSC_START, 8192);
 
     /* Non-secure buffers must be in non-secure RAM. This is primarily used for the EDMAC in flat projects.
      * The EDMAC is a non-secure bus master and can only access non-secure RAM. */
@@ -709,14 +764,14 @@ SECTIONS
         . = PROJECT_SECURE_OR_FLAT ? __OPTION_SETTING_OFS_Start + 0x10 : __OPTION_SETTING_OFS_Start;
         KEEP(*(.option_setting_dualsel))
         __OPTION_SETTING_OFS_End = .;
-    } > OPTION_SETTING_OFS = 0xFF
+    } > OPTION_SETTING_OFS = 0xFFFFFFFF
 
     .option_setting_sas :
     {
         __OPTION_SETTING_SAS_Start = .;
         KEEP(*(.option_setting_sas))
         __OPTION_SETTING_SAS_End = .;
-    } > OPTION_SETTING_SAS = 0xFF
+    } > OPTION_SETTING_SAS = 0xFFFFFFFF
 
     /* Symbol required for RA Configuration tool. */
     __tz_OPTION_SETTING_N = ABSOLUTE(OPTION_SETTING_START_NS);
@@ -746,7 +801,7 @@ SECTIONS
         . = USE_OPTION_SETTING_NS ? __OPTION_SETTING_NS_Start + 0x6C : __OPTION_SETTING_NS_Start;
         KEEP(*(.option_setting_pbps3))
         __OPTION_SETTING_NS_End = .;
-    } > OPTION_SETTING = 0xFF
+    } > OPTION_SETTING = 0xFFFFFFFF
 
     /* Symbol required for RA Configuration tool. */
     __tz_OPTION_SETTING_S_S = ORIGIN(OPTION_SETTING_S);
@@ -790,7 +845,7 @@ SECTIONS
         . = PROJECT_SECURE_OR_FLAT ? __OPTION_SETTING_S_Start + 0xCC : __OPTION_SETTING_S_Start;
         KEEP(*(.option_setting_bps_sel3))
         __OPTION_SETTING_S_End = .;
-    } > OPTION_SETTING_S = 0xFF
+    } > OPTION_SETTING_S = 0xFFFFFFFF
 
     /* Symbol required for RA Configuration tool. */
     __tz_OPTION_SETTING_S_N = __OPTION_SETTING_S_End;
@@ -814,7 +869,7 @@ SECTIONS
         . = USE_OPTION_SETTING_DATA_FLASH ? __OPTION_SETTING_DATA_FLASH_S_Start + 0x2E0 : __OPTION_SETTING_DATA_FLASH_S_Start;
         KEEP(*(.option_setting_data_flash_hoemrtpk))
         __OPTION_SETTING_DATA_FLASH_S_End = .;
-    } > OPTION_SETTING_DATA_FLASH_S = 0xFF
+    } > OPTION_SETTING_DATA_FLASH_S = 0xFFFFFFFF
 
     /* Symbol required for RA Configuration tool. */
     __tz_OPTION_SETTING_DATA_FLASH_S_N = __OPTION_SETTING_DATA_FLASH_S_End;

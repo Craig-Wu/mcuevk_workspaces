@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 /***********************************************************************************************************************
  * File Name    : ov3640.h
  * Description  : Contains data structures and functions used in hal_entry.c.

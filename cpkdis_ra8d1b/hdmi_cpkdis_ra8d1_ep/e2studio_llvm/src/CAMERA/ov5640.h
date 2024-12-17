@@ -1,4 +1,8 @@
-
+/*
+* Copyright (c) 2020 - 2024 Renesas Electronics Corporation and/or its affiliates
+*
+* SPDX-License-Identifier: BSD-3-Clause
+*/
 #ifndef __OV5640_H
 #define __OV5640_H
 
