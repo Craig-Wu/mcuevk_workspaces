@@ -19,6 +19,8 @@
 #### 1.4.3 将数据写入 QSPI FLASH。
 #### 1.4.4 从QSPI FLASH读回数据，并进行比较，确认写入成功。也可以从Memory窗口看到写入的数据。
 ![alt text](images/Picture4-1.png)
+#### 1.4.5 切换模式：SPI 1S-4S-4S 协议模式
+#### 1.4.6 从QSPI FLASH读回数据，并进行比较。
 
 ## 2. 支持的电路板：
 CPKCOR-RA8D1B
