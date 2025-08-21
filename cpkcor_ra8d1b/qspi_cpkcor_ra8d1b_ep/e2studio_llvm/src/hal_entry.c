@@ -107,6 +107,12 @@ void hal_entry(void)
     fsp_assert (err);
     ospi_test_wait_until_wip ();
 
+    dest = (uint8_t*) 0x90040000U;
+    /* Erase sector 0x0 via 1S-1S-1S protocol */
+    err = R_OSPI_B_Erase (g_ospi0.p_ctrl, dest, 0x1000);
+    fsp_assert (err);
+    ospi_test_wait_until_wip ();
+
     /* Set Write Enable via 1S-1S-1S protocol */
     memset(&direct_command, 0, sizeof(direct_command));
     direct_command.command        = 0x06;
@@ -225,10 +231,27 @@ void hal_entry(void)
     direct_command.data_length    = 0x2;
     err = R_OSPI_B_DirectTransfer (g_ospi0.p_ctrl, &direct_command, SPI_FLASH_DIRECT_TRANSFER_DIR_READ);
     fsp_assert (err);
-    //if(!((direct_command.data == 0xEF17) || (direct_command.data == 0x17EF)))//For CPKCOR W25Q128JVPIQ
-    if(!((direct_command.data == 0x1F17) || (direct_command.data == 0x171F)))//For CPKCOR AT25SF128A
+
+    if (AT25SF128A == Flash_Type)
     {
-        __BKPT(0);
+        if(!((direct_command.data == 0x1F17) || (direct_command.data == 0x171F)))//For CPKCOR AT25SF128A
+        {
+            __BKPT(0);
+        }
+    }
+    else if (W25Q128JVPIQ == Flash_Type)
+    {
+        if(!((direct_command.data == 0xEF17) || (direct_command.data == 0x17EF)))//For CPKCOR AT25SF128A
+        {
+            __BKPT(0);
+        }
+    }
+    else if (W25Q128JW == Flash_Type)
+    {
+        if(!((direct_command.data == 0xEF18) || (direct_command.data == 0x18EF)))//For CPKCOR AT25SF128A
+        {
+            __BKPT(0);
+        }
     }
 
 #if 1
