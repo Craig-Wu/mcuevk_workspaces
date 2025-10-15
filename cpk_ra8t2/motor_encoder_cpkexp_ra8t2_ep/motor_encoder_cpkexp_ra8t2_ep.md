@@ -40,5 +40,5 @@
 - 通过 USB Type-C 线连接调试主机和 MC-COM 板上的 USB 通讯口
 - 用 24V 便携电源给低压驱动板 MCI-LV-1 供电
 
-![hardware_connect](images/hardware_connect.PNG)
+![hardware_connect](images/hardware_connect.png)
 
