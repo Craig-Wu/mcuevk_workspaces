@@ -18,6 +18,7 @@ CPKEXP-RA8T2
 
 - 通过 USB Type-C 线连接调试电脑和 CPKEXP -RA8T2 板上的 USB 调试端口
 - 网线连接开发板的 ETH0 和 Twincat 工控机
+
 ![hardware_connect](images/hardware_connect.png)
 
 
