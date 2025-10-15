@@ -27,6 +27,9 @@ CPKEXP-RA8T2
 - 通过 USB Type-C 线连接调试主机和 MC-COM 板上的 USB 通讯口
 - 用 24V 便携电源给低压驱动板 MCI-LV-1 供电
 
+![hardware_connect](images/hardware_connect.PNG)
+
+
 # 硬件设置注意事项：
 
 建议最后联接电源，其他联接确认无误后，再供电
@@ -40,6 +43,6 @@ CPKEXP-RA8T2
 无
 
 #### 示例工程详细的配置和使用方法，请参考下面的说明文件。
-[Motor_encoder_CPKEXP_ra8t2_ep_gcc](Motor_encoder_CPKEXP_ra8t2_ep_gcc.md)
+[motor_encoder_cpkexp_ra8t2_ep](motor_encoder_cpkexp_ra8t2_ep.md)
 
 
