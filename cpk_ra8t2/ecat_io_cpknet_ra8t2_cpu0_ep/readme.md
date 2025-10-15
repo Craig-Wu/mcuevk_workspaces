@@ -31,6 +31,6 @@ CPKEXP-RA8T2
 无
 
 #### 示例工程详细的配置和使用方法，请参考下面的说明文件。
-[ecat_io_cpknet_ra8t2_cpu0_ep_gcc](ecat_io_cpknet_ra8t2_cpu0_ep_gcc.md)
+[ecat_io_cpknet_ra8t2_cpu0_ep](ecat_io_cpknet_ra8t2_cpu0_ep.md)
 
 
