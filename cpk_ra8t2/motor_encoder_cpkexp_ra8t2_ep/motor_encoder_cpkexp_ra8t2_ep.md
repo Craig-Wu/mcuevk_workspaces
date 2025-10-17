@@ -9,10 +9,10 @@
 
     1.3 如使用自己的编码器，分辨率不同，请调整FSP如下两处：
 
-![rm_motor_sense_encoder](images/rm_motor_sense_encoder.PNG)
+![rm_motor_sense_encoder](images/rm_motor_sense_encoder.png)
 
 
-![rm_motor_position](images/rm_motor_position.PNG)
+![rm_motor_position](images/rm_motor_position.png)
 
 
     1.4 参考 readme 完成系统联接后，推荐使用瑞萨电机调试 GUI 工具 workbench 进行电机系统调试。Workbench 下载地址和应用 APN 资料，请登录瑞萨官网下载 
