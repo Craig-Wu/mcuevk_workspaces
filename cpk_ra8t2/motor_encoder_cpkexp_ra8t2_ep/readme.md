@@ -13,19 +13,19 @@ CPKEXP-RA8T2
 - 1 块 Renesas 低压驱动板：MCI-LV-1
 - 1 块 Renesas 电机 ics 通讯板：MC-COM
 - 1 个 24V 便携电源（ 3A 以上输出）
-- 1 台 24V 可驱动的 PMSM 电机 + 增量型 encoder，推荐 R42BL40S02+GTS-ABZ
+- 1 台 24V 可驱动的 PMSM 电机 + 增量型 encoder，推荐 R42BL40S02+GTS06OCRAG1800
 - 1 根 4P XH2.54 联接线
 - 2 根 USB Type A->Type C 或 Type-C->Type-C 线（支持 Type-C 2.0 即可）
 
 # 硬件连接
 
-- 将 CPKEXP -RA8T2 和低压驱动板 MCI-LV-1 相应接口（对照软件设置）对插
-- 将 24V 可驱动 PMSM 电机联接到低压驱动板 CN2
-- 将编码器线束联接到低压驱动板 CN5
-- 用联接线 4P XH2.54 联接 CPKEXP -RA8T2 和 ics 通讯板 MC-COM
+- 将 CPKEXP -RA8T2 的 CN1、CN2 和低压驱动板 MCI-LV-1 相应接口（参照图例）对插
+- 将 24V 可驱动 PMSM 电机联接到低压驱动板 CN2 （请按旁边丝印 U, V, W 线序提示联接）
+- 将编码器线束联接到低压驱动板 CN5 （5V 接 CN5.2, GND 接 CN5.10, A 相接 CN5.6, B 相接 CN5.8）
+- 用联接线 4P XH2.54 联接 CPKEXP -RA8T2 和 ics 通讯板 MC-COM（AVDD 接 CN1.1, P707 接 CN1.2， P706 接 CN1.3， DGND 接 CN1.4）
 - 通过 USB Type-C 线连接调试主机和 CPKEXP -RA8T2 板上的 USB 调试端口
 - 通过 USB Type-C 线连接调试主机和 MC-COM 板上的 USB 通讯口
-- 用 24V 便携电源给低压驱动板 MCI-LV-1 供电
+- 用 24V 便携电源给低压驱动板 MCI-LV-1 供电（可使用 J1 圆接头，或者 CN1.1 接高电平， CN1.2 接低电平）
 
 ![hardware_connect](images/hardware_connect.png)
 
