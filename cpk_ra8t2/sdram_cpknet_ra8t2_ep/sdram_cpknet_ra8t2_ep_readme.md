@@ -20,9 +20,9 @@
 CPKNET-RA8T2
 
 ## 5. 硬件要求：
-1块瑞萨 RA8D1 HMI板：CPKNET-RA8T2
+1 块瑞萨 RA8D1 HMI板：CPKNET-RA8T2
 
-1根 Type-C USB 数据线
+1 根 Type-C USB 数据线
 
 ## 6. 硬件连接：
 通过 Type-C USB 数据线将 CPKNET-RA8T 板上的 USB 调试端口（JDBG）连接到主机 PC
