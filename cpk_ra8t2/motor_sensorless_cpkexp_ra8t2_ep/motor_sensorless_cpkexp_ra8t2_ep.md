@@ -13,7 +13,7 @@
 ![workbench1](images/workbench1.png)
 ![workbench2](images/workbench2.png) 
 
-# 2. 支持的开发板/演示板：
+# 2. 支持的开发板/演示板
 
 - CPKEXP -RA8T2
 

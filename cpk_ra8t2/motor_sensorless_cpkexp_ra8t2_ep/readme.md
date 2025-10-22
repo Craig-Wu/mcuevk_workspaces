@@ -4,7 +4,7 @@
 
 该示例工程演示了基于瑞萨 FSP 的 RA8T2 MCU 控制 sensorless 样例 motor 的一般运转功能。
 
-# 支持的开发板/演示板：
+# 支持的开发板/演示板
 CPKEXP-RA8T2
 
 # 硬件要求
@@ -28,7 +28,7 @@ CPKEXP-RA8T2
 
 ![hardware_connect](images/hardware_connect.png)
 
-# 硬件设置注意事项：
+# 硬件设置注意事项
 
 建议最后联接电源，其他联接确认无误后，再供电
 
@@ -40,7 +40,7 @@ CPKEXP-RA8T2
 # 第三方软件
 无
 
-#### 示例工程详细的配置和使用方法，请参考下面的说明文件。
+#### 示例工程详细的配置和使用方法，请参考下面的说明文件
 [motor_sensorless_cpkexp_ra8t2_ep](motor_sensorless_cpkexp_ra8t2_ep.md)
 
 
