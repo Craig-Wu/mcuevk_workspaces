@@ -26,6 +26,7 @@ CPKCOR-RA8P1
 ![alt text](images/image6.png)
 ## 3. 硬件要求：
 1 块瑞萨 RA核心板：CPKCOR-RA8P1
+
 1 根 Type-C USB 数据线
 
 ## 4. 硬件连接：
