@@ -7,8 +7,8 @@
 CPKCOR-RA8P1
 
 # 硬件要求
-- 1块 Renesas RA8 开发板：CPKCOR-RA8P1
-- 1根 USB Type A->Type C 或 Type-C->Type C 线 （支持 Type-C 2.0 即可）
+- 1 块 Renesas RA8 开发板：CPKCOR-RA8P1
+- 1 根 USB Type A->Type C 或 Type-C->Type C 线 （支持 Type-C 2.0 即可）
 
 # 硬件连接
 - 通过 USB Type-C 线连接调试主机和 CPKCOR-RA8P1 板上的 USB 调试端口。
