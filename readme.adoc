@@ -1,0 +1,68 @@
+:scripts: cjk
+
+== 瑞萨MCU EVK 样例代码提交仓库
+
+本仓库专门用于EVK样例代码的提交，不作为对外发布用。 如果您希望为瑞萨的EVK提供样例代码或参考应用代码，可以向瑞萨申请本仓库的合作者权限。
+
+作为合作者，您可以直接clone整个仓库，并直接拉取/推送代码。推送代码前请测试代码的准确性和可用性。
+
+样例代码的提交分为三个主要步骤。
+
+=== I. 查看瑞萨已经发布的样例代码，避免重复发布，请先查看以下页面：
+
+. link:www.renesas.com[瑞萨官网]上各个产品页面上已经发布的样例代码
+. link:https://github.com/renesas/ra-fsp-examples/tree/master/example_projects[Github]的RA FSP Example
+   .. link:https://github.com/renesas/ra-fsp-examples/releases[RA FSP Example的Github Release页面]上还有对应各个FSP历史版本的样例代码
+. link:https://github.com/renesas/cpk_examples[Github]或link:https://gitee.com/recn-mcu-ae/cpk_examples[Gitee镜像]上已发布的 CPK Example。
+. 本代码仓库，以确认是否已经有人认领某个样例代码的开发
+   
+=== II. 创建样例代码目录，声明该样例代码已有人在负责编写测试
+. 直接clone/拉取本仓库(确保您看到的是最新版本的代码)
+. 在对应的目标板目录下(例如cpkcor_ra8d1b)创建样例代码的目录
+. 在样例代码目录下创建readme.md/readme.adoc，声明您已经在开发中，并先将readme推送到远程仓库
+. 开发和调试您的样例代码
+
+详见link:docs/project_handling.md[样例代码开发提交流程]
+   
+=== III. 上传/推送开发完成的样例代码
+. 编写详细的样例代码和示例工程使用指南，您可以参考代码仓库中的其他样例
+. 修改readme.md，表示该样例代码已开发完成。
+. 推送样例代码到远程仓库(本仓库)，开发完成
+   .. 推送前请先拉取最新的仓库文件
+
+详见link:docs/project_handling.md[样例代码开发提交流程]
+   
+瑞萨相关人员看到readme.md更新到完成状态后，会将该样例代码发布到link:https://github.com/renesas/cpk_examples[Github]和linkhttps://gitee.com/ramcu/cpk_examples[Gitee]上的 CPK Examples，
+#并删除本代码仓库下的样例代码目录#。
+
+如有必要，您可以在本地电脑保留一个样例代码备份。 也可去Github和Gitee上下载已发布的样例代码。
+
+由于MCU发布的时间不同，支持的对应MCU的FSP版本也不尽相同。
+#每个CPK目录下的readme文件里有该CPK板样例代码的详细需求，开发前请仔细阅读。#
+
+cpk目录名对应的CPK硬件如下：
+
+// [%header,cols="18,15,17,~",format=csv]
+[%header,cols="18,15,17,~"]
+|===
+// include::./docs/cpk_boards.csv[]
+| 文件夹名称                | 对应的CPK名称      | 对应的CPK配置                      | 附加说明                                                    
+| cpk_ra8t2            | CPK-RA8T2     | CPKNET-RA8T2 + CPKEXP-ECSMCB  | RA8T2主要的样例程序均基于CPK-RA8T2                                
+| cpk_ra8p1            | CPK-RA8P1     | CPKCOR-RA8P1 + CPKEXP-EKRA8X2 | RA8P1主要的样例程序均基于CPK-RA8P1                                
+| cpknet_ra8t2         | CPKNET-RA8T2  | 仅CPKNET-RA8T2核心板              | RA8T2的主推核心板，仅包含核心板可独立运行的样例程序                            
+| cpkhmi_ra8p1         | CPKHMI-RA8P1  | 仅CPKHMI-RA8P1核心板              | 与CPKNET-RA8T2功能基本相同，USB改为2.0高速，支持MIPI接口                 
+| cpkcor_ra8p1         | CPKCOR-RA8P1  | 仅CPKCOR-RA8P1核心板              | RA8P1的主推核心板，仅包含核心板可独立运行的样例程序                            
+| cpkcor_ra8t2         | CPKCOR-RA8T2  | 仅CPKCOR-RA8T2核心板              | 与CPKCOR-RA8P1功能基本相同，USB改为2.0全速，删除MIPI接口                 
+| cpkcor_ra8t2_ecsmcb  | -             | CPKCOR-RA8T2 + CPKEXP-ECSMCB  | 可评估RA8T2+16位SDRAM+Octa-Memory + 电机/网络控制等功能              
+| cpkhmi_ra8p1_ekra8x2 | -             | CPKHMI-RA8P1 + CPKEXP-EKRA8X2 | 可评估RA8P1+32位SDRAM+QSPI Memory + LCD/摄像头等功能              
+| cpkhmi_ra8p1_ecsmcb  | -             | CPKHMI-RA8P1 + CPKEXP-ECSMCB  | 可评估RA8P1+32位SDRAM+QSPI Memory + 电机/网络控制等功能 （不支持EtherCAT）
+| cpkcor_ra8p1_ecsmcb  | -             | CPKCOR-RA8P1 + CPKEXP-ECSMCB  | 可评估RA8P1+16位SDRAM+Octa-Memory +电机/网络控制等功能 （不支持EtherCAT） 
+| cpkcor_ra8t2_ekra8x2 | -             | CPKCOR-RA8T2 + CPKEXP-EKRA8X2 | 可评估RA8T2+16位SDRAM+Octa-Memory + 单千兆网（不支持摄像头）            
+| cpknet_ra8t2_ekra8x2 | -             | CPKNET-RA8T2 + CPKEXP-EKRA8X2 | 可评估RA8T2+32位SDRAM+QSPI Memory + 单千兆网（不支持摄像头）            
+| cpkcor_ra8d1b        | CPKCOR-RA8D1B | 仅CPKCOR-RA8D1B核心板             | RA8D1的主推核心板，仅包含核心板可独立运行的样例程序                            
+| cpkhmi_ra8d1b        | CPKHMI-RA8D1B | 仅CPKHMI-RA8D1B核心板             | RA8D1支持32位SDRAM+Octa Memory+PoE以太网的核心板，包含这些额外的样例        
+| cpkexp_ekra8x1       | -             | CPKCOR-RA8D1B + CPKEXP-EKRA8X1  | RA8D1的完整CPK平台，主要功能性样例程序放在这里                             
+| 其他cpk目录              |               | 单一的CPK板                       | 目前没有具体的样例程序时间表，您可以上传已有的样例。                           
+|===
+
+
