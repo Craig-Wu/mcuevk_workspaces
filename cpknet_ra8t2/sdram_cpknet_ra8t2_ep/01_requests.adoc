@@ -1,0 +1,50 @@
+:scripts: cjk
+
+=== CPKNET-RA8T2 32bit SDRAM sample code with speed test
+
+Priority: 01
+
+* Hardware: CPKNET-RA8T2 core board only
+* FSP: 6.2.0
+* BSP: CPKNET-RA8T2 (no additional setting)
+* BSP Excel Sheet: default (no additional setting)
+
+This sample code should achieve: 
+
+. Function: AM initialization
+. Benchmark: Show SDRAM data throughput in different configuration
+
+***
+==== Functions: 
+Target(s): Initialize and confirm SDRAM working +
+Result(s): Show each function's execution result: OK / NG
+----
+1. 32bit SDRAM initialization
+2. Full memory Write, then full memory read and compare
+    Write: CPU -> Non-Cached SDRAM  
+    Read: Non-Cached SDRAM -> CPU
+    32bit access, patten 
+        0x5A5A5A5A
+        0xA5A5A5A5
+        0x5A5A5A5A
+        0xA5A5A5A5
+         ...
+        (repeat)
+----
+
+***
+==== Benchmarks: 
+Target(s): show SDRAM data throughput in different configuration +
+Result(s): Show each test's result in MB/second
+----
+1. Read speed test (64K bytes random data, with 8bit/16bit/32bit access)
+    1.1 CPU: Cached SDRAM -> D-TCM
+    1.2 CPU: Non-Cached SDRAM -> D-TCM
+    1.3 DMA: SDRAM -> D-TCM
+2. Write speed test (64K bytes random data, with 8bit/16bit/32bit access)
+    2.1 CPU: D-TCM -> Non-Cached SDRAM
+    2.2 CPU: D-TCM -> Cached SDRAM (Write Through)
+    2.3 CPU: D-TCM -> Cached SDRAM (Write Back, with flush at the end of write operation)
+    2.4 DMA: D-TCM -> SDRAM
+----
+
