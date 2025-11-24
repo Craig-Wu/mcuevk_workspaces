@@ -6,7 +6,7 @@ Priority: 01.1
 
 * Hardware: CPKHMI-RA8P1 core board only
 * FSP: 6.2.0
-* BSP: CPKNET-RA8T2 (no additional setting)
+* BSP: CPKHMI-RA8P1 (no additional setting)
 * BSP Excel Sheet: default (no additional setting)
 
 Exactly Same sample code with CPKNET-RA8T2 SDRAM, just use different BSP.
