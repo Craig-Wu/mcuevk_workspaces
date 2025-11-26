@@ -1,0 +1,7 @@
+Priority,Status,Key Peri.,EP name,EP details,Alternate HW,Remark
+01.1,In Progress,SDRAM,sdram_,32bit SDRAM settings and benchmark,,Similar to CPKHMI-RA8D1B
+02.1,Before Start,QSPI NOR,qspi_nor_,QSPI NOR setup and benchmark,,Similar to CPKCOR-RA8D1B
+03.1,Before Start,D-Cache,d_cache_,D-Cache WT/WB setting with benchmark,,New
+05,Before Start,USB-HS,usb_xx,"USB CC read and control, with sample code",05.1 CPKCOR-RA8P1,New
+07,Before Start,SDRAM LCD,mipi_xx,MIPI LCD setting and SDRAM benchmark,,Similar to CPKHMI-RA8D1B
+08,Before Start,LVGL,lvgl_xx,LVGL Demo with 2DG/ARM-2D/CPU Only,08.1 CPKCPR-RA8P1,Similar to EK

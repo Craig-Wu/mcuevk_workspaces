@@ -1,0 +1,3 @@
+Priority,Status,Key Peri.,EP name,EP details,Alternate HW,Remark
+21,In Progress,EtherCAT,ecs_xx_,EtherCAT Slave examples,N/A,Could port from MCK
+22,In Progress,Motor,motor_xx_,Motor control  examples with inverter board,N/A,Could port from MCK

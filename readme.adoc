@@ -47,11 +47,11 @@ cpk目录名对应的CPK硬件如下：
 |===
 // include::./docs/cpk_boards.csv[]
 | 文件夹名称                | 对应的CPK名称      | 对应的CPK配置                      | 附加说明                                                    
-| cpk_ra8t2            | CPK-RA8T2     | CPKNET-RA8T2 + CPKEXP-ECSMCB  | RA8T2主要的样例程序均基于CPK-RA8T2                                
-| cpk_ra8p1            | CPK-RA8P1     | CPKCOR-RA8P1 + CPKEXP-EKRA8X2 | RA8P1主要的样例程序均基于CPK-RA8P1                                
-| cpknet_ra8t2         | CPKNET-RA8T2  | 仅CPKNET-RA8T2核心板              | RA8T2的主推核心板，仅包含核心板可独立运行的样例程序                            
-| cpkhmi_ra8p1         | CPKHMI-RA8P1  | 仅CPKHMI-RA8P1核心板              | 与CPKNET-RA8T2功能基本相同，USB改为2.0高速，支持MIPI接口                 
-| cpkcor_ra8p1         | CPKCOR-RA8P1  | 仅CPKCOR-RA8P1核心板              | RA8P1的主推核心板，仅包含核心板可独立运行的样例程序                            
+| #cpk_ra8t2#            | CPK-RA8T2     | CPKNET-RA8T2 + CPKEXP-ECSMCB  | RA8T2主要的样例程序均基于CPK-RA8T2                                
+| #cpk_ra8p1#            | CPK-RA8P1     | CPKCOR-RA8P1 + CPKEXP-EKRA8X2 | RA8P1主要的样例程序均基于CPK-RA8P1                                
+| #cpknet_ra8t2#        | CPKNET-RA8T2  | 仅CPKNET-RA8T2核心板              | RA8T2的主推核心板，仅包含核心板可独立运行的样例程序                            
+| #cpkhmi_ra8p1#         | CPKHMI-RA8P1  | 仅CPKHMI-RA8P1核心板              | 与CPKNET-RA8T2功能基本相同，USB改为2.0高速，支持MIPI接口                 
+| #cpkcor_ra8p1#         | CPKCOR-RA8P1  | 仅CPKCOR-RA8P1核心板              | RA8P1的主推核心板，仅包含核心板可独立运行的样例程序                            
 | cpkcor_ra8t2         | CPKCOR-RA8T2  | 仅CPKCOR-RA8T2核心板              | 与CPKCOR-RA8P1功能基本相同，USB改为2.0全速，删除MIPI接口                 
 | cpkcor_ra8t2_ecsmcb  | -             | CPKCOR-RA8T2 + CPKEXP-ECSMCB  | 可评估RA8T2+16位SDRAM+Octa-Memory + 电机/网络控制等功能              
 | cpkhmi_ra8p1_ekra8x2 | -             | CPKHMI-RA8P1 + CPKEXP-EKRA8X2 | 可评估RA8P1+32位SDRAM+QSPI Memory + LCD/摄像头等功能              

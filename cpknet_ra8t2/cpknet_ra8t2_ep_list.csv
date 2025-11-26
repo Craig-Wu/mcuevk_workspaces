@@ -1,0 +1,6 @@
+Priority,Status,Key Peri.,EP name,EP details,Alternate HW,Remark
+01,In Progress,SDRAM,sdram_,32bit SDRAM settings and benchmark,01.1 CPKHMI-RA8P1,Similar to CPKHMI-RA8D1B
+02,Before Start,QSPI NOR,qspi_nor_,QSPI NOR setup and benchmark,02.1 CPKHMI-RA8P1,Similar to CPKCOR-RA8D1B
+03,Before Start,D-Cache,d_cache_,D-Cache WT/WB setting with benchmark,03.1 CPKHMI-RA8P1,New
+04,In Progress,Dual Core,ipc_rpmsglite_,IPC and RPMSG-Lite setup and demo,Any CPK Core board,New
+06,Before Start,USB-FS,usb_xx_,USB CC read out and execution,06.1 CPKCOR-RA8T2,New
