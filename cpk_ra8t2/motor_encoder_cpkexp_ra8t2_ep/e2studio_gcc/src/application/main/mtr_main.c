@@ -22,8 +22,7 @@
 ***********************************************************************************************************************/
 /**********************************************************************************************************************
 * History : DD.MM.YYYY Version
-*         : 25.03.2024 1.00
-*         : 14.05.2025 1.01         Instance pointers are reffered.
+*         : 19.01.2024 1.00
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -39,11 +38,12 @@
 * Global variables
 ***********************************************************************************************************************/
 float       g_f4_speed_ref = 0.0F;
-uint8_t     g_u1_motor_status;          /* Motor status */
-uint8_t     com_u1_sw_userif;           /* User interface switch */
-uint8_t     g_u1_sw_userif;             /* User interface switch */
-uint8_t     com_u1_mode_system;         /* System mode */
-uint8_t     g_u1_mode_system;           /* System mode */
+float       g_f_position_ref = 0.0F;
+uint8_t     g_u1_motor_status;            /* Motor status */
+uint8_t     com_u1_sw_userif;             /* User interface switch */
+uint8_t     g_u1_sw_userif;               /* User interface switch */
+uint8_t     com_u1_mode_system;           /* System mode */
+uint8_t     g_u1_mode_system;             /* System mode */
 uint16_t    g_u2_max_speed_rpm;
 uint8_t     g_u1_stop_req;
 uint16_t    g_u2_chk_error;
@@ -59,17 +59,21 @@ uint8_t     g_u1_conf_control[CONF_CONTROL_LEN];
 uint8_t     g_u1_conf_inverter[CONF_INVERTER_LEN];
 uint8_t     g_u1_reset_req;             /* Reset request flag */
 uint8_t     g_u1_sw_cnt;                /* Counter to remove chattering */
+uint8_t     g_u1_loop_mode;
 
 const motor_instance_t  *p_motor_instance;
+const motor_angle_instance_t  *p_angle_instance;
 motor_cfg_t g_user_motor_cfg;
-motor_sensorless_instance_ctrl_t *p_user_motor_instance_ctrl;
-motor_sensorless_extended_cfg_t g_user_motor_sensorless_extended_cfg;
+motor_encoder_instance_ctrl_t *p_user_motor_instance_ctrl;
+motor_encoder_extended_cfg_t g_user_motor_encoder_extended_cfg;
 motor_speed_cfg_t g_user_motor_speed_cfg;
 motor_speed_extended_cfg_t g_user_motor_speed_extended_cfg;
+motor_position_cfg_t g_user_motor_position_cfg;
+motor_position_extended_cfg_t g_user_motor_position_extended_cfg;
 motor_current_cfg_t g_user_motor_current_cfg;
 motor_current_extended_cfg_t g_user_motor_current_extended_cfg;
 motor_angle_cfg_t g_user_motor_angle_cfg;
-motor_estimate_extended_cfg_t g_user_motor_estimate_extended_cfg;
+motor_sense_encoder_extended_cfg_t g_user_motor_sense_encoder_extended_cfg;
 motor_driver_cfg_t g_user_motor_driver_cfg;
 motor_driver_extended_cfg_t g_user_motor_driver_extended_cfg;
 motor_current_motor_parameter_t g_user_motor_current_motor_parameter;
@@ -137,14 +141,13 @@ void mtr_init(void)
         g_u1_conf_inverter[i] = u1_conf_inverter[i];
     }
     g_u2_conf_hw = 0x0008;                        /* 0000000000001000b */
-    g_u2_conf_sw = 0x0000;                        /* 0000000000000000b */
-    g_u2_conf_tool = 0x0300;                      /* 0000011000000000b */
-
+    g_u2_conf_sw = 0x0081;                        /* 0000000010000001b */
+    g_u2_conf_tool = 0x0200;                      /* 0000001000000000b */
 
     make_cpkexp_init();
 
     /* Set motor instance pointer */
-    p_motor_instance = &g_motor_sensorless0;
+    p_motor_instance = &g_motor_encoder0;
 
     /* Start instances & set user parameters */
     motor_fsp_init();
@@ -224,7 +227,7 @@ static void board_ui(void)
                     p_motor_instance->p_api->run(p_motor_instance->p_ctrl);
                 }
             }
-        break;
+            break;
 
         case MOTOR_STATUS_RUN:
             u1_temp_sw_signal = get_sw1();
@@ -237,7 +240,7 @@ static void board_ui(void)
                 p_motor_instance->p_api->stop(p_motor_instance->p_ctrl);
                 u1_stop_wait_count = MOTOR_STOP_WAIT_COUNT;
             }
-        break;
+            break;
 
         case MOTOR_STATUS_ERROR:
             if (MTR_FLG_CLR == get_sw1())
@@ -261,11 +264,11 @@ static void board_ui(void)
                     /* Do nothing */
                 }
             }
-        break;
+            break;
 
         default:
             /* Do nothing */
-        break;
+            break;
     }
 
     /***** LED control *****/
@@ -352,8 +355,8 @@ static void software_init(void)
     g_u1_motor_status  = MOTOR_STATUS_STOP;
     g_u2_max_speed_rpm = MTR_MAX_SPEED_RPM;
     g_u1_mode_system   = MOTOR_CTRL_EVENT_STOP;
-    g_u1_stop_req      = MTR_FLG_SET;
     g_u1_reset_req     = SW_OFF;
+    g_u1_loop_mode     = CONFIG_LOOP_MODE;
 
     /* ICS variables initialization */
     com_u1_mode_system = MOTOR_CTRL_EVENT_STOP;
@@ -364,7 +367,7 @@ static void software_init(void)
 
 /***********************************************************************************************************************
 * Function Name : g_poe_overcurrent
-* Description   : Overcurrent(POEG) Interrupt callback function
+* Description   : POEG2 Interrupt callback function
 * Arguments     : p_args - Callback argument
 * Return Value  : None
 ***********************************************************************************************************************/
@@ -385,6 +388,7 @@ void g_poe_overcurrent(poeg_callback_args_t *p_args)
 ***********************************************************************************************************************/
 static void make_cpkexp_init (void)
 {
+
     uint32_t P400_PSEL;
     uint32_t P401_PSEL;
 
@@ -398,7 +402,6 @@ static void make_cpkexp_init (void)
     R_BSP_PinAccessEnable();
     R_PFS->PORT[4].PIN[0].PmnPFS=P400_PSEL;
     R_PFS->PORT[4].PIN[1].PmnPFS=P401_PSEL;
-
     R_BSP_PinAccessDisable();
 
 }
@@ -411,6 +414,8 @@ static void make_cpkexp_init (void)
 ***********************************************************************************************************************/
 static void motor_fsp_init(void)
 {
+    motor_speed_position_data_t temp_position_data;
+
     /* Open motor instance */
     p_motor_instance->p_api->open(p_motor_instance->p_ctrl, p_motor_instance->p_cfg);
 
@@ -419,14 +424,22 @@ static void motor_fsp_init(void)
 
     /* Set user configuration */
     g_user_motor_cfg = *(p_motor_instance->p_cfg);
-    g_user_motor_sensorless_extended_cfg = *(motor_sensorless_extended_cfg_t *)g_user_motor_cfg.p_extend;
-    g_user_motor_cfg.p_extend = &g_user_motor_sensorless_extended_cfg;
+    g_user_motor_encoder_extended_cfg = *(motor_encoder_extended_cfg_t *)g_user_motor_cfg.p_extend;
+    g_user_motor_cfg.p_extend = &g_user_motor_encoder_extended_cfg;
     p_user_motor_instance_ctrl = p_motor_instance->p_ctrl;
     p_user_motor_instance_ctrl->p_cfg = &g_user_motor_cfg;
 
     g_user_motor_speed_cfg = *(g_user_motor_cfg.p_motor_speed_instance->p_cfg);
     g_user_motor_speed_extended_cfg = *(motor_speed_extended_cfg_t *)g_user_motor_speed_cfg.p_extend;
     g_user_motor_speed_cfg.p_extend = &g_user_motor_speed_extended_cfg;
+    temp_position_data.e_step_mode = MOTOR_SPEED_STEP_DISABLE;
+    temp_position_data.e_loop_mode = MOTOR_SPEED_LOOP_MODE_SPEED;
+    temp_position_data.position_reference_degree = 0;
+    p_motor_instance->p_api->positionSet(p_motor_instance->p_ctrl, &temp_position_data);
+
+    g_user_motor_position_cfg = *(g_user_motor_cfg.p_motor_speed_instance->p_cfg->p_position_instance->p_cfg);
+    g_user_motor_position_extended_cfg = *(motor_position_extended_cfg_t *)g_user_motor_position_cfg.p_extend;
+    g_user_motor_position_cfg.p_extend = &g_user_motor_position_extended_cfg;
 
     g_user_motor_current_cfg = *(g_user_motor_cfg.p_motor_current_instance->p_cfg);
     g_user_motor_current_extended_cfg = *(motor_current_extended_cfg_t *)g_user_motor_current_cfg.p_extend;
@@ -436,9 +449,12 @@ static void motor_fsp_init(void)
     g_user_motor_current_extended_cfg.p_design_parameter = &g_user_motor_current_design_parameter;
     g_user_motor_current_cfg.p_extend = &g_user_motor_current_extended_cfg;
 
-    g_user_motor_angle_cfg = *(g_user_motor_cfg.p_motor_current_instance->p_cfg->p_motor_angle_instance->p_cfg);
-    g_user_motor_estimate_extended_cfg = *(motor_estimate_extended_cfg_t *)g_user_motor_angle_cfg.p_extend;
-    g_user_motor_angle_cfg.p_extend = &g_user_motor_estimate_extended_cfg;
+    p_angle_instance = g_user_motor_current_cfg.p_motor_angle_instance;
+    g_user_motor_angle_cfg = *(p_angle_instance->p_cfg);
+    g_user_motor_sense_encoder_extended_cfg
+        = *(motor_sense_encoder_extended_cfg_t *)g_user_motor_angle_cfg.p_extend;
+    g_user_motor_angle_cfg.p_extend = &g_user_motor_sense_encoder_extended_cfg;
+    p_angle_instance->p_api->parameterUpdate(p_angle_instance->p_ctrl, &g_user_motor_angle_cfg);
 
     g_user_motor_driver_cfg = *(g_user_motor_cfg.p_motor_current_instance->p_cfg->p_motor_driver_instance->p_cfg);
     g_user_motor_driver_extended_cfg = *(motor_driver_extended_cfg_t *)g_user_motor_driver_cfg.p_extend;
@@ -446,12 +462,12 @@ static void motor_fsp_init(void)
 } /* End of function motor_fsp_init */
 
 /***********************************************************************************************************************
-* Function Name : mtr_callback_event
-* Description   : Callback function of motor control
+* Function Name : mtr_callback_encoder
+* Description   : Callback function of Encoder Control
 * Arguments     : p_args - Callback argument
 * Return Value  : None
 ***********************************************************************************************************************/
-void mtr_callback_event(motor_callback_args_t * p_args)
+void mtr_callback_encoder(motor_callback_args_t * p_args)
 {
     /* Only valid after the finish of initialization */
     if (1U == u1_init_flag)
@@ -480,7 +496,7 @@ void mtr_callback_event(motor_callback_args_t * p_args)
                     p_motor_instance->p_api->errorCheck(p_motor_instance->p_ctrl, &g_u2_chk_error);
                 }
 
-                /* Speed reference (VR1) is sampled here after A/D conversion. */
+                /* Reference (VR1) is sampled here after A/D conversion. */
                 g_u2_vr1_ad = get_vr1();
                 break;
             }
@@ -493,13 +509,10 @@ void mtr_callback_event(motor_callback_args_t * p_args)
             }
 
             default:
-            {
-                /* Do nothing */
-            }
-            break;
+                break;
         }
     }
-} /* End of function mtr_callback_event */
+} /* End of function mtr_callback_encoder */
 
 /***********************************************************************************************************************
 * Function Name : mtr_board_led_control
@@ -541,6 +554,28 @@ static void mtr_board_led_control(uint8_t u1_motor_status)
             break;
         }
     }
+
+    /* LED3 is lighten at achieved the reference position. */
+    if((MOTOR_STATUS_RUN == g_u1_motor_status) && (LOOP_POSITION == g_u1_loop_mode))
+    {
+        float f4_temp;
+        /***** Positioning flag *****/
+        f4_temp = fabsf(g_motor_position0_ctrl.st_variable.f4_pos_err_rad);
+        if (g_user_motor_position_extended_cfg.u2_pos_band_limit
+                * g_user_motor_position_extended_cfg.f_encd_angle_diff
+          >= f4_temp)
+        {
+            led3_on();
+        }
+        else
+        {
+            led3_off();
+        }
+    }
+    else
+    {
+        led3_off();
+    }
 } /* End of function mtr_board_led_control */
 
 /***********************************************************************************************************************
@@ -574,7 +609,7 @@ static uint8_t mtr_remove_sw_chattering(uint8_t u1_sw, uint8_t u1_on_off)
 
 /***********************************************************************************************************************
 * Function Name : mtr_set_reference
-* Description   : Set reference of speed by VR1
+* Description   : Set reference of speed/position by VR1
 * Arguments     : None
 * Return Value  : None
 ***********************************************************************************************************************/
@@ -582,29 +617,73 @@ static void mtr_set_reference(void)
 {
     if (BOARD_UI == g_u1_sw_userif)
     {
-        /*=============================*/
-        /*      Set speed reference    */
-        /*=============================*/
-        g_f4_speed_ref = -(((float)g_u2_vr1_ad - ADJUST_OFFSET) * VR1_SCALING);
-        if (g_f4_speed_ref >= MTR_MAX_SPEED_RPM)
-        {
-            g_f4_speed_ref = MTR_MAX_SPEED_RPM;
-        }
-        if (g_f4_speed_ref <= -MTR_MAX_SPEED_RPM)
-        {
-            g_f4_speed_ref = -MTR_MAX_SPEED_RPM;
-        }
+        motor_speed_position_data_t temp_position_data;
 
-        p_motor_instance->p_api->speedSet(p_motor_instance->p_ctrl, g_f4_speed_ref);
+        /* Speed reference */
+        if (g_u1_loop_mode == LOOP_SPEED)
+        {
+            /*=============================*/
+            /*      Set speed reference    */
+            /*=============================*/
+            /* Read speed reference from VR1 */
+            g_f4_speed_ref = -(((float)g_u2_vr1_ad - ADJUST_OFFSET) * VR1_SCALING);
+            if (g_f4_speed_ref >= MTR_MAX_SPEED_RPM)
+            {
+                g_f4_speed_ref = MTR_MAX_SPEED_RPM;
+            }
+            if (g_f4_speed_ref <= -MTR_MAX_SPEED_RPM)
+            {
+                g_f4_speed_ref = -MTR_MAX_SPEED_RPM;
+            }
+            p_motor_instance->p_api->speedSet(p_motor_instance->p_ctrl, g_f4_speed_ref);
 
-        /* Below low limit speed, stop the motor */
-        if ((g_f4_speed_ref > (-STOP_RPM)) && (g_f4_speed_ref < STOP_RPM))
-        {
-            g_u1_stop_req = MTR_FLG_SET;
+            temp_position_data.e_step_mode= MOTOR_SPEED_STEP_DISABLE;
+            temp_position_data.e_loop_mode = MOTOR_SPEED_LOOP_MODE_SPEED;
+            temp_position_data.position_reference_degree = 0;
+            p_motor_instance->p_api->positionSet(p_motor_instance->p_ctrl, &temp_position_data);
+
+            /* Below low limit speed, stop the motor */
+            if ((g_f4_speed_ref > (-STOP_RPM)) && (g_f4_speed_ref < STOP_RPM))
+            {
+                g_u1_stop_req = MTR_FLG_SET;
+            }
+            else
+            {
+                g_u1_stop_req = MTR_FLG_CLR;
+            }
         }
-        else
+        /* Position reference */
+        else if (g_u1_loop_mode == LOOP_POSITION)
         {
-            g_u1_stop_req = MTR_FLG_CLR;
+            if (g_user_motor_sense_encoder_extended_cfg.loop_mode == LOOP_SPEED)
+            {
+                g_user_motor_sense_encoder_extended_cfg.loop_mode = MOTOR_SENSE_ENCODER_LOOP_POSITION;
+                p_angle_instance->p_api->parameterUpdate(p_angle_instance->p_ctrl, &g_user_motor_angle_cfg);
+            }
+
+            /*=============================*/
+            /*   Set position reference    */
+            /*=============================*/
+            /* read position reference from VR1, remove offset */
+            g_f_position_ref = (ADJUST_OFFSET - (float)g_u2_vr1_ad) * VR1_SCALING_POS;
+            if(g_f_position_ref > VR1_180)
+            {
+                g_f_position_ref = VR1_180;
+            }
+            else if (g_f_position_ref < -VR1_180)
+            {
+                g_f_position_ref = -VR1_180;
+            }
+            /* limit dead-band  */
+            if((g_f_position_ref <= VR1_POSITION_DEAD_BAND) && (g_f_position_ref >= -VR1_POSITION_DEAD_BAND))
+            {
+                g_f_position_ref = 0.0F;
+            }
+            p_motor_instance->p_api->speedSet(p_motor_instance->p_ctrl, 0.0F);
+            temp_position_data.e_step_mode = MOTOR_SPEED_STEP_ENABLE;
+            temp_position_data.e_loop_mode = MOTOR_SPEED_LOOP_MODE_POSITION;
+            temp_position_data.position_reference_degree = (int16_t)(g_f_position_ref);
+            p_motor_instance->p_api->positionSet(p_motor_instance->p_ctrl, &temp_position_data);
         }
     }
 }   /* End of function mtr_set_reference */
