@@ -1,112 +1,8 @@
 :imagesdir: images
 
-== 简介
+== perf_counter 使用
 
-此样例工程集成了perf_counter性能测试工具，并通过运行CoreMark®程序来测试不同编译器和编译配置下，RA8P1的Cortex M85内核的性能，该性能数据可以作为编译器和编译参数选择的一个参考。
-
-CoreMark测试并不支持CM85内核的Helium指令和RA8P1集成的Ethos U55 NPU，仅提供CPU标量运算性能的参考。
-
-本样例程序CoreMark的测试代码运行在I-TCM中，数据使用D-TCM，最大限度排除了片内存储器和总线对测试结果的影响。
-
-样例程序包含三个目录，对应FSP 6.3.0可以支持的三种编译器和对应的集成开发环境
-
-e^2^studio 2025-12 + LLVM 21.1.1
-e^2^studio 2025-12 + GCC 13.2.1
-Keil MDK 5.42 + ARM Compiler 6.23 (通过RASC生成MDK工程)
-
-本工程也可作为以及基础测试框架，对用户程序进行性能测试。有关如何设置工程并加入用户代码进行测试，请参考此文档：link:yyy.adoc[设置perf_counter工程进行性能测试]
-
-
-== 快速查看测试结果
-
-在 `perf_counter_cpkhmi_ra8p1_ep` 文件夹下已提供三个编译好的 hex 文件，分别对应三种环境，可以用瑞萨的RFP烧录工具或Segger的J-Flash Lite烧录后运行。其中使用 e^2^studio 开发环境的工程均使用 Release 配置编译生成，性能表现均会优于 Debug 配置。
-
-* perf_counter_llvm_release.hex: e^2^studio + llvm 21.1.1
-* perf_counter_gcc_release.hex: e^2^studio + arm-none-eabi-gcc 13.2.1.arm-13-7
-* perf_counter_keil.hex: Keil MDK + ARMCC6.23
-
-Release配置下
-
-* 测试结果使用 UART 输出，使用RA8P1的SCI9，连接J-Link OB的虚拟串口
-* PC端选择J-Link串口，设置波特率 2000000，8bit 数据位，1bit 停止位，无奇偶校验。
-* 输出信息使用UTF-8编码，其中含有中文字符，建议使用支持 UTF-8 编码的串口终端工具，例如 Putty。
-* 输出结果中包含了由perf_counter工具统计的运行CPU周期数。
-
-各个编译器使用的优化级别和CoreMark结果见下表：
-
-
-.展开查看perf_counter_llvm_release.hex 运行结果
-[%collapsible]
-====
-image::Snipaste_2026-01-08_17-03-43.png[align="center", width=640, height=480]
-====
-
-.展开查看perf_counter_gcc_release.hex 运行结果
-[%collapsible]
-====
-image::Snipaste_2026-01-09_09-59-22.png[align="center", width=640, height=480]
-====
-
-.展开查看perf_counter_keil.hex 运行结果
-[%collapsible]
-====
-image::Snipaste_2026-01-08_17-10-10.png[align="center", width=640, height=480]
-====
-
-== 在Release配置下修改编译优化选项
-
-perf_counter_cpkhmi_ra8p1_ep 目录下有三个工程文件夹，分别是
-
-* e2studio_gcc
-* e2studio_llvm
-* keil
-
-各个编译优化选项的CoreMark测试结果如下：
-
-如果您有兴趣自己复现一下测试，请按下面的流程修改编译优化选项。
-
-=== e^2^studio + llvm 或 gcc
-
-其中 e2studio_gcc 和 e2studio_llvm 都是使用 e2 studio 进行管理和构建的，只是使用的编译器不同。有关工程的配置都一样，因此只以 e2studio_llvm 为例说明如何使用，对于 e2studio_gcc，大部分步骤都一样，只对差异部分做说明。
-
-==== 导入工程并通过FSP生成工程文件
-
-导入后先双击工程目录下的 configuration.xml 打开 FSP Configuration，这里不需要对里面的配置做任何改动，直接点击右上角的 `Generate Project Content` 生成工程文件即可
-
-image::Snipaste_2026-01-09_10-35-03.png[]
-
-==== 修改编译优化选项 - LLVM
-
-==== 修改编译优化选项 - GCC
-
-==== 构建工程
-
-点击 e^2^studio 左上角的锤子图标构建工程。下方控制台会输出编译信息。
-
-==== 写入Hex文件并运行
-
-Release配置缺省不连接调试器进行调试，可以通过写入功能，将编译好的程序烧录到片内存储器。
-
-=== Keil MDK + ac6
-
-流程同上
-
-
-== 添加用户程序进行性能测试
-
-需要使用本工程框架对用户程序进行性能测试时，对工程配置进行一定的修改，例如
-
-* 切换Debug配置，确保用户程序可以正确运行
-* 使用perf_counter进行所需的的性能测试，并添加输入输出
-* 切换Release配置，测试能获得的最高性能（或其他结果）
-
-样例设置请参考此文档：link:yyy.adoc[设置perf_counter工程进行性能测试]
-
-=== perf_counter 使用
-
-perf_counter完整的说明可以参考link:https://github.com/GorgonMeducer/perf_counter[Github]代码库的文档，中文资料请参考作者的微信公众号文章 link:https://mp.weixin.qq.com/s/pSjphzHc79xaGylzS1dL8g[超级嵌入式系统“性能/时间”工具箱]。
-
-本例程主要使用以下功能
+完整的说明可以查看 https://github.com/GorgonMeducer/perf_counter/blob/CMSIS-Pack/README.md[Github] 获取。基本使用只有下面几点
 
 * 调用 `perfc_init(false);` 初始化
 * `+__cycleof__()+` 统计周期数
@@ -114,9 +10,43 @@ perf_counter完整的说明可以参考link:https://github.com/GorgonMeducer/per
 * `get_system_ms()`、`get_system_us()` 获取时间戳
 * `get_system_ticks()` 获取周期数
 
-----------------------------
+== 快速查看
 
-以下内容，新建一个文档，描述如何切换debug并加入用户代码测试。
+在 `perf_counter_cpkhmi_ra8p1_ep` 文件夹下已提供三个编译好的 hex 文件，分别对应三种环境，可以直接用 JFlash Lite 烧录运行。结果使用 UART 输出，波特率 2000000，8bit 数据位，1bit 停止位，无奇偶校验。由于输出信息中含有中文字符，因此建议使用支持 UTF-8 编码的串口终端工具，例如 Putty，否则会看到乱码。下面这些 hex 文件，使用 e2 studio 的均使用 Release 配置编译生成，其性能表现均会优于 Debug 配置。
+
+* perf_counter_llvm_release.hex: e2 studio + llvm 21.1.1
+* perf_counter_gcc_release.hex: e2 studio + arm-none-eabi-gcc 13.2.1.arm-13-7
+* perf_counter_keil.hex: Keil MDK + ARMCC6.23
+
+perf_counter_llvm_release.hex 运行结果
+
+image::Snipaste_2026-01-08_17-03-43.png[align="center"]
+
+perf_counter_gcc_release.hex 运行结果
+
+image::Snipaste_2026-01-09_09-59-22.png[align="center"]
+
+perf_counter_keil.hex 运行结果
+
+image::Snipaste_2026-01-08_17-10-10.png[align="center"]
+
+== 使用示例工程
+
+=== e2 studio + llvm 或 gcc
+
+perf_counter_cpkhmi_ra8p1_ep 目录下有三个工程文件夹，分别是
+
+* e2studio_gcc
+* e2studio_llvm
+* keil
+
+其中 e2studio_gcc 和 e2studio_llvm 都是使用 e2 studio 进行管理和构建的，只是使用的编译器不同。有关工程的配置都一样，因此只以 e2studio_llvm 为例说明如何使用，对于 e2studio_gcc，大部分步骤都一样，只对差异部分做说明。
+
+==== 生成工程文件
+
+导入后先双击工程目录下的 configuration.xml 打开 FSP Configuration，这里不需要对里面的配置做任何改动，直接点击右上角的 `Generate Project Content` 生成工程文件即可
+
+image::Snipaste_2026-01-09_10-35-03.png[]
 
 ==== 切换配置
 
