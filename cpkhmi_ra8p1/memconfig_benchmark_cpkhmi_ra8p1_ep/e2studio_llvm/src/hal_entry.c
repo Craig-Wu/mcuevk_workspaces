@@ -46,7 +46,7 @@ void hal_entry(void)
 		}
 	}
 	printf("Coremark running, please wait...\r\n");
-	__cycleof__("Coremark") { coremark_main(); };
+	__cpu_perf__("Coremark") { coremark_main(); };
 
 	while (1) {
 		R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_HIGH);

@@ -1,1 +1,1 @@
-CompileFlags: {CompilationDatabase: code_mram_data_dtcm_dcache_on_force_off}
+CompileFlags: {CompilationDatabase: code_itcm_data_sram_dcache_off}
