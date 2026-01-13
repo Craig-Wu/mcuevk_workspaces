@@ -28,7 +28,7 @@ image::Snipaste_2026-01-09_10-39-18.png[align="center"]
 
 在 Debug 配置下，工程将 C 标准库的标准输入输出流用 RTT View 实现，需要用 RTT Viewer 来查看输出，不过工程还设置了语言为中文，会有部分输出信息是中文，而 SEGGER 自带的那个 RTT Viewer 不支持中文显示，因此需要使用第三方的工具通过 telnet 的方式连接，这里先描述如何使用 telnet 连接再进行调试。或者参照 <<语言配置>> 一节将语言设为英文，这样可以直接使用 SEGGER 自带的 RTT Viewer。
 
-* 打开 map 文件，这个文件在工程目录的 `配置名` 目录下，当前已经在 <<切换配置>> 一节将配置设为了 Debug，因此要去 Debug 目录寻找 map 文件。如果后续想换配置，如换成 Release，那就应该去 Release 目录寻找文件。
+* 打开 map 文件，这个文件在工程目录的 `配置名` 目录下，当前已经将配置设为了 Debug，因此要去 Debug 目录寻找 map 文件。如果后续想换配置，如换成 Release，那就应该去 Release 目录寻找文件。
 
 image::Snipaste_2026-01-09_11-17-51.png[]
 
@@ -105,7 +105,7 @@ image::Snipaste_2026-01-09_13-30-24.png[]
 
 === Keil MDK
 
-MDK 工程需要先使用 RASC 生成。打开 RASC，点击左上角的 `File` -> `Open`，然后选择到工程目录下的 `configuration.xml`
+Keil MDK 不区分 Debug 和 Release 配置，先使用 RASC 生成，然后修改编译器参数即可。打开 RASC，点击左上角的 `File` -> `Open`，然后选择到工程目录下的 `configuration.xml`
 
 image::Snipaste_2026-01-09_13-36-36.png[align="center"]
 
@@ -129,7 +129,7 @@ image::Snipaste_2026-01-09_13-58-41.png[]
 
 image::Snipaste_2026-01-09_13-52-22.png[align="center"]
 
-这里分数相比于 <<快速查看>> 中预留的 hex 文件运行结果较低，是因为 RASC 每次生成都会把优化配置覆盖为默认。默认以减少空间占用优先，要修改优化配置，可以参考下文的 <<优化等级修改>>
+这里分数相比于 xref:perf_counter_cpkhmi_ra8p1_ep_readme.adoc#快速查看测试结果[快速查看测试结果] 中预留的 hex 文件运行结果较低，是因为 RASC 每次生成都会把优化配置覆盖为默认。默认以减少空间占用优先，要修改优化配置，可以参考 xref:perf_counter_cpkhmi_ra8p1_ep_readme.adoc#修改编译优化选项[修改编译优化选项]
 
 == 语言配置
 
@@ -173,31 +173,11 @@ RA8P1 有 ITCM 和 DTCM，CPU 访问这两个区域的内存比访问 MRAM 和 S
 
 这两个宏可以在预定义宏中定义，也可以在文件 `coremark/core_portme.h` 中修改。e2 studio 的示例工程中 Debug 配置未定义这两个宏，保留为了默认的 0，在 Release 配置中，通过添加预定义宏的方式修改为了 1。MDK 通过预定义宏的方式修改为 1。
 
-== 优化等级修改
-
-=== e2 studio
-
-打开工程的 C/C++ 属性设置窗口
-
-image::Snipaste_2026-01-09_14-43-28.png[]
-
-在 `C/C++ 构建` -> `设置` 中的 Optimization 中可以选择 Optimization Level。对于 LLVM 编译器，还可以勾选 Linker-time Optimizer。
-
-=== Keil MDK
-
-修改 `via/rasc_armclang.via` 和 `via/rasc_armlink.via`，*在 keil 里选择是无效的*。并且要注意，每次使用 RASC 生成，这两个文件都会被覆盖，因此需要注意这两个文件的修改是否被 RASC 覆盖。如下图，为 RASC 生成后的默认选项
-
-image::Snipaste_2026-01-09_14-55-25.png[]
-
-可以将优化选项改为 `-Omax`，链接选项中添加 `--lto` 获得最高的优化等级
-
-image::Snipaste_2026-01-09_14-56-35.png[]
-
 == FSP 配置
 :doctype: book
 
-=== 开启 DCache
-DCache 缓存可以有效加速数据的访问，同时开启强制写回，开启强制写回可以避免潜在的多主机读写问题。在 FSP Configuration 配置界面选择 BSP 选项卡，然后在下方窗口点击属性，展开 `RA8P1 Family` -> `Cache settings` 中将 `Data cache` 设为 `Enable`，`Data cache forced write-through` 保留为 `Disabled`
+=== DCache
+DCache 缓存可以有效加速数据的访问，该功能需要在 FSP COnfiguration 中开启。在 FSP Configuration 配置界面选择 BSP 选项卡，然后在下方窗口点击属性，展开 `RA8P1 Family` -> `Cache settings` 中将 `Data cache` 设为 `Enable`，`Data cache forced write-through` 保留为 `Disabled`
 
 image::Snipaste_2026-01-07_16-55-26.png[align="center"]
 

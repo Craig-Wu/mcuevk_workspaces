@@ -156,7 +156,10 @@ perf_counter完整的说明可以参考link:https://github.com/GorgonMeducer/per
 * 调用 `perfc_init(false);` 初始化
 * `get_system_ms()`、`get_system_us()` 获取自初始化后经过的时间
 * `get_system_ticks()` 获取自初始化后经过的 CPU 周期数
+* `+__cpu_perf__()+` 统计周期数+DCache Miss-Rate。但仅限使用 PMU 时可用
 * `+__cycleof__()+` 统计周期数。例如，统计延时函数使用的完整 CPU 周期
+
+一个简单例子如下：
 
 [source,c,subs="verbatim,attributes"]
 ----
@@ -172,15 +175,4 @@ printf("Using time: %lld ms", e - s);
 
 image::Snipaste_2026-01-13_11-20-19.png[]
 
-* `+__cpu_perf__()+` 统计周期数+DCache Miss-Rate。但仅限使用 PMU 时可用。例如，统计 coremark 运行时时间和 DCache Miss-Rate
 
-[source,c,subs="verbatim,attributes"]
-----
-__cpu_perf__("Coremark") {
-    coremark_main();
-};
-----
-
-perf_counter 的输出结果类似下面这样
-
-image::Snipaste_2026-01-13_11-26-43.png[align="center"]
