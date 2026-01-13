@@ -14,7 +14,7 @@ e^2^studio 2025-12 + LLVM 21.1.1
 e^2^studio 2025-12 + GCC 13.2.1
 Keil MDK 5.42 + ARM Compiler 6.23 (通过RASC生成MDK工程)
 
-本工程也可作为以及基础测试框架，对用户程序进行性能测试。有关如何设置工程并加入用户代码进行测试，请参考此文档：link:yyy.adoc[设置perf_counter工程进行性能测试]
+本工程也可作为以及基础测试框架，对用户程序进行性能测试。有关如何设置工程并加入用户代码进行测试，请参考此文档：link:perf_counter_debug_config.adoc[设置perf_counter工程进行性能测试]
 
 
 == 快速查看测试结果
@@ -77,7 +77,19 @@ image::Snipaste_2026-01-09_10-35-03.png[]
 
 ==== 修改编译优化选项 - LLVM
 
+在工程的 C/C++ 属性设置界面中的 Optimization 选项，通过 Optimization Level 选择优化级别。
+
+image::Snipaste_2026-01-13_10-06-36.png[]
+
+对于 LLVM 编译器，还有一个链接时优化选项可选，该选项也在 Optimization 中，若要使用，勾选 Link-time optimizer(-flto) 选项即可
+
+image::Snipaste_2026-01-13_10-09-09.png[]
+
 ==== 修改编译优化选项 - GCC
+
+在工程的 C/C++ 属性设置界面中的 Optimization 选项，通过 Optimization Level 选择优化级别。
+
+image::Snipaste_2026-01-13_10-12-14.png[]
 
 ==== 构建工程
 
@@ -89,137 +101,7 @@ Release配置缺省不连接调试器进行调试，可以通过写入功能，�
 
 === Keil MDK + ac6
 
-流程同上
-
-
-== 添加用户程序进行性能测试
-
-需要使用本工程框架对用户程序进行性能测试时，对工程配置进行一定的修改，例如
-
-* 切换Debug配置，确保用户程序可以正确运行
-* 使用perf_counter进行所需的的性能测试，并添加输入输出
-* 切换Release配置，测试能获得的最高性能（或其他结果）
-
-样例设置请参考此文档：link:yyy.adoc[设置perf_counter工程进行性能测试]
-
-=== perf_counter 使用
-
-perf_counter完整的说明可以参考link:https://github.com/GorgonMeducer/perf_counter[Github]代码库的文档，中文资料请参考作者的微信公众号文章 link:https://mp.weixin.qq.com/s/pSjphzHc79xaGylzS1dL8g[超级嵌入式系统“性能/时间”工具箱]。
-
-本例程主要使用以下功能
-
-* 调用 `perfc_init(false);` 初始化
-* `+__cycleof__()+` 统计周期数
-* `+__cpu_perf__()+` 统计周期数+DCache Miss-Rate。但仅限使用 PMU 时可用
-* `get_system_ms()`、`get_system_us()` 获取时间戳
-* `get_system_ticks()` 获取周期数
-
-----------------------------
-
-以下内容，新建一个文档，描述如何切换debug并加入用户代码测试。
-
-==== 切换配置
-
-e2 studio 可以有多个不同的构建配置，示例工程中都使用了 Release 配置，这也是预留的 hex 文件的生成配置。要切换配置可以右键单击工程名选择 C/C++ Project Settings 打开工程属性配置界面
-
-image::Snipaste_2026-01-09_10-23-42.png[align="center"]
-
-在弹出的对话框中选择 C/C++ 构建 -> 设置，然后点击管理配置
-
-image::Snipaste_2026-01-09_10-26-05.png[align="center"]
-
-在弹出的对话框中选中 Debug，然后选择设置为活跃，最后点击确定，切换到 Debug 配置
-
-image::Snipaste_2026-01-09_10-27-57.png[align="center"]
-
-点击工程属性配置界面下方的 `应用并关闭` 
-
-image::Snipaste_2026-01-09_10-41-17.png[]
-
-==== 构建工程
-
-点击 e2 studio 左上角的锤子图标构建工程。下方控制台会输出编译信息。
-
-image::Snipaste_2026-01-09_10-39-18.png[align="center"]
-
-==== RTT View 连接
-
-在 Debug 配置下，工程将 C 标准库的标准输入输出流用 RTT View 实现，需要用 RTT Viewer 来查看输出，不过工程还设置了语言为中文，会有部分输出信息是中文，而 SEGGER 自带的那个 RTT Viewer 不支持中文显示，因此需要使用第三方的工具通过 telnet 的方式连接，这里先描述如何使用 telnet 连接再进行调试。或者参照 <<语言配置>> 一节将语言设为英文，这样可以直接使用 SEGGER 自带的 RTT Viewer。
-
-* 打开 map 文件，这个文件在工程目录的 `配置名` 目录下，当前已经在 <<切换配置>> 一节将配置设为了 Debug，因此要去 Debug 目录寻找 map 文件。如果后续想换配置，如换成 Release，那就应该去 Release 目录寻找文件。
-
-image::Snipaste_2026-01-09_11-17-51.png[]
-
-* 用任意一个文件编辑器打开，然后搜索 `_SEGGER_RTT`，记住这个地址，稍后会用到
-
-image::Snipaste_2026-01-09_11-20-01.png[]
-
-* 打开 windows Terminal，输入下面这个命令
-
-[source,powershell,subs="verbatim,attributes"]
-----
-JLink -NoGui 1 -If SWD -Speed 4000 -Device R7KA8P1KF_CPU0 -AutoConnect 1 -RTTTelnetPort 19021
-----
-
-注意需要先将 JLink 添加进环境变量，或改为绝对路径调用。然后会进入 JLink 的命令行交互界面
-
-image::Snipaste_2026-01-09_11-29-32.png[align="center"]
-
-* 在 JLink 的命令行交互界面输入
-
-[source,powershell,subs="verbatim,attributes"]
-----
-Exec SetRTTAddr 0x2200008c
-----
-
-image::Snipaste_2026-01-09_11-31-06.png[align="center"]
-
-0x2200008c 是 map 文件中查找到的内存地址。随后打开一个支持 telnet 的终端软件，例如 MobaXterm 或者 Putty
-
-* MobaXterm 链接配置
-** 链接类型选择 Telnet
-** Remote host 选择 localhost
-** Username 可以自定义，这里起 RTTViewer 便于分辨
-** Port 写 19021
-
-image::Snipaste_2026-01-07_13-48-23.png[]
-
-* Putty 的链接配置
-** Host Name 写 localhost
-** Port 写 19021
-** Connection type 选 Other，在下拉列表框里选 Telnet
-
-image::Snipaste_2026-01-07_13-53-32.png[align="center"]
-
-不管是 MobaXterm 还是 Putty，连接后能看到类似下面的消息就说明连接成功
-
-image::Snipaste_2026-01-09_11-33-38.png[]
-
-NOTE: MobaXterm 的 telnet 链接要输入内容要按 Ctrl + Enter，只按 Enter 会显示 `^M`。Windows 自带的 telnet 不支持中文显示。JLink 用于命令行的 JLinkRTTClient 不支持中文显示。
-
-==== 开始调试
-
-右键单击项目资源管理器中的工程，选择 `调试方式` 下的 `Renesas GDB Hardware Ddebugging`，进入调试
-
-image::Snipaste_2026-01-09_11-46-40.png[align="center"]
-
-如果多个配置下都有 elf 文件，那么会弹出下面这个界面，双击选择 Debug 下的 elf 文件
-
-image::Snipaste_2026-01-09_11-49-56.png[align="center"]
-
-之后进入调试界面，程序暂停在了复位中断函数入口处。函数调用堆栈窗口，即右下角显示为调试的窗口，默认在整个界面的左侧，这些窗口都是可拖动的，可以拖动到其它位置，这里就从默认的左侧拖动到了右下角
-
-image::Snipaste_2026-01-09_10-49-19.png[]
-
-点击继续箭头，进入，main 函数。之后再次点击继续，让程序自由运行
-
-image::Snipaste_2026-01-09_11-37-55.png[align="center"]
-
-然后可以在 MobaXterm 或者 Putty 中看到输出的消息
-
-image::Snipaste_2026-01-09_13-30-24.png[]
-
-=== Keil MDK
+==== RASC 打开工程
 
 MDK 工程需要先使用 RASC 生成。打开 RASC，点击左上角的 `File` -> `Open`，然后选择到工程目录下的 `configuration.xml`
 
@@ -229,9 +111,23 @@ image::Snipaste_2026-01-09_13-36-36.png[align="center"]
 
 image::Snipaste_2026-01-09_13-40-02.png[]
 
+==== 修改编译优化选项
+
+编译选项在 `via/rasc_armclang.via` 和 `via/rasc_armlink.via` 中修改，*在 keil 里选择是无效的，这两个文件的优先级高于 keil 里的设置*。并且要注意，每次使用 RASC 生成，这两个文件都会被覆盖，因此需要注意这两个文件的修改是否被 RASC 覆盖。如下图，为 RASC 生成后的默认选项
+
+image::Snipaste_2026-01-09_14-55-25.png[]
+
+要获得最高运行速度，可以将优化选项改为 `-Omax`，链接选项中添加 `--lto` 获得最高的优化等级
+
+image::Snipaste_2026-01-09_14-56-35.png[]
+
+==== 构建工程
+
 点击左上角的符号进行构建
 
 image::Snipaste_2026-01-09_13-47-31.png[align="center"]
+
+==== 写入 hex 文件并运行
 
 随后点击调试符号进行调试
 
@@ -241,341 +137,50 @@ image::Snipaste_2026-01-09_13-50-19.png[align="center"]
 
 image::Snipaste_2026-01-09_13-58-41.png[]
 
-打开串口终端，波特率 2000000，8bit 数据位，1bit 停止位，无奇偶校验，下图是运行结果
+== 添加用户程序进行性能测试
 
-image::Snipaste_2026-01-09_13-52-22.png[align="center"]
+需要使用本工程框架对用户程序进行性能测试时，对工程配置进行一定的修改，例如
 
-这里分数相比于 <<快速查看>> 中预留的 hex 文件运行结果较低，是因为 RASC 每次生成都会把优化配置覆盖为默认。默认以减少空间占用优先，要修改优化配置，可以参考下文的 <<优化等级修改>>
+* 切换Debug配置，确保用户程序可以正确运行
+* 使用perf_counter进行所需的的性能测试，并添加输入输出
+* 切换Release配置，测试能获得的最高性能（或其他结果）
 
-== 语言配置
+样例设置请参考此文档：link:perf_counter_debug_config.adoc[设置perf_counter工程进行性能测试]
 
-示例工程所使用的代码对部分输出内容做了翻译，输出信息可以为中文。该功能由宏 `_LANGUAGE=0x0804` 控制，定义该宏则使用中文显示，不定义则使用英文显示。该宏必须添加在编译器的预定义宏中，下面是添加方法
+== perf_counter 使用
 
-=== e2 studio
+perf_counter完整的说明可以参考link:https://github.com/GorgonMeducer/perf_counter[Github]代码库的文档，中文资料请参考作者的微信公众号文章 link:https://mp.weixin.qq.com/s/pSjphzHc79xaGylzS1dL8g[超级嵌入式系统“性能/时间”工具箱]。
 
-打开工程的 C/C++ Project Settings 界面。依次选择 `C/C++ 构建` -> `设置` -> `Compiler` -> `Includes`，点击红框中的加号，然后填入宏
+本例程主要使用以下功能
 
-image::Snipaste_2026-01-05_18-16-31.png[]
-
-对于使用 gcc 编译器的工程，它的位置如下图。依然是 `C/C++ 构建` -> `设置`，然后是 `GNU Arm Cross C Compiler` 下的 `Preprocessor` 中
-
-image::Snipaste_2026-01-09_14-12-04.png[]
-
-=== Keil MDK
-
-点击魔术棒工具，选择 C/C++(AC6) 选项卡，在 Define 栏中添加，多个宏使用括号隔开
-
-image::Snipaste_2026-01-09_14-15-48.png[]
-
-== 输入输出配置
-
-打开 `source` 文件夹下的 `console.h`，里面定义了多个输入输出位置，但目前仅实现以下两个：
-
-* CONSOLE_CFG_USE_RTT
-* CONSOLE_CFG_USE_UART
-
-有两种修改方式，添加预定义宏或修改头文件配置。要使用哪个，就把谁定义为 1。编译器预定宏的优先级高于文件的定义。注意：*只能选择一项，只能有一个宏为 1*。如果不用输入输出，可以把所有宏设为 0 或不在预定义宏定义。
-
-== 内存区域配置
-
-RA8P1 有 ITCM 和 DTCM，CPU 访问这两个区域的内存比访问 MRAM 和 SRAM 快。示例工程中可以通过宏修改 coremark 中代码的变量的存储位置。
-
-* PUT_CODE_IN_ITCM
-** 0 或未定义: 代码放在 MRAM
-** 1: 代码放在 ITCM
-* PUT_DATA_IN_DTCM
-** 0 或未定义：变量放在 SRAM
-** 1: 代码放在 DTCM
-
-这两个宏可以在预定义宏中定义，也可以在文件 `coremark/core_portme.h` 中修改。e2 studio 的示例工程中 Debug 配置未定义这两个宏，保留为了默认的 0，在 Release 配置中，通过添加预定义宏的方式修改为了 1。MDK 通过预定义宏的方式修改为 1。
-
-== 优化等级修改
-
-=== e2 studio
-
-打开工程的 C/C++ 属性设置窗口
-
-image::Snipaste_2026-01-09_14-43-28.png[]
-
-在 `C/C++ 构建` -> `设置` 中的 Optimization 中可以选择 Optimization Level。对于 LLVM 编译器，还可以勾选 Linker-time Optimizer。
-
-=== Keil MDK
-
-修改 `via/rasc_armclang.via` 和 `via/rasc_armlink.via`，*在 keil 里选择是无效的*。并且要注意，每次使用 RASC 生成，这两个文件都会被覆盖，因此需要注意这两个文件的修改是否被 RASC 覆盖。如下图，为 RASC 生成后的默认选项
-
-image::Snipaste_2026-01-09_14-55-25.png[]
-
-可以将优化选项改为 `-Omax`，链接选项中添加 `--lto` 获得最高的优化等级
-
-image::Snipaste_2026-01-09_14-56-35.png[]
-
-= FSP 配置
-:doctype: book
-
-== 开启 DCache
-DCache 缓存可以有效加速数据的访问，同时开启强制写回，开启强制写回可以避免潜在的多主机读写问题。在 FSP Configuration 配置界面选择 BSP 选项卡，然后在下方窗口点击属性，展开 `RA8P1 Family` -> `Cache settings` 中将 `Data cache` 设为 `Enable`，`Data cache forced write-through` 保留为 `Disabled`
-
-image::Snipaste_2026-01-07_16-55-26.png[align="center"]
-
-== 修改栈大小
-coremark 当前移植选择了使用栈来分配空间，因此需要较大的栈空间，FSP 默认给到 1024 字节，需要增加。依然在下方的属性选项卡，展开 `RA Common`，将 `Main stack size (bytes)` 修改为 `0x4000`。如下图所示
-
-image::Snipaste_2026-01-05_11-19-58.png[]
-
-== 启用时钟
-后续需要使用 UART 输出消息，因此需要把相应的时钟打开。UART 的时钟源是 SCICLK。在 FSP Configuration 中选择 Clocks 选项卡
-
-* `PLL2 Src` 从 `Disabled` 改为 `XTAL`
-* `SCICLK Src` 从 `Disabled` 改为 `PLL2R`
-
-之后 SCICLK 时钟为 120MHz，这是 SCICLK 时钟允许的最大值。如下图所示
-
-image::Snipaste_2026-01-05_11-26-49.png[]
-
-== 新建 FSP Stack
-在 FSP Configuration 的 Stacks 选项卡中选择 `New Stack` -> `Connectivity` -> `UART (r_sci_b_uart)`
-
-image::Snipaste_2026-01-07_17-06-34.png[align="center"]
-
-随后点击新添加的 Stack，在下方的属性面板修改属性。根据原理图，RA8P1 与板载 JLink 连接的是 SCI9。展开 Module 下的 General，将
-
-* Name 改为 `g_uart9`
-* Channel 改为 9
-
-如下图所示
-
-image::Snipaste_2026-01-07_17-10-04.png[align="center"]
-
-板载 JLink 的虚拟串口可以支持到 2000000 的波特率。展开 Module 下的 Baud，将 Baud Rate 改为 2000000
-
-image::Snipaste_2026-01-08_10-03-53.png[align="center"]
-
-展开 Module 下的 Interrupts，将
-
-* Callback 改为 `UART9_Callback`
-
-image::Snipaste_2026-01-07_17-13-57.png[align="center"]
-
-最后，点击右上角的 `Generate Project Content` 生成工程
-
-image::Snipaste_2026-01-05_13-29-34.png[]
-
-= Debug 配置
-
-e2 studio 新建工程后，会生成两种构建配置，Debug 和 Release，其中默认使用的是 Debug。
-
-== 添加源文件
-:doctype: book
-
-将 `source` 和 `third` 两个文件夹复制到 src 目录下，复制后，从左侧的项目资源管理器中可以看到 src 目录结构应类似下面这样
-
-image::Snipaste_2026-01-07_17-18-36.png[align="center"]
-
-== 添加头文件路径
-
-在项目资源管理器中对项目名右键单击，打开工程属性设置窗口，依次选择 `C/C++构建`->`设置`，在工具设置选项卡里选择 `Compiler` 下的 `Includes`，点击 `Include file directories` 右侧的绿色加号，如下图所示：
-
-image::Snipaste_2026-01-05_17-03-23.png[]
-
-之后会弹出如下图所示的对话框，点击 `工作空间`
-
-image::Snipaste_2026-01-05_17-58-19.png[align="center"]
-
-出现如下图所示界面，选择 src 下的 source 文件夹，点击确定
-
-image::Snipaste_2026-01-07_17-27-52.png[align="center"]
-
-用相同的方式添加 src 下的 third 文件夹，添加完成后在包含目录里应该能看到新添加的两个目录
-
-image::Snipaste_2026-01-07_17-32-16.png[align="center"]
-
-== 添加预定义宏
-:doctype: book
-
-示例工程中使用 perf_counter 组件来测量代码运行事件以及性能评估，该组件以源代码形式提供，为了使其正常工作，需要添加一些预定义宏。
-
-在相同的工程属性选项卡，点击 `Macro Defines(-D)` 右侧的绿色加号，如下图所示
-
-image::Snipaste_2026-01-05_18-16-31.png[]
-
-之后在对话框中加入添加宏 `CONSOLE_CFG_USE_RTT=1` 使输入输出重定向到 SEGGER RTT。
-
-image::Snipaste_2026-01-06_13-11-49.png[align="center"]
-
-再用相同的步骤添加宏 `CONSOLE_CFG_USE_RTT=1` 使输入输出重定向到 SEGGER RTT。最后切换到 `Compiler` 下的 `Source` 选项，将语言标准改为 GNU ISO C99
-
-image::Snipaste_2026-01-06_09-45-52.png[]
-
-点击应用并关闭，在弹出的对话框中选择重建索引完成设置
-
-image::Snipaste_2026-01-06_09-48-18.png[]
-
-NOTE: 可以添加宏 `_LANGUAGE=0x0804` 使 perf_counter 的报告以中文输出，但 SEGGER 的 RTT Viewer 不支持 UTF-8 编码显示，因此中文部分会乱码。不添加这个预定义宏让程序使用英文输出。在 <<运行>> 一节会描述如何使用 telnet 链接 RTT View 以使用第三方支持中文显示的客户端，而不用 JLink RTT Viewer 这个软件。
-
-== 调用
-:doctype: book
-
-编辑 `src/hal_entry.c` 文件，在文件开头先包含需要的头文件
+* 调用 `perfc_init(false);` 初始化
+* `get_system_ms()`、`get_system_us()` 获取自初始化后经过的时间
+* `get_system_ticks()` 获取自初始化后经过的 CPU 周期数
+* `+__cycleof__()+` 统计周期数。例如，统计延时函数使用的完整 CPU 周期
 
 [source,c,subs="verbatim,attributes"]
 ----
-#include "console.h"
-#include "hal_data.h"
-
-#include "coremark/coremark.h"
-#include "perf_counter/perf_counter.h"
-----
-
-在 `hal_entry()` 函数里添加初始化和调用
-
-[source,c,subs="verbatim,attributes"]
-----
-CONSOLE_Init();
-perfc_init(false);
-
-printf("Input any character to start coremark\r\n");
-while (1) {
-    R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_SECONDS);
-    if (CONSOLE_HasData()) {
-        break;
-    }
-    else {
-        printf("Input any character to start coremark\r\n");
-    }
+int64_t s = get_system_ms();
+__cycleof__("100MS") {
+    R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);
 }
-printf("Coremark running, please wait...\r\n");
-__cycleof__("Coremark") { coremark_main(); };
+int64_t e = get_system_ms();
+printf("Using time: %lld ms", e - s);
 ----
 
-最后，让 LED 闪烁来提示 coremark 已运行完成
+输出结果类似下面这样
+
+image::Snipaste_2026-01-13_11-20-19.png[]
+
+* `+__cpu_perf__()+` 统计周期数+DCache Miss-Rate。但仅限使用 PMU 时可用。例如，统计 coremark 运行时时间和 DCache Miss-Rate
 
 [source,c,subs="verbatim,attributes"]
 ----
-while (1) {
-    R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_HIGH);
-    R_BSP_SoftwareDelay(500, BSP_DELAY_UNITS_MILLISECONDS);
-    R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_LOW);
-    R_BSP_SoftwareDelay(500, BSP_DELAY_UNITS_MILLISECONDS);
-}
+__cpu_perf__("Coremark") {
+    coremark_main();
+};
 ----
 
-== 运行
-:doctype: book
+perf_counter 的输出结果类似下面这样
 
-打开 RTT Viewer，在 `Debug/coremark_llvm.map` 文件中查找 `_SEGGER_RTT`，这是 JLink 需要读取的内存地址。RTT Viewer 的配置如下图所示，红色方框内填写从 map 文件中查找到的内存地址。
-
-image::Snipaste_2026-01-06_13-24-58.png[align="center"]
-
-运行结果如下图所示。在复位运行后，会一直输出消息等待输入，输入任意字符后，开始运行 coremark 测试。
-
-image::Snipaste_2026-01-07_17-57-06.png[]
-
-=== telnet 链接 RTT View
-
-打开 windows Terminal，输入下面这个命令
-
-[source,powershell,subs="verbatim,attributes"]
-----
-JLink -NoGui 1 -If SWD -Speed 4000 -Device R7KA8P1KF_CPU0 -AutoConnect 1 -RTTTelnetPort 19021
-----
-
-注意需要先将 JLink 添加进环境变量，或改为绝对路径调用。然后进入 JLink 的命令行交互界面，在这个界面输入
-
-[source,powershell,subs="verbatim,attributes"]
-----
-Exec SetRTTAddr 0x220000b4
-----
-
-0x220000b4 是 map 文件中查找到的内存地址。随后打开一个支持 telnet 的终端软件，例如 MobaXterm 或者 Putty
-
-* MobaXterm 链接配置
-** 链接类型选择 Telnet
-** Remote host 选择 localhost
-** Username 可以自定义，这里起 RTTViewer 便于分辨
-** Port 写 19021
-
-image::Snipaste_2026-01-07_13-48-23.png[]
-
-* Putty 的链接配置
-** Host Name 写 localhost
-** Port 写 19021
-** Connection type 选 Other，在下拉列表框里选 Telnet
-
-image::Snipaste_2026-01-07_13-53-32.png[align="center"]
-
-NOTE: MobaXterm 的 telnet 链接要输入内容要按 Ctrl + Enter，只按 Enter 会显示 `^M`。Windows 自带的 telnet 不支持中文显示。JLink 用于命令行的 JLinkRTTClient 不支持中文显示。
-
-下图为使用 Putty 显示 RTT View 的结果
-
-image::Snipaste_2026-01-07_17-50-57.png[align="center"]
-
-= Release 配置
-:doctype: book
-
-e2 studio 生成的工程默认使用 Debug 配置，在 Debug 配置下验证后，可以切换到 Release 配置。
-
-打开工程的 C/C++ 属性配置。在 `C/C++构建`->`设置`->`管理配置`，弹出的对话框中选中 Release，然后选择设置为活跃。
-
-image::Snipaste_2026-01-06_13-31-34.png[]
-
-NOTE: 切换配置后，先前配置的头文件路径、预定义宏等都会被清除，因此需要重新配置。
-
-== 重新添加头文件路径
-
-参照 <<添加头文件路径>> 来重新添加头文件包含路径
-
-== 添加宏
-
-参照 <<添加预定义宏>> 来添加预定义宏，不过在 Release 配置中，可以修改输入输出重定向为 UART，支持 UTF-8 编码的串口终端较多。此外还可以使用 perf_counter 的 PMU 移植，不使用 SysTick。需要添加的宏如下图所示
-
-image::Snipaste_2026-01-08_14-02-42.png[align="center"]
-
-每个宏的含义：
-
-* `_LANGUAGE=0x0804`: 语言选择为中文
-* `+__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1+`: perfc 不使用 SysTick
-* `+__PERFC_USE_PMU_PORTING__=1+`: perfc 使用 PMU
-* `CONSOLE_CFG_USE_UART=1`: C 库标准输入输出重定向至 UART
-* `PUT_DATA_IN_DTCM=1`：将 coremark 使用的变量放在 DTCM
-* `PUT_CODE_IN_ITCM=1`：将 coremark 的代码段放在 ITCM
-
-== 修改栈的位置
-
-把栈放在 DTCM 可以加速数据的访问，尤其是当前 coremark 使用栈来分配空间。在 FSP Configuration 的 Linker Sections 中添加如下分配：
-
-image::Snipaste_2026-01-08_14-08-20.png[align="center"]
-
-在对话框中填写：`*(*.bss.g_main_stack)`，并在下方的 Default Mappings 中取消勾选 `*(*.bss.g_main_stack)`
-
-image::Snipaste_2026-01-08_14-34-30.png[]
-
-== 修改优化级别
-
-e2 studio 默认使用 `-Os` 优化，不过可以修改，为了提升速度，可以使用 `-O3` 优化并开启链接时优化。如下图所示
-
-image::Snipaste_2026-01-06_14-18-37.png[align="center"]
-
-== 运行结果
-
-烧录后，在串口终端中可以看到输出的消息。波特率 2000000，8bit 数据位，无奇偶校验。复位后会一直输出消息提示输入任意字符继续，在输入任意字符后开始运行 coremark 测试，运行结果如下图：
-
-image::Snipaste_2026-01-08_14-00-25.png[]
-
-可以看到，在使用 `-O3` 配合链接时优化时，速度相对于 `-Os` 有提升。
-
-= gcc 和 keil
-:doctype: book
-
-== gcc
-
-gcc 要格式化浮点数，需要修改链接选项并提供 heap。链接选项修改如下
-
-image::Snipaste_2026-01-08_13-27-12.png[align="center"]
-
-heap 的大小为 1KBytes
-
-image::Snipaste_2026-01-08_13-29-56.png[align="center"]
-
-== keil
-
-RASC + keil 要修改优化等级和链接选项需要修改 `via/rasc_armclang.via` 和 `rasc_armlink.via`，*在 keil 里选择是无效的*。并且要注意，每次使用 RASC 生成，这两个文件都会被覆盖，因此需要注意这两个文件的修改是否被 RASC 覆盖。
+image::Snipaste_2026-01-13_11-26-43.png[align="center"]
