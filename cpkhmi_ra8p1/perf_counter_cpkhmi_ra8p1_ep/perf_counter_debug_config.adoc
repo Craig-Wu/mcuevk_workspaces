@@ -1,8 +1,13 @@
 :imagesdir: images
 
-== 切换配置
+== e^2^studio - 基于perf_counter工程进行用户代码性能测试
 
-e2 studio 可以有多个不同的构建配置，示例工程中都使用了 Release 配置，这也是预留的 hex 文件的生成配置。要切换配置可以右键单击工程名选择 C/C++ Project Settings 打开工程属性配置界面
+== 切换到Debug配置
+
+e2 studio 可以有多个不同的构建配置，示例工程中都使用了 Release 配置，这也是预留的 hex 文件的生成配置。
+如果要使用该工程测试用户代码，则建议先切换到Debug配置，添加用户代码并进行调试，确保代码功能和测试功能都正常。
+
+要切换配置，可以右键单击工程名选择 C/C++ Project Settings 打开工程属性配置界面
 
 image::Snipaste_2026-01-09_10-23-42.png[align="center"]
 
