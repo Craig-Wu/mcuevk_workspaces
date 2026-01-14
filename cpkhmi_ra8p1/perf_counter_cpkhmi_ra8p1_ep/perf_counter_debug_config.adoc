@@ -4,34 +4,36 @@
 
 == 切换到Debug配置
 
-e2 studio 可以有多个不同的构建配置，示例工程中都使用了 Release 配置，这也是预留的 hex 文件的生成配置。
-如果要使用该工程测试用户代码，则建议先切换到Debug配置，添加用户代码并进行调试，确保代码功能和测试功能都正常。
+e^2^studio 的项目可以有多个不同的构建配置，示例工程中都使用了 Release 配置已获取最高性能，这也是预留的 hex 文件的生成配置。
+
+如果要使用该工程测试用户代码，则建议先切换到Debug配置，添加用户代码并进行调试，先确保代码功能和测试功能都能正常运行。
 
 要切换配置，可以右键单击工程名选择 C/C++ Project Settings 打开工程属性配置界面
 
-image::Snipaste_2026-01-09_10-23-42.png[align="center"]
+image::Snipaste_2026-01-09_10-23-42.png[role="thumb", width=480]
 
 在弹出的对话框中选择 C/C++ 构建 -> 设置，然后点击管理配置
 
-image::Snipaste_2026-01-09_10-26-05.png[align="center"]
+image::Snipaste_2026-01-09_10-26-05.png[role="thumb", width=800]
 
 在弹出的对话框中选中 Debug，然后选择设置为活跃，最后点击确定，切换到 Debug 配置
 
-image::Snipaste_2026-01-09_10-27-57.png[align="center"]
+image::Snipaste_2026-01-09_10-27-57.png[role="thumb", width=400]
 
 点击工程属性配置界面下方的 `应用并关闭` 
 
-image::Snipaste_2026-01-09_10-41-17.png[]
+image::Snipaste_2026-01-09_10-41-17.png[role="thumb", width=800]
 
 == 构建工程
 
 点击 e2 studio 左上角的锤子图标构建工程。下方控制台会输出编译信息。
 
-image::Snipaste_2026-01-09_10-39-18.png[align="center"]
+image::Snipaste_2026-01-09_10-39-18.png[role="thumb", width=800]
 
 == RTT View 连接
 
-在 Debug 配置下，工程将 C 标准库的标准输入输出流用 RTT View 实现，需要用 RTT Viewer 来查看输出，不过工程还设置了语言为中文，会有部分输出信息是中文，而 SEGGER 自带的那个 RTT Viewer 不支持中文显示，因此需要使用第三方的工具通过 telnet 的方式连接，这里先描述如何使用 telnet 连接再进行调试。或者参照 <<语言配置>> 一节将语言设为英文，这样可以直接使用 SEGGER 自带的 RTT Viewer。
+在 Debug 配置下，工程将 C 标准库的标准输入输出流用 RTT View 实现，需要用 RTT Viewer 来查看输出.
+本样例工程还设置了输出语言为中文，会有部分输出通过UTF-8编码输出。而 SEGGER 自带的那个PC端应用程序 RTT Viewer 不支持UTF编码，因此需要使用第三方的工具通过 telnet 的方式连接，这里先描述如何使用 telnet 连接再进行调试。或者参照 <<语言配置>> 一节将语言设为英文，这样可以直接使用 SEGGER 自带的 RTT Viewer。
 
 * 打开 map 文件，这个文件在工程目录的 `配置名` 目录下，当前已经将配置设为了 Debug，因此要去 Debug 目录寻找 map 文件。如果后续想换配置，如换成 Release，那就应该去 Release 目录寻找文件。
 

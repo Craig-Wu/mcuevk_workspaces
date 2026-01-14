@@ -38,4 +38,4 @@
 
 **详细的样例程序配置和使用，请参考下面的说明文件。**
 
-[perf_counter_cpkhmi_ra8p1_ep_readme](perf_counter_cpkhmi_ra8p1_ep_readme.adoc)
+[perf_counter性能测试工程使用说明](perf_counter_cpkhmi_ra8p1_ep_readme.adoc)
