@@ -16,21 +16,123 @@ image::Snipaste_2026-01-12_15-21-27.png[align="center"]
 
 |===
 |配置名|ICache|DCache|代码位置|数据位置
-|code_mram_data_sram_dcache_on_force_on
+|code_itcm_data_sram_dcache_off
+|ON
+|Off
+|ITCM
+|SRAM
+
+|code_itcm_data_sram_dcache_on_force_off
 |ON
 |Write Back
+|ITCM
+|SRAM
+
+|code_itcm_data_sram_dcache_on_force_on
+|ON
+|Write Through
+|ITCM
+|SRAM
+
+|code_mram_data_dtcm_dcache_off
+|ON
+|Off
+|MRAM
+|DTCM
+
+|code_mram_data_dtcm_dcache_on_force_off
+|ON
+|Write Back
+|MRAM
+|DTCM
+
+|code_mram_data_dtcm_dcache_on_force_on
+|ON
+|Write Through
+|MRAM
+|DTCM
+
+|code_mram_data_sram_dcache_off
+|ON
+|OFF
 |MRAM
 |SRAM
 
 |code_mram_data_sram_dcache_on_force_off
 |ON
+|Write Back
+|MRAM
+|SRAM
+
+|code_mram_data_sram_dcache_on_force_on
+|ON
 |Write Through
 |MRAM
 |SRAM
 
-|code_mram_data_sram_dcache_off
-|ON
-|Off
+|code_mram_data_sram_dcache_on_force_off_icache_off
+|OFF
+|Write Back
 |MRAM
 |SRAM
 |===
+
+.code_itcm_data_sram_dcache_off 运行结果
+[%collapsible]
+====
+image::code_itcm_data_sram_dcache_off.png[role="thumb"]
+====
+
+.code_itcm_data_sram_dcache_on_force_off 运行结果
+[%collapsible]
+====
+image::code_itcm_data_sram_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_itcm_data_sram_dcache_on_force_on 运行结果
+[%collapsible]
+====
+image::code_itcm_data_sram_dcache_on_force_on.png[role="thumb"]
+====
+
+.code_mram_data_dtcm_dcache_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_dtcm_dcache_off.png[role="thumb"]
+====
+
+.code_mram_data_dtcm_dcache_on_force_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_dtcm_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_mram_data_dtcm_dcache_on_force_on 运行结果
+[%collapsible]
+====
+image::code_mram_data_dtcm_dcache_on_force_on.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_off.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_on_force_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_on_force_on 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_on_force_on.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_on_force_off_icache_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_on_force_off_icache_off.png[role="thumb"]
+====
