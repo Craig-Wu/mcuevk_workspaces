@@ -560,6 +560,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -852,6 +853,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -1143,6 +1145,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -1433,6 +1436,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -1726,6 +1730,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -2018,6 +2023,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -2309,6 +2315,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -2602,6 +2609,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
@@ -3185,6 +3193,7 @@
 									<listOptionValue builtIn="false" value="_RENESAS_RA_"/>
 									<listOptionValue builtIn="false" value="_RA_CORE=CPU0"/>
 									<listOptionValue builtIn="false" value="_RA_ORDINAL=1"/>
+									<listOptionValue builtIn="false" value="_LANGUAGE=0x0804"/>
 									<listOptionValue builtIn="false" value="__PERFC_USE_PMU_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1"/>
 									<listOptionValue builtIn="false" value="CONSOLE_CFG_USE_UART=1"/>
