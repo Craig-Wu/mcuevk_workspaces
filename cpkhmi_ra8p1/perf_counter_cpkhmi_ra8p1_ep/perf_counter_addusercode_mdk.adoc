@@ -1,0 +1,85 @@
+:imagesdir: images
+
+= Keil MDK - 基于perf_counter工程进行用户代码性能测试
+
+先用 RASC 导入后进入以下界面，在该界面无需任何配置，直接点击右上角的 `Generate Project Content` 即可
+
+image::Snipaste_2026-01-09_13-40-02.png[]
+
+NOTE: 打开示例工程前先确认 Keil MDK 已设置为使用 UTF-8 编码
+
+image::Snipaste_2026-01-14_10-21-46.png[align="center"]
+
+== 示例工程结构
+
+示例工程已经添加好所需的文件。
+
+image::Snipaste_2026-01-14_10-24-18.png[align="center"]
+
+用户程序入口为 hal_entry.c 中的 `hal_entry()`，下面是示例工程的 hal_entry。当要评估其它代码时，只需要评估的代码放进 `+__cycleof__+` 的花括号内，为了方便观察，建议把小括号里的名字也根据实际代码功能作修改
+
+[source,c,subs="verbatim,attributes"]
+----
+/* 等待任意输入，如果不需要，这个 while 循环可以删除 */
+printf("Input any character to start coremark\r\n");
+while (1) {
+    R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_SECONDS);
+    if (CONSOLE_HasData()) {
+        break;
+    }
+    else {
+        printf("Input any character to start coremark\r\n");
+    }
+}
+printf("Coremark running, please wait...\r\n");
+/* 获取到了输入，开始执行 */
+__cycleof__("Coremark") {
+    /* 要评估其它代码的性能，注释下面这条语句，然后在后面添加要评估的代码 */
+    coremark_main();
+};
+----
+
+== 使用的预定义宏
+
+示例工程使用预定义宏的方式来对程序行为进行控制，使用的宏同 e2studio 下 Release 配置，对于宏的含义，可以查看 xref:perf_counter_addusercode_e2.adoc#Debug与Release配置的不同[Debug与Release配置的不同] 获取，并根据需要进行修改，下图显示了示例工程添加的预定义宏
+
+image::Snipaste_2026-01-14_10-37-12.png[align="center"]
+
+== 评估其它代码
+
+现在假设需要评估一个函数 `foo()` 的运行时间，它的定义如下
+[source,c,subs="verbatim,attributes"]
+----
+ITCM_CODE
+void foo(uint32_t num)
+{
+	while (num--) {
+		__asm volatile (
+			"NOP"
+		);
+	}
+}
+----
+
+那么就做如下修改。由于要评估的函数 `foo()` 没有像 coremark 那样主动去获取时间，因此可以用 `get_system_us()` 来获得一个便于快速评估的时间
+[source,c,subs="verbatim,attributes"]
+----
+int64_t time_start = get_system_us();
+__cycleof__("foo") {
+    /* 要评估其它代码的性能，注释下面这条语句，然后在后面添加要评估的代码 */
+    // coremark_main();
+    foo(100000000);
+};
+int64_t time_end = get_system_us();
+printf("Total time: %lld us\r\n", time_end - time_start);
+----
+
+== 调试
+
+点击调试符号进行调试
+
+image::Snipaste_2026-01-09_13-50-19.png[align="center"]
+
+示例工程设置了使用 UART 来进行输入输出，打开一个串口终端，波特率 2000000，8bit 数据位，1bit 停止位，无奇偶校验，可以看到结果如下
+
+image::Snipaste_2026-01-14_10-03-01.png[align="center"]

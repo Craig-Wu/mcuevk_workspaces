@@ -21,6 +21,7 @@ void hal_entry(void)
 	CONSOLE_Init();
 	perfc_init(false);
 
+	/* 等待任意输入，如果不需要，这个 while 循环可以删除 */
 	printf("Input any character to start coremark\r\n");
 	while (1) {
 		R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_SECONDS);
@@ -32,7 +33,10 @@ void hal_entry(void)
 		}
 	}
 	printf("Coremark running, please wait...\r\n");
-	__cycleof__("Coremark") { coremark_main(); };
+	__cycleof__("Coremark") {
+		/* 要评估其它代码的性能，注释下面这条语句，然后在后面添加要评估的代码 */
+		coremark_main();
+	};
 
 	while (1) {
 		R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_HIGH);
