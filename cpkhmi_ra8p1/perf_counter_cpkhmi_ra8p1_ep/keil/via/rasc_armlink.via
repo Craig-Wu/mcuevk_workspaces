@@ -4,4 +4,3 @@
 --no_startup
 --legacyalign
 --diag_suppress=6319,6314,3912
---lto

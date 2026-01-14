@@ -55,9 +55,13 @@ __cycleof__("Coremark") {
 
 image::Snipaste_2026-01-14_10-37-12.png[role="thumb", width=800]
 
-在调试代码时，请修改为使用Systick和RTTViewer进行性能评估和输入输出，优化选项建议选-O2。
+在调试代码时，请修改为使用Systick和RTTViewer进行性能评估和输入输出，优化选项建议选-O2。在 `via/rasc_armclang.via` 和 `via/rasc_armlink.via` 修改优化等级
 
-截图！！！！
+image::Snipaste_2026-01-14_17-10-30.png[role="thumb"]
+
+使用 SysTick 和 RTTViewer 时配置的宏
+
+image::Snipaste_2026-01-14_17-09-04.png[role="thumb"]
 
 === 评添加用户代码并进行性能评估
 
@@ -101,12 +105,18 @@ image::Snipaste_2026-01-14_10-03-01.png[align="center"]
 
 == 修改编译优化选项进行性能评估
 
-修改优化选项为项目所需的值（此处使用-Omax --lto），参考xref:。。。
+修改优化选项为项目所需的值（此处使用-Omax --lto），参考 xref:perf_counter_cpkhmi_ra8p1_ep_readme.adoc#修改编译优化选项[修改编译优化选项] 
 
 使用PMU和串口进行性能评估和输入输出。
 
-截图！！！
+image::Snipaste_2026-01-14_10-37-12_01.png[role="thumb"]
+
+完整的字符串
+[source,c,subs="verbatim,attributes"]
+----
+_LANGUAGE=0x0804,__PERFC_USE_PMU_PORTING__=1,__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1,CONSOLE_CFG_USE_UART=1
+----
 
 重新编译烧录后，运行结果如下
 
-截图！！！
+image::Snipaste_2026-01-08_17-10-10.png[width=640, height=480]

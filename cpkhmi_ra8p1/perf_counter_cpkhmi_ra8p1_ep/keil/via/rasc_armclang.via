@@ -1,4 +1,4 @@
--Omax
+-O2
 -ffunction-sections
 -Wno-license-management
 -Wunused
