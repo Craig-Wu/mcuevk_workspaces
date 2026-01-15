@@ -57,11 +57,11 @@ image::Snipaste_2026-01-14_10-37-12.png[role="thumb", width=800]
 
 在调试代码时，请修改为使用Systick和RTTViewer进行性能评估和输入输出，优化选项建议选-O2。在 `via/rasc_armclang.via` 和 `via/rasc_armlink.via` 修改优化等级
 
-image::Snipaste_2026-01-14_17-10-30.png[role="thumb"]
+image::Snipaste_2026-01-14_17-10-30.png[role="thumb", width=800]
 
-使用 SysTick 和 RTTViewer 时配置的宏
+调试时使用 SysTick 和 RTTViewer ，配置的宏如下图
 
-image::Snipaste_2026-01-14_17-09-04.png[role="thumb"]
+image::Snipaste_2026-01-14_17-09-04.png[role="thumb", width=800]
 
 === 评添加用户代码并进行性能评估
 
@@ -95,28 +95,29 @@ printf("Total time: %lld us\r\n", time_end - time_start);
 
 === 调试
 
-点击调试符号进行调试
+编译完成后点击调试符号进行调试
 
-image::Snipaste_2026-01-09_13-50-19.png[align="center"]
+image::Snipaste_2026-01-09_13-50-19.png[role="thumb", width=800]
 
-示例工程设置了使用 UART 来进行输入输出，打开一个串口终端，波特率 2000000，8bit 数据位，1bit 停止位，无奇偶校验，可以看到结果如下
+之后可以在 RTT Viewer 中查看结果。最后一行的乱码是由于 RTT Viewer 软件不支持UTF-8编码。
 
-image::Snipaste_2026-01-14_10-03-01.png[align="center"]
+image::Snipaste_2026-01-13_17-30-59.png[role="thumb", width=480]
+
 
 == 修改编译优化选项进行性能评估
 
-修改优化选项为项目所需的值（此处使用-Omax --lto），参考 xref:perf_counter_cpkhmi_ra8p1_ep_readme.adoc#修改编译优化选项[修改编译优化选项] 
+调试完成后，修改优化选项为项目所需的值（例如使用-Omax --lto），参考 xref:perf_counter_cpkhmi_ra8p1_ep_readme.adoc#修改编译优化选项[修改编译优化选项] 
 
-使用PMU和串口进行性能评估和输入输出。
+改为中文输出，使用PMU和串口进行性能评估和通信。
 
-image::Snipaste_2026-01-14_10-37-12_01.png[role="thumb"]
+image::Snipaste_2026-01-14_10-37-12_01.png[role="thumb", width=640]
 
-完整的字符串
+您可以拷贝以下完整的字符串
 [source,c,subs="verbatim,attributes"]
 ----
 _LANGUAGE=0x0804,__PERFC_USE_PMU_PORTING__=1,__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1,CONSOLE_CFG_USE_UART=1
 ----
 
-重新编译烧录后，运行结果如下
+重新编译烧录后，PC端打开一个串口终端，连接J-Link的UART端口，波特率 2,000,000，8-N-1，可以看到结果如下：
 
-image::Snipaste_2026-01-08_17-10-10.png[width=640, height=480]
+image::Snipaste_2026-01-14_10-03-01.png[role="thumb", width=640]

@@ -1,16 +1,17 @@
-**该示例工程由 瑞萨电子 提供，2026年1月12日**
+**该示例工程由 李昌壕 提供，2026年1月12日**
 
 ### 工程概述
 
-- 该示例工程演示了基于瑞萨 FSP 的瑞萨 RA MCU 上将代码与数据放在不同内存段对性能的影响。
+- 该示例工程基于瑞萨FSP， 演示了在RA8P1 MCU上，将代码与数据放在不同内存段时对性能的影响。
 
 ### 支持的开发板 / 演示板：
 
 - CPKHMI-RA8P1
+- CPKNET-RA8T2
   
 ### 硬件要求：
 
-- 1 块 Renesas RA8 开发板：CPKHMI-RA8P1
+- 1 块 Renesas RA8 开发板：CPKHMI-RA8P1或CPKNET-RA8T2
 
 - 1 根 USB Type A->Type C 或 Type-C->Type C 线（支持Type-C 2.0 即可）
 
@@ -30,9 +31,12 @@
   - e2studio v2025-12 + LLVM v21.1.1
 
 ### 第三方软件
-- 无 
+- perf_counter - [Github](https://github.com/GorgonMeducer/perf_counter/blob/CMSIS-Pack/README.md)
+- CoreMark® - 代码已经集成在perf_counter中，[官方网站](https://www.eembc.org/coremark/)
 	
 
 **详细的样例程序配置和使用，请参考下面的文件。** 
 
 [memconfig_benchmark_cpkhmi_ra8p1_ep_read](memconfig_benchmark_cpkhmi_ra8p1_ep_read.adoc) 
+
+在CPKNET-RA8T2上运行时，也请参考这个基于CPKHMI-RA8P1的文档。
