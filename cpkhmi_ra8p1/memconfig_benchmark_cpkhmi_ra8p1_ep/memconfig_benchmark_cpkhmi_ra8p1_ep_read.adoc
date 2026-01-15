@@ -1,0 +1,138 @@
+:imagesdir: images
+
+RA8P1 有多个内存区域可以存放代码和数据，并支持指令缓存和数据缓存。该工程以 coremark 为基准，通过将代码和数据放在不同区域、缓存是否开启来演示不同内存区域配置和缓存配置对性能的影响。
+
+== 切换配置
+
+不同的配置已经在工程内预置好，导入工程，在工程的 C/C++ 属性配置界面即可看见预置的所有配置
+
+image::Snipaste_2026-01-12_15-14-23.png[]
+
+点击管理配置，已有配置如下：
+
+image::Snipaste_2026-01-12_15-21-27.png[align="center"]
+
+它们分别代表：
+
+|===
+|配置名|ICache|DCache|代码位置|数据位置
+|code_itcm_data_sram_dcache_off
+|ON
+|Off
+|ITCM
+|SRAM
+
+|code_itcm_data_sram_dcache_on_force_off
+|ON
+|Write Back
+|ITCM
+|SRAM
+
+|code_itcm_data_sram_dcache_on_force_on
+|ON
+|Write Through
+|ITCM
+|SRAM
+
+|code_mram_data_dtcm_dcache_off
+|ON
+|Off
+|MRAM
+|DTCM
+
+|code_mram_data_dtcm_dcache_on_force_off
+|ON
+|Write Back
+|MRAM
+|DTCM
+
+|code_mram_data_dtcm_dcache_on_force_on
+|ON
+|Write Through
+|MRAM
+|DTCM
+
+|code_mram_data_sram_dcache_off
+|ON
+|OFF
+|MRAM
+|SRAM
+
+|code_mram_data_sram_dcache_on_force_off
+|ON
+|Write Back
+|MRAM
+|SRAM
+
+|code_mram_data_sram_dcache_on_force_on
+|ON
+|Write Through
+|MRAM
+|SRAM
+
+|code_mram_data_sram_dcache_on_force_off_icache_off
+|OFF
+|Write Back
+|MRAM
+|SRAM
+|===
+
+.code_itcm_data_sram_dcache_off 运行结果
+[%collapsible]
+====
+image::code_itcm_data_sram_dcache_off.png[role="thumb"]
+====
+
+.code_itcm_data_sram_dcache_on_force_off 运行结果
+[%collapsible]
+====
+image::code_itcm_data_sram_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_itcm_data_sram_dcache_on_force_on 运行结果
+[%collapsible]
+====
+image::code_itcm_data_sram_dcache_on_force_on.png[role="thumb"]
+====
+
+.code_mram_data_dtcm_dcache_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_dtcm_dcache_off.png[role="thumb"]
+====
+
+.code_mram_data_dtcm_dcache_on_force_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_dtcm_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_mram_data_dtcm_dcache_on_force_on 运行结果
+[%collapsible]
+====
+image::code_mram_data_dtcm_dcache_on_force_on.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_off.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_on_force_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_on_force_on 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_on_force_on.png[role="thumb"]
+====
+
+.code_mram_data_sram_dcache_on_force_off_icache_off 运行结果
+[%collapsible]
+====
+image::code_mram_data_sram_dcache_on_force_off_icache_off.png[role="thumb"]
+====
