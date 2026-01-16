@@ -72,13 +72,13 @@
                                        /    (double)__PERF_INFO__.dwNoInstr);   \
             if (__PLOOC_VA_NUM_ARGS(__VA_ARGS__) == 0) {                        \
                 __perf_counter_printf__( "\r\n"                                 \
-                        "[%s 报告汇总]\r\n"                                   \
+                        "[%s 报告汇总]\r\n"                                      \
                         "-----------------------------------------\r\n"         \
-                        "执行指令数量: %"PRIi64"\r\n"                   \
-                        "周期数: %"PRIi64"\r\n"                             \
-                        "每条指令周期数: %3.3f \r\n\r\n"               \
-                        "内存访问计数: %"PRIi64"\r\n"                    \
-                        "L1 DCache 重新填充计数: %"PRIi64"\r\n"                 \
+                        "执行指令数量: %"PRIi64"\r\n"                             \
+                        "周期数: %"PRIi64"\r\n"                                  \
+                        "每条指令周期数: %3.3f \r\n\r\n"                          \
+                        "内存访问计数: %"PRIi64"\r\n"                             \
+                        "L1 DCache 重新填充计数: %"PRIi64"\r\n"                   \
                         "L1 DCache Miss Rate: %3.4f %% \r\n"                    \
                         ,                                                       \
                         (__str),                                                \

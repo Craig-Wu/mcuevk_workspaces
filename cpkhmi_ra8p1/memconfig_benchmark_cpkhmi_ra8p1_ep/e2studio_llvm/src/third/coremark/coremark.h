@@ -156,6 +156,15 @@ typedef struct RESULTS_S
     core_portable port;
 } core_results;
 
+typedef struct CORE_PARAMETER
+{
+	core_results results[MULTITHREAD];
+	CORE_TICKS total_time;
+	ee_s16 known_id;
+	ee_s16 total_errors;
+	ee_u16 seedcrc;
+} core_param;
+
 /* Multicore execution handling */
 #if (MULTITHREAD > 1)
 ee_u8 core_start_parallel(core_results *res);
@@ -183,8 +192,11 @@ ee_u32 core_init_matrix(ee_u32      blksize,
 ee_u16 core_bench_matrix(mat_params *p, ee_s16 seed, ee_u16 crc);
 
 #if MAIN_HAS_NOARGC
-MAIN_RETURN_TYPE coremark_main(void);
+MAIN_RETURN_TYPE coremark_main(core_param *p_par);
 #else
 MAIN_RETURN_TYPE coremark_main(int argc, char *argv[]);
 #endif
+
+void coremark_report(core_param *p_par);
+void portable_init(core_param *p_par, int *argc, char *argv[]);
 

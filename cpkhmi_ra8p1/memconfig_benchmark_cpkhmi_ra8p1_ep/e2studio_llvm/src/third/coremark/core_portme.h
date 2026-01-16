@@ -25,38 +25,16 @@ Original Author: Shay Gal-on
 #include <stdint.h>
 #include <string.h>
 
+#include "hal_entry.h"
+
 #define ITERATIONS			80000
 #define STANDALONE			1
 #define PERFORMANCE_RUN		1
 #define VALIDATION_RUN		0
 #define FLAGS_STR			"Not specified"
 
-#ifndef PUT_CODE_IN_ITCM
-#define PUT_CODE_IN_ITCM		0
-#endif
-
-#ifndef PUT_DATA_IN_DTCM
-#define PUT_DATA_IN_DTCM		0
-#endif
-
 #ifndef CORE_EN_ICACHE
 #define CORE_EN_ICACHE		1
-#endif
-
-#if PUT_DATA_IN_DTCM
-#define DTCM_BSS			__attribute__((section(".dtcm_noinit")))
-#define DTCM_DATA		__attribute__((section(".dtcm_from_flash")))
-#define DTCM_ZERO		__attribute__((section(".dtcm")))
-#else
-#define DTCM_BSS
-#define DTCM_DATA
-#define DTCM_ZERO
-#endif
-
-#if PUT_CODE_IN_ITCM
-#define ITCM_CODE		__attribute__((section(".itcm_code_from_flash")))
-#else
-#define ITCM_CODE
 #endif
 
 /************************/
@@ -237,7 +215,6 @@ typedef struct CORE_PORTABLE_S
 } core_portable;
 
 /* target specific init/fini */
-void portable_init(core_portable *p, int *argc, char *argv[]);
 void portable_fini(core_portable *p);
 
 #if !defined(PROFILE_RUN) && !defined(PERFORMANCE_RUN) \
@@ -255,12 +232,6 @@ void portable_fini(core_portable *p);
 #define MAIN_RETURN_TYPE		void
 #else
 #define MAIN_RETURN_TYPE		int
-#endif
-
-#if MAIN_HAS_NOARGC
-MAIN_RETURN_TYPE coremark_main(void);
-#else
-MAIN_RETURN_TYPE coremark_main(int argc, char *argv[]);
 #endif
 
 int ee_printf(const char *fmt, ...);

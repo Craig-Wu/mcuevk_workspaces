@@ -12,7 +12,7 @@
 #endif
 
 #ifndef CONSOLE_CFG_USE_UART
-#define CONSOLE_CFG_USE_UART			0
+#define CONSOLE_CFG_USE_UART		0
 #endif
 
 #ifndef CONSOLE_CFG_USE_USB
@@ -56,7 +56,7 @@
 #include "SEGGER_RTT/SEGGER_RTT.h"
 
 #define CONSOLE_HasData				SEGGER_RTT_HasKey
-#define CONSOLE_Init					SEGGER_RTT_Init
+#define CONSOLE_Init				SEGGER_RTT_Init
 #define CONSOLE_Read(buffer, size)	SEGGER_RTT_Read(CONSOLE_CFG_RTT_INDEX, buffer, size)
 
 #elif CONSOLE_CFG_USE_CUSTOM

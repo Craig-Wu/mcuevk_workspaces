@@ -10,12 +10,30 @@ image::Snipaste_2026-01-12_15-14-23.png[]
 
 点击管理配置，已有配置如下：
 
-image::Snipaste_2026-01-12_15-21-27.png[align="center"]
+image::Snipaste_2026-01-16_14-09-00.png[align="center"]
 
 它们分别代表：
 
 |===
 |配置名|ICache|DCache|代码位置|数据位置
+|code_itcm_data_dtcm_dcache_off
+|ON
+|Off
+|ITCM
+|DTCM
+
+|code_itcm_data_dtcm_dcache_on_force_off
+|ON
+|Write Back
+|ITCM
+|DTCM
+
+|code_itcm_data_dtcm_dcache_on_force_on
+|ON
+|Write Through
+|ITCM
+|DTCM
+
 |code_itcm_data_sram_dcache_off
 |ON
 |Off
@@ -77,6 +95,24 @@ image::Snipaste_2026-01-12_15-21-27.png[align="center"]
 |SRAM
 |===
 
+.code_itcm_data_dtcm_dcache_off 运行结果
+[%collapsible]
+====
+image::code_itcm_data_dtcm_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_itcm_data_dtcm_dcache_on_force_off 运行结果
+[%collapsible]
+====
+image::code_itcm_data_dtcm_dcache_on_force_off.png[role="thumb"]
+====
+
+.code_itcm_data_dtcm_dcache_on_force_on 运行结果
+[%collapsible]
+====
+image::code_itcm_data_dtcm_dcache_on_force_on.png[role="thumb"]
+====
+
 .code_itcm_data_sram_dcache_off 运行结果
 [%collapsible]
 ====
@@ -136,3 +172,108 @@ image::code_mram_data_sram_dcache_on_force_on.png[role="thumb"]
 ====
 image::code_mram_data_sram_dcache_on_force_off_icache_off.png[role="thumb"]
 ====
+
+== 预定义宏选项
+
+示例工程使用预定义宏作为选项决定代码和变量存储位置以及 Cache 功能以及其它功能。下面是所使用的预定义宏
+
+* _LANGUAGE 选项: 决定 perf_counter 的输出语言
+** `_LANGUAGE=0x0804`: 输出语言为中文
+** 未定义: 输出语言为英文
+* __CODE_AREA 选项: 决定 `CODE_AREA` 的值，控制代码存储的位置
+** `__CODE_AREA=1`: 被 `CODE_AREA` 修饰的函数存储在 ITCM
+** `__CODE_AREA=0` 或未定义: 被 `CODE_AREA` 修饰的函数存储在 MRAM（编译器默认行为）
+* __DATA_AREA 选项: 决定 `DATA_AREA_BSS`、`DATA_AREA_DATA`、`DATA_AREA_ZERO` 的值，控制变量存储的位置
+** `__CODE_AREA=1`: 被以上宏修饰的变量存储在 DTCM
+** `__CODE_AREA=0` 或未定义: 被以上宏修饰的变量存储在 SRAM（编译器默认行为）
+* BSP_CFG_DCACHE_ENABLED: 决定是否开启 DCache 功能
+** `BSP_CFG_DCACHE_ENABLED=1`: 开启 DCache
+** `BSP_CFG_DCACHE_ENABLED=0`: 关闭 DCache
+** 未定义: 由 FSP Configuration 决定
+* BSP_CFG_DCACHE_FORCE_WRITETHROUGH: 决定 DCache 模式，必须要开启 DCache，该配置才起效
+** `BSP_CFG_DCACHE_FORCE_WRITETHROUGH=1`: DCache 工作在 Write Through 模式
+** `BSP_CFG_DCACHE_FORCE_WRITETHROUGH=0`: DCache 工作在 Write Back 模式
+** 未定义: 由 FSP Configuration 决定
+* 输入输出实现: 示例工程有两个输入输出实现，可以通过以下两个宏切换，两个宏不能同时为 1，如果两个都没定义，那么没有输入输出
+** `CONSOLE_CFG_USE_RTT=1`: 使用 RTT View 输入输出，注意 RTT Viewer 不支持中文显示
+** `CONSOLE_CFG_USE_UART=1`: 使用 UART 输入输出
+* perf_counter 的计时实现
+** 使用 SysTick: 不定义 `+__PERFC_USE_PMU_PORTING__=1+` 和 `+__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1+`
+** 使用 PMU: 定义 `+__PERFC_USE_PMU_PORTING__=1+` 和 `+__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1+`
+
+NOTE: 不要修改示例工程的 perf_counter 实现选项，因为示例工程还会统计 DCache 的 Miss Rate，这必须使用 PMU
+
+下面是编译配置 code_itcm_data_dtcm_dcache_on_force_on 所预定义的宏
+
+[.text-center]
+--
+image::Snipaste_2026-01-16_14-44-40.png[role="thumb"]
+--
+
+== 测量其它代码运行时间
+
+应用程序入口在 hal_entey.c 中的 `hal_entey()` 函数，示例工程的函数主要内容如下：
+
+[source,c,subs="verbatim,attributes"]
+----
+printf("Input any character to start coremark\r\n");
+while (1) {
+    R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_SECONDS);
+    if (CONSOLE_HasData()) {
+        break;
+    }
+    else {
+        printf("Input any character to start coremark\r\n");
+    }
+}
+printf("Coremark running, please wait...\r\n");
+__cpu_perf__("Coremark") {
+    coremark_main(&s_core_param);
+};
+coremark_report(&s_core_param);
+----
+
+要测量其它代码，只需将要测量部分放进 `+__cpu_perf__+` 的花括号内。例如，假设要测量如下一个函数的运行时间
+
+[source,c,subs="verbatim,attributes"]
+----
+DATA_AREA_DATA static int s_loop_num;
+CODE_AREA void foo(void)
+{
+	while (s_loop_num--) {
+		__asm__ volatile (
+			"NOP"
+		);
+	}
+}
+----
+
+那么对 hal_entry() 做如下修改
+
+[source,c,subs="verbatim,attributes"]
+----
+printf("Input any character to start coremark\r\n");
+while (1) {
+    R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_SECONDS);
+    if (CONSOLE_HasData()) {
+        break;
+    }
+    else {
+        printf("Input any character to start coremark\r\n");
+    }
+}
+printf("foo() running, please wait...\r\n");
+int64_t time_start = get_system_us();
+__cpu_perf__("foo") {
+    // coremark_main(&s_core_param);
+    s_loop_num = 100000000;
+    foo();
+};
+int64_t time_end = get_system_us();
+// coremark_report(&s_core_param);
+printf("\r\nfoo() spend time: %lld\r\n", time_end - time_start);
+----
+
+运行结果如下：
+
+image::Snipaste_2026-01-16_15-31-05.png[role="thumb"]
