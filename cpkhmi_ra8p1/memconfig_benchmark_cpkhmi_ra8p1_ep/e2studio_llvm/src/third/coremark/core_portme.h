@@ -25,13 +25,13 @@ Original Author: Shay Gal-on
 #include <stdint.h>
 #include <string.h>
 
-#include "hal_entry.h"
+#include "memory_area.h"
 
-#define ITERATIONS			80000
-#define STANDALONE			1
+#define ITERATIONS		80000
+#define STANDALONE		1
 #define PERFORMANCE_RUN		1
 #define VALIDATION_RUN		0
-#define FLAGS_STR			"Not specified"
+#define FLAGS_STR		"Not specified"
 
 #ifndef CORE_EN_ICACHE
 #define CORE_EN_ICACHE		1

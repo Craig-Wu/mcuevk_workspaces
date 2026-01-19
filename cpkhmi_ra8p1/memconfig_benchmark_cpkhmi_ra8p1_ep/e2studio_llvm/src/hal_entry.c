@@ -1,6 +1,6 @@
 #include "console.h"
 #include "hal_data.h"
-#include "hal_entry.h"
+#include "memory_area.h"
 
 #include "coremark/coremark.h"
 #include "perf_counter/perf_counter.h"
@@ -12,7 +12,7 @@ bsp_ipc_semaphore_handle_t g_core_start_semaphore =
 };
 #endif
 
-#if __DATA_AREA == 1
+#if __DATA_AREA == DATA_DTCM
 static uint8_t s_dtcm_stack[BSP_CFG_STACK_MAIN_BYTES] DATA_AREA_BSS __attribute__((aligned(8)));
 static uint32_t *s_stack_top = (uint32_t *)(s_dtcm_stack + BSP_CFG_STACK_MAIN_BYTES);
 #endif
@@ -26,7 +26,7 @@ DATA_AREA_DATA static core_param s_core_param;
 void hal_entry(void)
 {
 	/* TODO: add your own code here */
-#if __DATA_AREA == 1
+#if __DATA_AREA == DATA_DTCM
 	__set_MSPLIM((uint32_t)s_dtcm_stack);
 	__asm__ volatile (
 		"mov sp, %[top]"

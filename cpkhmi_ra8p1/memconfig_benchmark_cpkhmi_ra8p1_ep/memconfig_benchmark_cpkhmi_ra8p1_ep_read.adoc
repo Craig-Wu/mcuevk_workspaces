@@ -4,188 +4,28 @@ RA8P1 有多个内存区域可以存放代码和数据，并支持指令缓存�
 
 == 切换配置
 
-不同的配置已经在工程内预置好，导入工程，在工程的 C/C++ 属性配置界面即可看见预置的所有配置
+示例工程有两个编译配置，分别为 Debug 和 Release，可以按下图所示切换，二者的区别：
 
-image::Snipaste_2026-01-12_15-14-23.png[]
+* Debug 配置可以调试，Release 没有调试符号，在 Release 配置下可以使用 JFlash Lite 或 RFP 等其它烧录工具进行烧录
+* Debug 使用 RTT View 输入输出，Release 使用 UART 输入输出，UART 波特率 2000000，8bit 数据位，1bit 停止位，无奇偶校验
 
-点击管理配置，已有配置如下：
+image::Snipaste_2026-01-09_10-41-17_01.png[role="thumb", width=800]
 
-image::Snipaste_2026-01-16_14-09-00.png[align="center"]
+=== 预定义宏选项
 
-它们分别代表：
+示例工程可以使用下图中红色方框中的预定义宏来决定代码和变量存储位置以及 Cache 功能。
 
-|===
-|配置名|ICache|DCache|代码位置|数据位置
-|code_itcm_data_dtcm_dcache_off
-|ON
-|Off
-|ITCM
-|DTCM
+[.text-center]
+--
+image::Snipaste_2026-01-19_13-43-05.png[role="thumb"]
+--
 
-|code_itcm_data_dtcm_dcache_on_force_off
-|ON
-|Write Back
-|ITCM
-|DTCM
-
-|code_itcm_data_dtcm_dcache_on_force_on
-|ON
-|Write Through
-|ITCM
-|DTCM
-
-|code_itcm_data_sram_dcache_off
-|ON
-|Off
-|ITCM
-|SRAM
-
-|code_itcm_data_sram_dcache_on_force_off
-|ON
-|Write Back
-|ITCM
-|SRAM
-
-|code_itcm_data_sram_dcache_on_force_on
-|ON
-|Write Through
-|ITCM
-|SRAM
-
-|code_mram_data_dtcm_dcache_off
-|ON
-|Off
-|MRAM
-|DTCM
-
-|code_mram_data_dtcm_dcache_on_force_off
-|ON
-|Write Back
-|MRAM
-|DTCM
-
-|code_mram_data_dtcm_dcache_on_force_on
-|ON
-|Write Through
-|MRAM
-|DTCM
-
-|code_mram_data_sram_dcache_off
-|ON
-|OFF
-|MRAM
-|SRAM
-
-|code_mram_data_sram_dcache_on_force_off
-|ON
-|Write Back
-|MRAM
-|SRAM
-
-|code_mram_data_sram_dcache_on_force_on
-|ON
-|Write Through
-|MRAM
-|SRAM
-
-|code_mram_data_sram_dcache_on_force_off_icache_off
-|OFF
-|Write Back
-|MRAM
-|SRAM
-|===
-
-.code_itcm_data_dtcm_dcache_off 运行结果
-[%collapsible]
-====
-image::code_itcm_data_dtcm_dcache_on_force_off.png[role="thumb"]
-====
-
-.code_itcm_data_dtcm_dcache_on_force_off 运行结果
-[%collapsible]
-====
-image::code_itcm_data_dtcm_dcache_on_force_off.png[role="thumb"]
-====
-
-.code_itcm_data_dtcm_dcache_on_force_on 运行结果
-[%collapsible]
-====
-image::code_itcm_data_dtcm_dcache_on_force_on.png[role="thumb"]
-====
-
-.code_itcm_data_sram_dcache_off 运行结果
-[%collapsible]
-====
-image::code_itcm_data_sram_dcache_off.png[role="thumb"]
-====
-
-.code_itcm_data_sram_dcache_on_force_off 运行结果
-[%collapsible]
-====
-image::code_itcm_data_sram_dcache_on_force_off.png[role="thumb"]
-====
-
-.code_itcm_data_sram_dcache_on_force_on 运行结果
-[%collapsible]
-====
-image::code_itcm_data_sram_dcache_on_force_on.png[role="thumb"]
-====
-
-.code_mram_data_dtcm_dcache_off 运行结果
-[%collapsible]
-====
-image::code_mram_data_dtcm_dcache_off.png[role="thumb"]
-====
-
-.code_mram_data_dtcm_dcache_on_force_off 运行结果
-[%collapsible]
-====
-image::code_mram_data_dtcm_dcache_on_force_off.png[role="thumb"]
-====
-
-.code_mram_data_dtcm_dcache_on_force_on 运行结果
-[%collapsible]
-====
-image::code_mram_data_dtcm_dcache_on_force_on.png[role="thumb"]
-====
-
-.code_mram_data_sram_dcache_off 运行结果
-[%collapsible]
-====
-image::code_mram_data_sram_dcache_off.png[role="thumb"]
-====
-
-.code_mram_data_sram_dcache_on_force_off 运行结果
-[%collapsible]
-====
-image::code_mram_data_sram_dcache_on_force_off.png[role="thumb"]
-====
-
-.code_mram_data_sram_dcache_on_force_on 运行结果
-[%collapsible]
-====
-image::code_mram_data_sram_dcache_on_force_on.png[role="thumb"]
-====
-
-.code_mram_data_sram_dcache_on_force_off_icache_off 运行结果
-[%collapsible]
-====
-image::code_mram_data_sram_dcache_on_force_off_icache_off.png[role="thumb"]
-====
-
-== 预定义宏选项
-
-示例工程使用预定义宏作为选项决定代码和变量存储位置以及 Cache 功能以及其它功能。下面是所使用的预定义宏
-
-* _LANGUAGE 选项: 决定 perf_counter 的输出语言
-** `_LANGUAGE=0x0804`: 输出语言为中文
-** 未定义: 输出语言为英文
-* __CODE_AREA 选项: 决定 `CODE_AREA` 的值，控制代码存储的位置
-** `__CODE_AREA=1`: 被 `CODE_AREA` 修饰的函数存储在 ITCM
-** `__CODE_AREA=0` 或未定义: 被 `CODE_AREA` 修饰的函数存储在 MRAM（编译器默认行为）
+* __CODE_AREA: 决定 `CODE_AREA` 的值，控制代码存储的位置
+** `__CODE_AREA=CODE_MRAM` 或未定义: 被 `CODE_AREA` 修饰的函数存储在 MRAM（编译器默认行为）
+** `__CODE_AREA=CODE_ITCM`: 被 `CODE_AREA` 修饰的函数存储在 ITCM
 * __DATA_AREA 选项: 决定 `DATA_AREA_BSS`、`DATA_AREA_DATA`、`DATA_AREA_ZERO` 的值，控制变量存储的位置
-** `__CODE_AREA=1`: 被以上宏修饰的变量存储在 DTCM
-** `__CODE_AREA=0` 或未定义: 被以上宏修饰的变量存储在 SRAM（编译器默认行为）
+** `__DATA_AREA=DATA_SRAM` 或未定义: 被以上宏修饰的变量存储在 SRAM（编译器默认行为）
+** `__DATA_AREA=DATA_DTCM`: 被以上宏修饰的变量存储在 DTCM
 * BSP_CFG_DCACHE_ENABLED: 决定是否开启 DCache 功能
 ** `BSP_CFG_DCACHE_ENABLED=1`: 开启 DCache
 ** `BSP_CFG_DCACHE_ENABLED=0`: 关闭 DCache
@@ -194,21 +34,10 @@ image::code_mram_data_sram_dcache_on_force_off_icache_off.png[role="thumb"]
 ** `BSP_CFG_DCACHE_FORCE_WRITETHROUGH=1`: DCache 工作在 Write Through 模式
 ** `BSP_CFG_DCACHE_FORCE_WRITETHROUGH=0`: DCache 工作在 Write Back 模式
 ** 未定义: 由 FSP Configuration 决定
-* 输入输出实现: 示例工程有两个输入输出实现，可以通过以下两个宏切换，两个宏不能同时为 1，如果两个都没定义，那么没有输入输出
-** `CONSOLE_CFG_USE_RTT=1`: 使用 RTT View 输入输出，注意 RTT Viewer 不支持中文显示
-** `CONSOLE_CFG_USE_UART=1`: 使用 UART 输入输出
-* perf_counter 的计时实现
-** 使用 SysTick: 不定义 `+__PERFC_USE_PMU_PORTING__=1+` 和 `+__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1+`
-** 使用 PMU: 定义 `+__PERFC_USE_PMU_PORTING__=1+` 和 `+__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__=1+`
 
-NOTE: 不要修改示例工程的 perf_counter 实现选项，因为示例工程还会统计 DCache 的 Miss Rate，这必须使用 PMU
+下面是在上图所示配置下的运行结果
 
-下面是编译配置 code_itcm_data_dtcm_dcache_on_force_on 所预定义的宏
-
-[.text-center]
---
-image::Snipaste_2026-01-16_14-44-40.png[role="thumb"]
---
+image::Snipaste_2026-01-19_13-32-43.png[role="thumb"]
 
 == 测量其它代码运行时间
 
