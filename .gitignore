@@ -16,6 +16,7 @@ JLinkLog.txt
 
 # VSCode
 .vscode
+*.code-workspace
 
 # Prerequisites
 *.d

@@ -92,15 +92,12 @@ while (1) {
     }
 }
 printf("foo() running, please wait...\r\n");
-int64_t time_start = get_system_us();
 __cpu_perf__("foo") {
     // coremark_main(&s_core_param);
     s_loop_num = 100000000;
     foo();
 };
-int64_t time_end = get_system_us();
 // coremark_report(&s_core_param);
-printf("\r\nfoo() spend time: %lld\r\n", time_end - time_start);
 ----
 
 运行结果如下：
