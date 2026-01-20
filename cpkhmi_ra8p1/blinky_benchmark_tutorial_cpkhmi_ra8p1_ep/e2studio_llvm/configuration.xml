@@ -103,7 +103,7 @@
       <property id="config.bsp.fsp.mcu.adc_dmac.samples_per_channel" value="32767"/>
       <property id="config.bsp.fsp.mcu.sci_b_lin.max_baud" value="7812500"/>
       <property id="config.bsp.fsp.mcu.ospi_b.spi_dspi_qspi_mode_max_freq_hz" value="120000000"/>
-      <property id="config.bsp.fsp.dcache" value="config.bsp.fsp.dcache.disabled"/>
+      <property id="config.bsp.fsp.dcache" value="config.bsp.fsp.dcache.enabled"/>
       <property id="config.bsp.fsp.mscr.forcewt" value="config.bsp.fsp.mscr.forcewt.disabled"/>
       <property id="config.bsp.fsp.mcu.rtc.err_adjustment_value.max_value" value="63"/>
       <property id="config.bsp.fsp.ioport.voltage_mode.vcc" value="config.bsp.fsp.ioport.voltage_mode.vcc.high"/>
@@ -1166,6 +1166,9 @@
       <configSetting altId="pc14.sdram.dq16" configurationId="pc14"/>
       <configSetting altId="pc14.gpio_speed.gpio_speed_h" configurationId="pc14.gpio_drivecapacity"/>
       <configSetting altId="pc14.gpio_mode.gpio_mode_peripheral" configurationId="pc14.gpio_mode"/>
+      <configSetting altId="pc15.output.low" configurationId="pc15"/>
+      <configSetting altId="pc15.gpio_speed.gpio_speed_hh" configurationId="pc15.gpio_drivecapacity"/>
+      <configSetting altId="pc15.gpio_mode.gpio_mode_out.low" configurationId="pc15.gpio_mode"/>
       <configSetting altId="pd00.sdram.a15" configurationId="pd00"/>
       <configSetting altId="pd00.gpio_speed.gpio_speed_h" configurationId="pd00.gpio_drivecapacity"/>
       <configSetting altId="pd00.gpio_mode.gpio_mode_peripheral" configurationId="pd00.gpio_mode"/>

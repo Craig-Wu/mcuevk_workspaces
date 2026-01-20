@@ -271,7 +271,9 @@
 								<listOptionValue builtIn="false" value="-funsigned-char"/>
 							</option>
 							<option id="com.renesas.cdt.managedbuild.llvm.core.option.optimization.fnoaliasing.1703490632" name="Disable optimizations based on the type of expressions (-fno-strict-aliasing)" superClass="com.renesas.cdt.managedbuild.llvm.core.option.optimization.fnoaliasing" value="true" valueType="boolean"/>
-							<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="true" id="com.renesas.cdt.managedbuild.llvm.core.option.debug.otherFlags.674061773" name="Other flags" superClass="com.renesas.cdt.managedbuild.llvm.core.option.debug.otherFlags" valueType="stringList"/>
+							<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.renesas.cdt.managedbuild.llvm.core.option.debug.otherFlags.674061773" name="Other flags" superClass="com.renesas.cdt.managedbuild.llvm.core.option.debug.otherFlags" valueType="stringList">
+								<listOptionValue builtIn="false" value="-g0"/>
+							</option>
 							<option id="com.renesas.cdt.managedbuild.llvm.core.option.warnings.unused.664837238" name="Warn for various unused elements (-Wunused)" superClass="com.renesas.cdt.managedbuild.llvm.core.option.warnings.unused" value="true" valueType="boolean"/>
 							<option id="com.renesas.cdt.managedbuild.llvm.core.option.warnings.uninitialized.1340931076" name="Warn for uninitialized variables (-Wuninitialized)" superClass="com.renesas.cdt.managedbuild.llvm.core.option.warnings.uninitialized" value="true" valueType="boolean"/>
 							<option id="com.renesas.cdt.managedbuild.llvm.core.option.warnings.allwarn.648164075" name="Enable all warnings (-Wall)" superClass="com.renesas.cdt.managedbuild.llvm.core.option.warnings.allwarn" value="true" valueType="boolean"/>
