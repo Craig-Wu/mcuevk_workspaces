@@ -32,7 +32,6 @@ image::Snipaste_2026-01-09_10-41-17_01.png[role="thumb", width=800]
 
 image::Snipaste_2026-01-19_13-43-05.png[role="thumb"]
 
-
 * __CODE_AREA: 设定 `CODE_AREA` 的值，控制被修饰的程序代码运行的位置
 * __DATA_AREA: 设定 `DATA_AREA_BSS`、`DATA_AREA_DATA`、`DATA_AREA_ZERO` 的值，控制被修饰的变量存储的位置
 
