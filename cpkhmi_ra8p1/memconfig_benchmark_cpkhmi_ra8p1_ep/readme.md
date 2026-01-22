@@ -1,4 +1,4 @@
-**该示例工程由 李昌壕 提供，2026年1月12日**
+**该示例工程由 李昌壕 提供，2026年1月20日**
 
 ### 工程概述
 
@@ -7,11 +7,10 @@
 ### 支持的开发板 / 演示板：
 
 - CPKHMI-RA8P1
-- CPKNET-RA8T2
   
 ### 硬件要求：
 
-- 1 块 Renesas RA8 开发板：CPKHMI-RA8P1或CPKNET-RA8T2
+- 1 块 Renesas RA8 开发板：CPKHMI-RA8P1
 
 - 1 根 USB Type A->Type C 或 Type-C->Type C 线（支持Type-C 2.0 即可）
 
