@@ -27,7 +27,89 @@
 #   define __perfc_sync_barrier__(...)         do {__DSB();__ISB();} while(0)
 #endif
 
-
+#if _LANGUAGE == 0x0804
+#define __cpu_perf__(__str, ...)                                                \
+    using(                                                                      \
+        struct {                                                                \
+            uint64_t dwNoInstr;                                                 \
+            uint64_t dwNoMemAccess;                                             \
+            uint64_t dwNoL1DCacheRefill;                                        \
+            uint64_t dwNoL1ICacheRefill;                                        \
+            int64_t lCycles;                                                    \
+            uint32_t wInstrCalib;                                               \
+            uint32_t wMemAccessCalib;                                           \
+            float fCPI;                                                         \
+            float fDCacheMissRate;                                              \
+            float fICacheMissRate;                                              \
+        } __PERF_INFO__ = {0},                                                  \
+        ({                                                                      \
+            __PERF_INFO__.dwNoInstr = perfc_pmu_get_instruction_count();        \
+            __PERF_INFO__.dwNoMemAccess = perfc_pmu_get_memory_access_count();  \
+            __PERF_INFO__.wInstrCalib = perfc_pmu_get_instruction_count()       \
+                                - __PERF_INFO__.dwNoInstr;                      \
+            __PERF_INFO__.wMemAccessCalib = perfc_pmu_get_memory_access_count() \
+                                          - __PERF_INFO__.dwNoMemAccess;        \
+            __PERF_INFO__.dwNoL1DCacheRefill                                    \
+                = perfc_pmu_get_L1_dcache_refill_count();                       \
+            __PERF_INFO__.dwNoL1ICacheRefill                                    \
+                = perfc_pmu_get_L1_icache_refill_count();                       \
+            __PERF_INFO__.dwNoInstr = perfc_pmu_get_instruction_count();        \
+            __PERF_INFO__.dwNoMemAccess = perfc_pmu_get_memory_access_count();  \
+        }),                                                                     \
+        ({                                                                      \
+            __PERF_INFO__.dwNoInstr = perfc_pmu_get_instruction_count()         \
+                                    - __PERF_INFO__.dwNoInstr                   \
+                                    - __PERF_INFO__.wInstrCalib;                \
+            __PERF_INFO__.dwNoMemAccess = perfc_pmu_get_memory_access_count()   \
+                                        - __PERF_INFO__.dwNoMemAccess           \
+                                        - __PERF_INFO__.wMemAccessCalib;        \
+            __PERF_INFO__.dwNoL1DCacheRefill                                    \
+                = perfc_pmu_get_L1_dcache_refill_count()                        \
+                - __PERF_INFO__.dwNoL1DCacheRefill;                             \
+            __PERF_INFO__.dwNoL1ICacheRefill                                    \
+                = perfc_pmu_get_L1_icache_refill_count()                        \
+                - __PERF_INFO__.dwNoL1ICacheRefill;                             \
+                                                                                \
+            __PERF_INFO__.fDCacheMissRate                                       \
+                        = (float)( (double)__PERF_INFO__.dwNoL1DCacheRefill     \
+                                 / (double)__PERF_INFO__.dwNoMemAccess)         \
+                        * 100.0f;                                               \
+                                                                                \
+            __PERF_INFO__.fICacheMissRate                                       \
+                        = (float)( (double)__PERF_INFO__.dwNoL1ICacheRefill     \
+                                 / (double)__PERF_INFO__.dwNoInstr)             \
+                        * 100.0f;                                               \
+            __PERF_INFO__.fCPI = (float)(    (double)__PERF_INFO__.lCycles      \
+                                       /    (double)__PERF_INFO__.dwNoInstr);   \
+            if (__PLOOC_VA_NUM_ARGS(__VA_ARGS__) == 0) {                        \
+                __perf_counter_printf__( "\r\n"                                 \
+                        "[%s 报告汇总]\r\n"                                      \
+                        "-----------------------------------------\r\n"         \
+                        "执行指令数量: %"PRIi64"\r\n"                             \
+                        "周期数: %"PRIi64"\r\n"                                  \
+                        "每条指令周期数: %3.3f \r\n\r\n"                          \
+                        "内存访问计数: %"PRIi64"\r\n"                             \
+                        "L1 DCache 重新填充计数: %"PRIi64"\r\n"                   \
+                        "L1 DCache Miss Rate: %3.4f %% \r\n"                    \
+                        "L1 ICache 重新填充计数: %"PRIi64"\r\n"                   \
+                        "L1 ICache Miss Rate: %3.4f %% \r\n"                    \
+                        ,                                                       \
+                        (__str),                                                \
+                        __PERF_INFO__.dwNoInstr,                                \
+                        __PERF_INFO__.lCycles,                                  \
+                        (double)__PERF_INFO__.fCPI,                             \
+                        __PERF_INFO__.dwNoMemAccess,                            \
+                        __PERF_INFO__.dwNoL1DCacheRefill,                       \
+                        (double)__PERF_INFO__.fDCacheMissRate,                  \
+                        __PERF_INFO__.dwNoL1ICacheRefill,                       \
+                        (double)__PERF_INFO__.fICacheMissRate                   \
+                        );                                                      \
+             } else {                                                           \
+                __VA_ARGS__                                                     \
+             }                                                                  \
+        }))                                                                     \
+        __cycleof__("", { __PERF_INFO__.lCycles = __cycle_count__; })
+#else
 #define __cpu_perf__(__str, ...)                                                \
     using(                                                                      \
         struct {                                                                \
@@ -109,7 +191,7 @@
              }                                                                  \
         }))                                                                     \
         __cycleof__("", { __PERF_INFO__.lCycles = __cycle_count__; })
-
+#endif
 
 
 #if defined(__PERFC_STACK_GROWS_UPWARD__)

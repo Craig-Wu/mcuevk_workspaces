@@ -72,7 +72,7 @@ typedef int32_t q16_t;
 
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
-
+PERF_DATA_DATA
 volatile static struct {
 
     /* raw ticks */
@@ -121,8 +121,8 @@ volatile static struct {
 
 //volatile static int64_t s_lSystemClockCounts = 0;
 
-volatile int32_t g_nOffset = 0;
-volatile int64_t g_lLastTimeStamp = 0;
+PERF_DATA_DATA volatile int32_t g_nOffset = 0;
+PERF_DATA_DATA volatile int64_t g_lLastTimeStamp = 0;
 
 /*============================ PROTOTYPES ====================================*/
 
@@ -153,7 +153,7 @@ void perfc_port_clear_system_timer_counter(void);
 
 /*============================ IMPLEMENTATION ================================*/
 
-
+PERF_CODE
 __STATIC_INLINE 
 q16_t
 reinterpret_q16_f32(float fIn0)
@@ -161,6 +161,7 @@ reinterpret_q16_f32(float fIn0)
     return ((q16_t)((fIn0) * 65536.0f + ((fIn0) >= 0 ? 0.5f : -0.5f)));
 }
 
+PERF_CODE
 __STATIC_INLINE 
 float
 reinterpret_f32_q16(q16_t q16In0)
@@ -175,6 +176,7 @@ reinterpret_f32_q16(q16_t q16In0)
  *            the System Timer ISR (i.e. SysTick_Handler) have the same or 
  *            higher priority.
  */
+PERF_CODE
 void perfc_port_insert_to_system_timer_insert_ovf_handler(void)
 {
     int64_t lLoad = perfc_port_get_system_timer_top() + 1;
@@ -221,18 +223,20 @@ void perfc_port_insert_to_system_timer_insert_ovf_handler(void)
 #endif
 }
 
+PERF_CODE
 uint32_t perfc_get_systimer_frequency(void)
 {
     return perfc_port_get_system_timer_freq();
 }
 
 __WEAK
+PERF_CODE
 __attribute__((noinline))
 void __perf_os_patch_init(void)
 {
 }
 
-
+PERF_CODE
 void update_perf_counter(void)
 {
     int64_t lLoad = perfc_port_get_system_timer_top() + 1;
@@ -275,6 +279,7 @@ void update_perf_counter(void)
     }
 }
 
+PERF_CODE
 bool perfc_init(bool bIsSysTimerOccupied)
 {
     bool bResult = false;
@@ -301,6 +306,7 @@ bool perfc_init(bool bIsSysTimerOccupied)
     return bResult;
 }
 
+PERF_CODE
 __STATIC_INLINE int64_t __check_and_handle_ovf(int64_t lTemp)
 {
     __IRQ_SAFE {
@@ -323,6 +329,7 @@ __STATIC_INLINE int64_t __check_and_handle_ovf(int64_t lTemp)
  *        hence SysTick-LOAD and (SCB->ICSR & SCB_ICSR_PENDSTSET_Msk)
  *        won't change.
  */
+PERF_CODE
 __STATIC_INLINE int64_t check_systick(void)
 {
     int64_t lTemp = perfc_port_get_system_timer_elapsed();
@@ -352,6 +359,7 @@ __STATIC_INLINE int64_t check_systick(void)
     return lTemp;
 }
 
+PERF_CODE
 void before_cycle_counter_reconfiguration(void)
 {
     __PERFC_SAFE {
@@ -374,6 +382,7 @@ void before_cycle_counter_reconfiguration(void)
     }
 }
 
+PERF_CODE
 void perfc_system_ms_calibration(int64_t lRTCMS)
 {
     __PERFC_SAFE {
@@ -381,13 +390,14 @@ void perfc_system_ms_calibration(int64_t lRTCMS)
     }
 }
 
+PERF_CODE
 __attribute__((constructor))
 void __perf_counter_init(void)
 {
     perfc_init(true);
 }
 
-__WEAK
+__WEAK PERF_CODE
 __attribute__((noinline))
 bool perfc_delay_us_user_code_in_loop(int64_t lRemainInUs)
 {
@@ -396,6 +406,7 @@ bool perfc_delay_us_user_code_in_loop(int64_t lRemainInUs)
     return true;
 }
 
+PERF_CODE
 void perfc_delay_us(uint32_t wUs)
 {
     int64_t lTicks = perfc_convert_us_to_ticks(wUs);
@@ -422,7 +433,7 @@ void perfc_delay_us(uint32_t wUs)
     } while(1);
 }
 
-__WEAK
+__WEAK PERF_CODE
 __attribute__((noinline))
 bool perfc_delay_ms_user_code_in_loop(int64_t lRemainInMs)
 {
@@ -432,8 +443,10 @@ bool perfc_delay_ms_user_code_in_loop(int64_t lRemainInMs)
 }
 
 #if __C_LANGUAGE_EXTENSIONS_PERFC_COROUTINE__
+PERF_CODE
 void __perfc_delay_ms(uint32_t wMs, perfc_coroutine_t *ptCoroutine)
 #else
+PERF_CODE
 void perfc_delay_ms(uint32_t wMs)
 #endif
 {
@@ -464,6 +477,7 @@ void perfc_delay_ms(uint32_t wMs)
     } while(1);
 }
 
+PERF_CODE
 __attribute__((noinline))
 int64_t get_system_ticks(void)
 {
@@ -520,22 +534,25 @@ int64_t get_system_ticks(void)
 __attribute__((nothrow))
 #endif
 __attribute__((noinline))
+PERF_CODE
 int64_t clock(void)
 {
     return get_system_ticks();
 }
 
+PERF_CODE
 int64_t perfc_convert_ticks_to_ms(int64_t lTick)
 {
     return lTick / (int64_t)PERFC.MS.wUnit;
 }
 
+PERF_CODE
 int64_t perfc_convert_ms_to_ticks(int32_t nMS)
 {
     return (int64_t)PERFC.MS.wUnit * (int64_t)nMS;
 }
 
-
+PERF_CODE
 int64_t perfc_convert_ticks_to_us(int64_t lTick)
 {
     int64_t lResult;
@@ -553,6 +570,7 @@ int64_t perfc_convert_ticks_to_us(int64_t lTick)
     return lResult;
 }
 
+PERF_CODE
 int64_t perfc_convert_us_to_ticks(uint32_t wUS)
 {
     int64_t lResult;
@@ -571,6 +589,7 @@ int64_t perfc_convert_us_to_ticks(uint32_t wUS)
 }
 
 #if defined(__PERFC_USE_DEDICATED_MS_AND_US__)
+PERF_CODE
 int64_t get_system_ms(void)
 {
     int64_t lTemp = 0;
@@ -595,6 +614,7 @@ int64_t get_system_ms(void)
     return lTemp;
 }
 
+PERF_CODE
 int64_t get_system_us(void)
 {
     int64_t lTemp = 0;
@@ -621,7 +641,7 @@ int64_t get_system_us(void)
 }
 #endif
 
-
+PERF_CODE
 bool __perfc_is_time_out(int64_t lPeriod, int64_t *plTimestamp, bool bAutoReload)
 {
     if (NULL == plTimestamp) {
@@ -649,6 +669,7 @@ bool __perfc_is_time_out(int64_t lPeriod, int64_t *plTimestamp, bool bAutoReload
 
 #ifdef __PERFC_STACK_GROWS_UPWARD__
 
+PERF_CODE
 __attribute__((noinline))
 bool perfc_stack_fill(uintptr_t nSP, uintptr_t nStackLimit)
 {
@@ -680,6 +701,7 @@ bool perfc_stack_fill(uintptr_t nSP, uintptr_t nStackLimit)
     return true;
 }
 
+PERF_CODE
 __attribute__((noinline))
 size_t perfc_stack_remain(uintptr_t nStackLimit)
 {
@@ -697,6 +719,7 @@ size_t perfc_stack_remain(uintptr_t nStackLimit)
 }
 
 #else
+PERF_CODE
 __attribute__((noinline))
 bool perfc_stack_fill(uintptr_t nSP, uintptr_t nStackLimit)
 {
@@ -722,6 +745,7 @@ bool perfc_stack_fill(uintptr_t nSP, uintptr_t nStackLimit)
     return true;
 }
 
+PERF_CODE
 __attribute__((noinline))
 size_t perfc_stack_remain(uintptr_t nStackLimit)
 {
@@ -745,6 +769,7 @@ size_t perfc_stack_remain(uintptr_t nStackLimit)
 
 /// Setup timer hardware.
 /// \return       status (1=Success, 0=Failure)
+PERF_CODE
 uint32_t EventRecorderTimerSetup (void)
 {
     /* doing nothing at all */
@@ -753,6 +778,7 @@ uint32_t EventRecorderTimerSetup (void)
 
 /// Get timer frequency.
 /// \return       timer frequency in Hz
+PERF_CODE
 uint32_t EventRecorderTimerGetFreq (void)
 {
     return perfc_port_get_system_timer_freq();
@@ -760,17 +786,19 @@ uint32_t EventRecorderTimerGetFreq (void)
 
 /// Get timer count.
 /// \return       timer count (32-bit)
+PERF_CODE
 uint32_t EventRecorderTimerGetCount (void)
 {
     return get_system_ticks();
 }
 
-__WEAK
+__WEAK PERF_CODE
 task_cycle_info_t * get_rtos_task_cycle_info(void)
 {
     return NULL;
 }
 
+PERF_CODE
 void init_task_cycle_counter(void)
 {
     struct __task_cycle_info_t * ptRootAgent =
@@ -786,6 +814,7 @@ void init_task_cycle_counter(void)
     ptRootAgent->wMagicWord = MAGIC_WORD_CANARY;
 }
 
+PERF_CODE
 bool perfc_check_task_stack_canary_safe(void)
 {
     struct __task_cycle_info_t * ptRootAgent =
@@ -804,6 +833,7 @@ bool perfc_check_task_stack_canary_safe(void)
     return false;
 }
 
+PERF_CODE
 task_cycle_info_t *init_task_cycle_info(task_cycle_info_t *ptInfo)
 {
     do {
@@ -819,6 +849,7 @@ task_cycle_info_t *init_task_cycle_info(task_cycle_info_t *ptInfo)
     return ptInfo;
 }
 
+PERF_CODE
 bool enable_task_cycle_info(task_cycle_info_t *ptInfo)
 {
     if (NULL == ptInfo) {
@@ -832,6 +863,7 @@ bool enable_task_cycle_info(task_cycle_info_t *ptInfo)
     return bOrig;
 }
 
+PERF_CODE
 bool disable_task_cycle_info(task_cycle_info_t *ptInfo)
 {
     if (NULL == ptInfo) {
@@ -845,6 +877,7 @@ bool disable_task_cycle_info(task_cycle_info_t *ptInfo)
     return bOrig;
 }
 
+PERF_CODE
 void resume_task_cycle_info(task_cycle_info_t *ptInfo, bool bEnabledStatus)
 {
     if (NULL == ptInfo) {
@@ -854,7 +887,7 @@ void resume_task_cycle_info(task_cycle_info_t *ptInfo, bool bEnabledStatus)
     ptInfo->bEnabled = bEnabledStatus;
 }
 
-
+PERF_CODE
 task_cycle_info_agent_t *register_task_cycle_agent(task_cycle_info_t *ptInfo,
                                              task_cycle_info_agent_t *ptAgent)
 {
@@ -893,6 +926,7 @@ task_cycle_info_agent_t *register_task_cycle_agent(task_cycle_info_t *ptInfo,
     return ptAgent;
 }
 
+PERF_CODE
 task_cycle_info_agent_t *
 unregister_task_cycle_agent(task_cycle_info_agent_t *ptAgent)
 {
@@ -928,7 +962,7 @@ unregister_task_cycle_agent(task_cycle_info_agent_t *ptAgent)
     return ptAgent;
 }
 
-
+PERF_CODE
 void __on_context_switch_in(uint32_t *pwStack)
 {
     struct __task_cycle_info_t *ptRootAgent = (struct __task_cycle_info_t *)pwStack;
@@ -951,6 +985,7 @@ void __on_context_switch_in(uint32_t *pwStack)
     }
 }
 
+PERF_CODE
 void __on_context_switch_out(uint32_t *pwStack)
 {
     struct __task_cycle_info_t *ptRootAgent = (struct __task_cycle_info_t *)pwStack;
@@ -974,6 +1009,7 @@ void __on_context_switch_out(uint32_t *pwStack)
     }
 }
 
+PERF_CODE
 __attribute__((noinline))
 void __start_task_cycle_counter(task_cycle_info_t *ptInfo)
 {
@@ -994,6 +1030,7 @@ void __start_task_cycle_counter(task_cycle_info_t *ptInfo)
     }
 }
 
+PERF_CODE
 __attribute__((noinline))
 int64_t __stop_task_cycle_counter(task_cycle_info_t *ptInfo)
 {

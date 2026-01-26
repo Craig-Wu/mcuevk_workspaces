@@ -236,6 +236,27 @@ __asm(".global __ensure_systick_wrapper\n\t");
         }
     \endcode
  */
+#if _LANGUAGE == 0x0804
+#define __cycleof__(__STR, ...)                                                 \
+            perfc_using(int64_t _ = get_system_ticks(), __cycle_count__ = _,    \
+                {__perfc_sync_barrier__();},                                    \
+                {                                                               \
+                __perfc_sync_barrier__();                                       \
+                _ = get_system_ticks() - _ - g_nOffset;                         \
+                __cycle_count__ = _;                                            \
+                if (__PLOOC_VA_NUM_ARGS(__VA_ARGS__) == 0) {                    \
+                    __perf_counter_printf__("\r\n");                            \
+                    __perf_counter_printf__("-[时钟周期数报告]");                 \
+                    __perf_counter_printf__(                                    \
+                        "------------------------------------\r\n");            \
+                    __perf_counter_printf__(                                    \
+                        "%s 总周期数: %" PRIi64 " [%08" PRIX64 "]\r\n",          \
+                         (const char *)(__STR), (int64_t)_, (int64_t)_);        \
+                } else {                                                        \
+                    __VA_ARGS__                                                 \
+                };                                                              \
+            })
+#else
 #define __cycleof__(__STR, ...)                                                 \
             perfc_using(int64_t _ = get_system_ticks(), __cycle_count__ = _,    \
                 {__perfc_sync_barrier__();},                                    \
@@ -255,6 +276,7 @@ __asm(".global __ensure_systick_wrapper\n\t");
                     __VA_ARGS__                                                 \
                 };                                                              \
             })
+#endif
 
 /*!
  * \brief measure the cpu usage for a given code segment and print out the
@@ -273,6 +295,33 @@ __asm(".global __ensure_systick_wrapper\n\t");
         }
     \endcode
  */
+#if _LANGUAGE == 0x0804
+#define __cpu_usage__(__CNT, ...)                                               \
+    static int64_t  PERFC_SAFE_NAME(s_lTimestamp) = 0,                          \
+                    PERFC_SAFE_NAME(s_lTotal) = 0;                              \
+    static uint32_t PERFC_SAFE_NAME(s_wLoopCounter) = (__CNT);                  \
+    perfc_using(float __usage__ = 0, ({                                         \
+    if (0 == PERFC_SAFE_NAME(s_wLoopCounter)) {                                 \
+        __usage__ = (float)((double)PERFC_SAFE_NAME(s_lTotal)                   \
+                        / (double)(     get_system_ticks()                      \
+                                  -     PERFC_SAFE_NAME(s_lTimestamp)));        \
+        __usage__ *= 100.0f;                                                    \
+        PERFC_SAFE_NAME(s_lTimestamp) = 0;                                      \
+        PERFC_SAFE_NAME(s_lTotal) = 0;                                          \
+        if (__PLOOC_VA_NUM_ARGS(__VA_ARGS__) == 0) {                            \
+            __perf_counter_printf__("CPU 使用率 %3.2f%%\r\n", (double)__usage__);\
+        } else {                                                                \
+            __VA_ARGS__                                                         \
+        }                                                                       \
+    }                                                                           \
+    if (0 == PERFC_SAFE_NAME(s_lTimestamp)) {                                   \
+        PERFC_SAFE_NAME(s_lTimestamp) = get_system_ticks();                     \
+        PERFC_SAFE_NAME(s_wLoopCounter) = (__CNT);                              \
+    }                                                                           \
+    start_task_cycle_counter();}),                                              \
+    ({PERFC_SAFE_NAME(s_lTotal) += stop_task_cycle_counter();                   \
+    PERFC_SAFE_NAME(s_wLoopCounter)--;}))
+#else
 #define __cpu_usage__(__CNT, ...)                                               \
     static int64_t  PERFC_SAFE_NAME(s_lTimestamp) = 0,                          \
                     PERFC_SAFE_NAME(s_lTotal) = 0;                              \
@@ -298,6 +347,7 @@ __asm(".global __ensure_systick_wrapper\n\t");
     start_task_cycle_counter();}),                                              \
     ({PERFC_SAFE_NAME(s_lTotal) += stop_task_cycle_counter();                   \
     PERFC_SAFE_NAME(s_wLoopCounter)--;}))
+#endif
 
 #define __cpu_time__    __cpu_usage__
 

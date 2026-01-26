@@ -1435,7 +1435,7 @@ enum {
 #endif
 
 
-static volatile uint64_t s_dwEventCounter[__COUNTER_NUM__] = {0};
+PERF_DATA_DATA static volatile uint64_t s_dwEventCounter[__COUNTER_NUM__] = {0};
 
 /*============================ PROTOTYPES ====================================*/
 /* low level interface for porting */
@@ -1462,11 +1462,13 @@ void perfc_port_clear_system_timer_counter(void);
 #if __PERFC_USE_PMU_PORTING__
 
 __USED
+PERF_CODE
 void DebugMon_Handler(void)
 {
     perfc_port_pmu_insert_to_debug_monitor_handler();
 }
 
+PERF_CODE
 void perfc_port_pmu_insert_to_debug_monitor_handler(void)
 {
     if (!(SCB->DFSR & SCB_DFSR_PMU_Msk)) {
@@ -1539,6 +1541,7 @@ void perfc_port_pmu_insert_to_debug_monitor_handler(void)
     } while(0);
 }
  
+PERF_CODE
 bool perfc_port_init_system_timer(bool bIsTimeOccupied)
 {
     UNUSED_PARAM(bIsTimeOccupied);
@@ -1661,6 +1664,7 @@ bool perfc_port_init_system_timer(bool bIsTimeOccupied)
     return true;
 }
 
+PERF_CODE
 uint64_t perfc_pmu_get_instruction_count(void)
 {
     uint32_t wHigh16, wLow16;
@@ -1687,6 +1691,7 @@ uint64_t perfc_pmu_get_instruction_count(void)
     return dwResult;
 }
 
+PERF_CODE
 uint64_t perfc_pmu_get_memory_access_count(void)
 {
     uint32_t wHigh16, wLow16;
@@ -1714,7 +1719,7 @@ uint64_t perfc_pmu_get_memory_access_count(void)
     return dwResult;
 }
 
-
+PERF_CODE
 uint64_t perfc_pmu_get_L1_dcache_refill_count(void)
 {
     uint32_t wLow16;
@@ -1739,6 +1744,7 @@ uint64_t perfc_pmu_get_L1_dcache_refill_count(void)
     return dwResult;
 }
 
+PERF_CODE
 uint64_t perfc_pmu_get_L1_icache_refill_count(void)
 {
     uint32_t wLow16;
@@ -1763,6 +1769,7 @@ uint64_t perfc_pmu_get_L1_icache_refill_count(void)
     return dwResult;
 }
 
+PERF_CODE
 uint32_t perfc_port_get_system_timer_freq(void)
 {
     extern uint32_t SystemCoreClock;
@@ -1771,40 +1778,47 @@ uint32_t perfc_port_get_system_timer_freq(void)
     return SystemCoreClock;
 }
 
+PERF_CODE
 bool perfc_port_is_system_timer_ovf_pending(void)
 {
     /* whether the system timer overflow is pending */
     return PMU->OVSSET & PMU_OVSSET_CYCCNT_STATUS_Msk;
 }
 
+PERF_CODE
 int64_t perfc_port_get_system_timer_top(void)
 {
     /* the top value of the counting */
     return 0xFFFFFFFF;
 }
 
+PERF_CODE
 int64_t perfc_port_get_system_timer_elapsed(void)
 {
     return (int64_t)PMU->CCNTR;//ARM_PMU_Get_CCNTR();
 }
 
+PERF_CODE
 void perfc_port_clear_system_timer_ovf_pending(void)
 {
     PMU->OVSCLR = PMU_OVSCLR_CYCCNT_STATUS_Msk;
 }
 
+PERF_CODE
 void perfc_port_stop_system_timer_counting(void)
 {
     /* stop the system timer */
     PMU->CNTENCLR = PMU_CNTENCLR_CCNTR_ENABLE_Msk;
 }
 
+PERF_CODE
 void perfc_port_clear_system_timer_counter(void)
 {
     /* clear the system timer counter */
     PMU->CTRL |= PMU_CTRL_CYCCNT_RESET_Msk;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 uintptr_t __perfc_port_get_sp(void)
@@ -1815,6 +1829,7 @@ uintptr_t __perfc_port_get_sp(void)
     return (result);
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 void __perfc_port_set_sp(uintptr_t nSP)
