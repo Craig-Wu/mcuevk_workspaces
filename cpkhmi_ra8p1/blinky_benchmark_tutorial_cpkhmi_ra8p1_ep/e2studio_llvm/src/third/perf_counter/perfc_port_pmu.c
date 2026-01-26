@@ -1419,22 +1419,23 @@ enum {
     PMU_CNT_INSTRUCTION         = 0,
     PMU_CNT_MEM_ACCESS          = 1,
     PMU_CNT_L1_DCACHE_REFILL    = 2,
+    PMU_CNT_L1_ICACHE_REFILL    = 3,
+    __PMU_CNT_DEFAULT_START,
 };
 
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
 
 #if __PMU_NUM_EVENTCNT >= 6
-#   define __COUNTER_NUM__      (3 + (__PMU_NUM_EVENTCNT - 6))
+#   define __COUNTER_NUM__      (4 + (__PMU_NUM_EVENTCNT - 6))
 #elif __PMU_NUM_EVENTCNT > 2
 #   define __COUNTER_NUM__      (__PMU_NUM_EVENTCNT >> 1)
 #else
 #   define __COUNTER_NUM__      (5)
 #endif
 
-#if __PERFC_USE_PMU_PORTING__
-static volatile uint64_t s_dwEventCounter[__COUNTER_NUM__] = {0};
-#endif
+
+PERF_DATA_DATA static volatile uint64_t s_dwEventCounter[__COUNTER_NUM__] = {0};
 
 /*============================ PROTOTYPES ====================================*/
 /* low level interface for porting */
@@ -1461,11 +1462,13 @@ void perfc_port_clear_system_timer_counter(void);
 #if __PERFC_USE_PMU_PORTING__
 
 __USED
+PERF_CODE
 void DebugMon_Handler(void)
 {
     perfc_port_pmu_insert_to_debug_monitor_handler();
 }
 
+PERF_CODE
 void perfc_port_pmu_insert_to_debug_monitor_handler(void)
 {
     if (!(SCB->DFSR & SCB_DFSR_PMU_Msk)) {
@@ -1509,14 +1512,20 @@ void perfc_port_pmu_insert_to_debug_monitor_handler(void)
         if (chCounter < 6) {
             break ;
         }
+        if (PMU->OVSCLR & PMU_OVSCLR_CNT4_STATUS_Msk) {
+            PMU->OVSCLR = PMU_OVSCLR_CNT4_STATUS_Msk;
+
+            s_dwEventCounter[PMU_CNT_L1_DCACHE_REFILL] += (uint32_t)0x10000;
+        }
         if (PMU->OVSCLR & PMU_OVSCLR_CNT5_STATUS_Msk) {
             PMU->OVSCLR = PMU_OVSCLR_CNT5_STATUS_Msk;
 
-            s_dwEventCounter[PMU_CNT_L1_DCACHE_REFILL] += (uint64_t)0x100000000;
+            s_dwEventCounter[PMU_CNT_L1_ICACHE_REFILL] += (uint32_t)0x10000;
         }
 
         if (chCounter > 6) {
 
+            int_fast8_t chCountIndex = __PMU_CNT_DEFAULT_START;
             for (uint_fast8_t n = 6; n < chCounter; n++) {
                 uint32_t wMask = (1<<n);
                 if (PMU->OVSSET & wMask) {
@@ -1524,13 +1533,15 @@ void perfc_port_pmu_insert_to_debug_monitor_handler(void)
                     PMU->OVSCLR = wMask;                                            /* clear Overflow Flag */
 
                     /* update corresponding counter */
-                    s_dwEventCounter[n - 3] += 0x10000;
+                    s_dwEventCounter[chCountIndex] += 0x10000;
                 }
+                chCountIndex++;
             }
         }
     } while(0);
 }
  
+PERF_CODE
 bool perfc_port_init_system_timer(bool bIsTimeOccupied)
 {
     UNUSED_PARAM(bIsTimeOccupied);
@@ -1592,22 +1603,34 @@ bool perfc_port_init_system_timer(bool bIsTimeOccupied)
                 PMU->CNTENSET = PMU_CNTENSET_CNT2_ENABLE_Msk
                               | PMU_CNTENSET_CNT3_ENABLE_Msk;
             }
+            
+            if (chCounter >= 5) {
+                /* 32bit counter for L1 DCache Refill */
+                PMU->EVTYPER[4] = ARM_PMU_L1D_CACHE_REFILL;
+
+                /* clear counter 4 overflow flag */
+                PMU->OVSCLR = PMU_OVSCLR_CNT4_STATUS_Msk;
+
+                /* enable counter 4 interrupt */
+                PMU->INTENSET = PMU_INTENSET_CNT4_ENABLE_Msk;
+
+                /* enable counter 4 */
+                PMU->CNTENSET = PMU_CNTENSET_CNT4_ENABLE_Msk;
+
+            }
 
             if (chCounter >= 6) {
-                /* 32bit counter for all Data memory Accesses */
-                PMU->EVTYPER[4] = ARM_PMU_L1D_CACHE_REFILL;
-                PMU->EVTYPER[5] = ARM_PMU_CHAIN;
+                /* 32bit counter for L1 ICache Refill */
+                PMU->EVTYPER[5] = ARM_PMU_L1I_CACHE_REFILL;
 
-                /* clear counter 4/5 overflow flag */
-                PMU->OVSCLR = PMU_OVSCLR_CNT4_STATUS_Msk
-                            | PMU_OVSCLR_CNT5_STATUS_Msk;
+                /* clear counter 5 overflow flag */
+                PMU->OVSCLR = PMU_OVSCLR_CNT5_STATUS_Msk;
 
                 /* enable counter 5 interrupt */
                 PMU->INTENSET = PMU_INTENSET_CNT5_ENABLE_Msk;
 
-                /* enable counter 4/5 */
-                PMU->CNTENSET = PMU_CNTENSET_CNT4_ENABLE_Msk
-                              | PMU_CNTENSET_CNT5_ENABLE_Msk;
+                /* enable counter 5 */
+                PMU->CNTENSET = PMU_CNTENSET_CNT5_ENABLE_Msk;
 
             }
 
@@ -1617,7 +1640,7 @@ bool perfc_port_init_system_timer(bool bIsTimeOccupied)
 
                     PMU->OVSCLR = wMask;        /* clear overflow flag */
                     PMU->INTENSET = wMask;      /* enable interrupt */
-                    PMU->CNTENSET = wMask;      /* enable counter */
+                    //PMU->CNTENSET = wMask;      /* enable counter */
                 }
             }
 
@@ -1641,6 +1664,7 @@ bool perfc_port_init_system_timer(bool bIsTimeOccupied)
     return true;
 }
 
+PERF_CODE
 uint64_t perfc_pmu_get_instruction_count(void)
 {
     uint32_t wHigh16, wLow16;
@@ -1667,6 +1691,7 @@ uint64_t perfc_pmu_get_instruction_count(void)
     return dwResult;
 }
 
+PERF_CODE
 uint64_t perfc_pmu_get_memory_access_count(void)
 {
     uint32_t wHigh16, wLow16;
@@ -1694,26 +1719,23 @@ uint64_t perfc_pmu_get_memory_access_count(void)
     return dwResult;
 }
 
-
+PERF_CODE
 uint64_t perfc_pmu_get_L1_dcache_refill_count(void)
 {
-    uint32_t wHigh16, wLow16;
+    uint32_t wLow16;
     uint64_t dwResult;
     bool bIsOverflow = false;
 
     __IRQ_SAFE {
-        do {
-            wHigh16 = PMU->EVCNTR[5];
-            wLow16 = PMU->EVCNTR[4];
-        } while(wHigh16 < PMU->EVCNTR[5]);
+        wLow16 = PMU->EVCNTR[4];
         dwResult = s_dwEventCounter[PMU_CNT_L1_DCACHE_REFILL];
-        bIsOverflow = (0 != (PMU->OVSCLR & PMU_OVSCLR_CNT5_STATUS_Msk));
+        bIsOverflow = (0 != (PMU->OVSCLR & PMU_OVSCLR_CNT4_STATUS_Msk));
     }
 
-    dwResult += wLow16 | (wHigh16 << 16);
+    dwResult += wLow16;
     
     if (bIsOverflow) {
-        dwResult += (uint64_t)1<<32;
+        dwResult += (uint64_t)1<<16;
     }
 
     /* force to disable DWT */
@@ -1722,6 +1744,32 @@ uint64_t perfc_pmu_get_L1_dcache_refill_count(void)
     return dwResult;
 }
 
+PERF_CODE
+uint64_t perfc_pmu_get_L1_icache_refill_count(void)
+{
+    uint32_t wLow16;
+    uint64_t dwResult;
+    bool bIsOverflow = false;
+
+    __IRQ_SAFE {
+        wLow16 = PMU->EVCNTR[5];
+        dwResult = s_dwEventCounter[PMU_CNT_L1_ICACHE_REFILL];
+        bIsOverflow = (0 != (PMU->OVSCLR & PMU_OVSCLR_CNT5_STATUS_Msk));
+    }
+
+    dwResult += wLow16;
+    
+    if (bIsOverflow) {
+        dwResult += (uint64_t)1<<16;
+    }
+
+    /* force to disable DWT */
+    DWT->CTRL = 0;
+
+    return dwResult;
+}
+
+PERF_CODE
 uint32_t perfc_port_get_system_timer_freq(void)
 {
     extern uint32_t SystemCoreClock;
@@ -1730,40 +1778,47 @@ uint32_t perfc_port_get_system_timer_freq(void)
     return SystemCoreClock;
 }
 
+PERF_CODE
 bool perfc_port_is_system_timer_ovf_pending(void)
 {
     /* whether the system timer overflow is pending */
     return PMU->OVSSET & PMU_OVSSET_CYCCNT_STATUS_Msk;
 }
 
+PERF_CODE
 int64_t perfc_port_get_system_timer_top(void)
 {
     /* the top value of the counting */
     return 0xFFFFFFFF;
 }
 
+PERF_CODE
 int64_t perfc_port_get_system_timer_elapsed(void)
 {
     return (int64_t)PMU->CCNTR;//ARM_PMU_Get_CCNTR();
 }
 
+PERF_CODE
 void perfc_port_clear_system_timer_ovf_pending(void)
 {
     PMU->OVSCLR = PMU_OVSCLR_CYCCNT_STATUS_Msk;
 }
 
+PERF_CODE
 void perfc_port_stop_system_timer_counting(void)
 {
     /* stop the system timer */
     PMU->CNTENCLR = PMU_CNTENCLR_CCNTR_ENABLE_Msk;
 }
 
+PERF_CODE
 void perfc_port_clear_system_timer_counter(void)
 {
     /* clear the system timer counter */
     PMU->CTRL |= PMU_CTRL_CYCCNT_RESET_Msk;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 uintptr_t __perfc_port_get_sp(void)
@@ -1774,6 +1829,7 @@ uintptr_t __perfc_port_get_sp(void)
     return (result);
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 void __perfc_port_set_sp(uintptr_t nSP)
@@ -1787,3 +1843,5 @@ void __perfc_port_set_sp(uintptr_t nSP)
 
 
 #endif
+
+

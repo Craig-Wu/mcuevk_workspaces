@@ -1167,7 +1167,7 @@
       <configSetting altId="pc14.gpio_speed.gpio_speed_h" configurationId="pc14.gpio_drivecapacity"/>
       <configSetting altId="pc14.gpio_mode.gpio_mode_peripheral" configurationId="pc14.gpio_mode"/>
       <configSetting altId="pc15.output.low" configurationId="pc15"/>
-      <configSetting altId="pc15.gpio_speed.gpio_speed_hh" configurationId="pc15.gpio_drivecapacity"/>
+      <configSetting altId="pc15.gpio_speed.gpio_speed_h" configurationId="pc15.gpio_drivecapacity"/>
       <configSetting altId="pc15.gpio_mode.gpio_mode_out.low" configurationId="pc15.gpio_mode"/>
       <configSetting altId="pd00.sdram.a15" configurationId="pd00"/>
       <configSetting altId="pd00.gpio_speed.gpio_speed_h" configurationId="pd00.gpio_drivecapacity"/>

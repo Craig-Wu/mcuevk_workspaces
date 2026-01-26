@@ -158,6 +158,7 @@ extern uint32_t SystemCoreClock;
 /*============================ IMPLEMENTATION ================================*/
 
 #if !__PERFC_CFG_DISABLE_DEFAULT_SYSTICK_PORTING__
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 bool perfc_port_init_system_timer(bool bTimerOccupied)
@@ -182,6 +183,7 @@ bool perfc_port_init_system_timer(bool bTimerOccupied)
     return true;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 uint32_t perfc_port_get_system_timer_freq(void)
@@ -189,6 +191,7 @@ uint32_t perfc_port_get_system_timer_freq(void)
     return SystemCoreClock;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 bool perfc_port_is_system_timer_ovf_pending(void)
@@ -196,6 +199,7 @@ bool perfc_port_is_system_timer_ovf_pending(void)
     return SCB->ICSR & SCB_ICSR_PENDSTSET_Msk;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 int64_t perfc_port_get_system_timer_top(void)
@@ -203,6 +207,7 @@ int64_t perfc_port_get_system_timer_top(void)
     return SysTick->LOAD;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 int64_t perfc_port_get_system_timer_elapsed(void)
@@ -210,6 +215,7 @@ int64_t perfc_port_get_system_timer_elapsed(void)
     return (int64_t)SysTick->LOAD - (uint32_t)SysTick->VAL;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 void perfc_port_clear_system_timer_ovf_pending(void)
@@ -217,6 +223,7 @@ void perfc_port_clear_system_timer_ovf_pending(void)
     SCB->ICSR      = SCB_ICSR_PENDSTCLR_Msk;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 void perfc_port_stop_system_timer_counting(void)
@@ -224,6 +231,7 @@ void perfc_port_stop_system_timer_counting(void)
     SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 void perfc_port_clear_system_timer_counter(void)
@@ -231,6 +239,7 @@ void perfc_port_clear_system_timer_counter(void)
     SysTick->VAL = 0UL;
 }
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 #if __IS_COMPILER_ARM_COMPILER_5__
@@ -249,6 +258,7 @@ uintptr_t __perfc_port_get_sp(void)
 }
 #endif
 
+PERF_CODE
 __WEAK
 __attribute__((noinline))
 #if __IS_COMPILER_ARM_COMPILER_5__
@@ -268,9 +278,10 @@ void __perfc_port_set_sp(uintptr_t nSP)
 }
 #endif
 
+PERF_CODE
 void SysTick_Handler(void)
 {
-    perfc_port_insert_to_system_timer_insert_ovf_handler();
+	perfc_port_insert_to_system_timer_insert_ovf_handler();
 }
 
 #endif

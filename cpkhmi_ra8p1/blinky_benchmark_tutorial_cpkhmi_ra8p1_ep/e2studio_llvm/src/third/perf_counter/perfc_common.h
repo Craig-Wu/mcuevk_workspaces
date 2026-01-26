@@ -30,6 +30,31 @@ extern "C" {
 #endif
 
 /*============================ MACROS ========================================*/
+#define __PERF_CODE_MRAM        0x00
+#define __PERF_CODE_SRAM        0x01
+#define __PERF_CODE_ITCM        0x02
+
+#define __PERF_DATA_SRAM        __PERF_CODE_SRAM
+#define __PERF_DATA_DTCM        0x03
+
+#if !defined(__PERF_CODE_AREA) || (__PERF_CODE_AREA == __PERF_CODE_ITCM)
+#define PERF_CODE               __attribute__((section(".itcm_code_from_flash")))
+#elif __PERF_CODE_AREA == __PERF_CODE_SRAM
+#define PERF_CODE               __attribute__((section(".ram_code_from_flash")))
+#else
+#define PERF_CODE
+#endif
+
+#if !defined(__PERF_DATA_AREA) || (__PERF_DATA_AREA == __PERF_DATA_DTCM)
+#define PERF_DATA_BSS           __attribute__((section(".dtcm_noinit")))
+#define PERF_DATA_DATA          __attribute__((section(".dtcm_from_flash")))
+#define PERF_DATA_ZERO          __attribute__((section(".dtcm")))
+#else
+#define PERF_DATA_BSS
+#define PERF_DATA_DATA
+#define PERF_DATA_ZERO
+#endif
+
 /*!
  * \addtogroup gHelper 4 Helper
  * @{
@@ -339,7 +364,7 @@ extern "C" {
                                     (__VA_ARGS__)
 
 #undef __perfc_with2
-#undef __perfc_perfc_with3
+#undef __perfc_with3
 #undef perfc_with
 
 #define __perfc_with1(__addr)                                                   \

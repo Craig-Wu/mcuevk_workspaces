@@ -27,9 +27,9 @@
 #include "perfc_common.h"
 
 #if __PERFC_USE_PMU_PORTING__
-#   include "perfc_port_pmu.h"
+#	include "perfc_port_pmu.h"
 #else
-#   include "perfc_port_default.h"
+#	include "perfc_port_default.h"
 #endif
 
 #if defined(__C_LANGUAGE_EXTENSIONS_PERFC_PT__) && __C_LANGUAGE_EXTENSIONS_PERFC_PT__
@@ -48,9 +48,9 @@ extern "C" {
  */
 #define __PERF_COUNTER_VER_MAJOR__          2
 #define __PERF_COUNTER_VER_MINOR__          5
-#define __PERF_COUNTER_VER_REVISE__         4
+#define __PERF_COUNTER_VER_REVISE__         5
 
-#define __PERF_COUNTER_VER_STR__            ""
+#define __PERF_COUNTER_VER_STR__            "dev"
 
 #define __PER_COUNTER_VER__    (__PERF_COUNTER_VER_MAJOR__ * 10000ul            \
                                +__PERF_COUNTER_VER_MINOR__ * 100ul              \
@@ -250,7 +250,7 @@ __asm(".global __ensure_systick_wrapper\n\t");
                     __perf_counter_printf__(                                    \
                         "------------------------------------\r\n");            \
                     __perf_counter_printf__(                                    \
-                        "%s 总周期数: %" PRIi64 " [%08" PRIX64 "]\r\n",\
+                        "%s 总周期数: %" PRIi64 " [%08" PRIX64 "]\r\n",          \
                          (const char *)(__STR), (int64_t)_, (int64_t)_);        \
                 } else {                                                        \
                     __VA_ARGS__                                                 \
@@ -295,6 +295,33 @@ __asm(".global __ensure_systick_wrapper\n\t");
         }
     \endcode
  */
+#if _LANGUAGE == 0x0804
+#define __cpu_usage__(__CNT, ...)                                               \
+    static int64_t  PERFC_SAFE_NAME(s_lTimestamp) = 0,                          \
+                    PERFC_SAFE_NAME(s_lTotal) = 0;                              \
+    static uint32_t PERFC_SAFE_NAME(s_wLoopCounter) = (__CNT);                  \
+    perfc_using(float __usage__ = 0, ({                                         \
+    if (0 == PERFC_SAFE_NAME(s_wLoopCounter)) {                                 \
+        __usage__ = (float)((double)PERFC_SAFE_NAME(s_lTotal)                   \
+                        / (double)(     get_system_ticks()                      \
+                                  -     PERFC_SAFE_NAME(s_lTimestamp)));        \
+        __usage__ *= 100.0f;                                                    \
+        PERFC_SAFE_NAME(s_lTimestamp) = 0;                                      \
+        PERFC_SAFE_NAME(s_lTotal) = 0;                                          \
+        if (__PLOOC_VA_NUM_ARGS(__VA_ARGS__) == 0) {                            \
+            __perf_counter_printf__("CPU 使用率 %3.2f%%\r\n", (double)__usage__);\
+        } else {                                                                \
+            __VA_ARGS__                                                         \
+        }                                                                       \
+    }                                                                           \
+    if (0 == PERFC_SAFE_NAME(s_lTimestamp)) {                                   \
+        PERFC_SAFE_NAME(s_lTimestamp) = get_system_ticks();                     \
+        PERFC_SAFE_NAME(s_wLoopCounter) = (__CNT);                              \
+    }                                                                           \
+    start_task_cycle_counter();}),                                              \
+    ({PERFC_SAFE_NAME(s_lTotal) += stop_task_cycle_counter();                   \
+    PERFC_SAFE_NAME(s_wLoopCounter)--;}))
+#else
 #define __cpu_usage__(__CNT, ...)                                               \
     static int64_t  PERFC_SAFE_NAME(s_lTimestamp) = 0,                          \
                     PERFC_SAFE_NAME(s_lTotal) = 0;                              \
@@ -320,6 +347,7 @@ __asm(".global __ensure_systick_wrapper\n\t");
     start_task_cycle_counter();}),                                              \
     ({PERFC_SAFE_NAME(s_lTotal) += stop_task_cycle_counter();                   \
     PERFC_SAFE_NAME(s_wLoopCounter)--;}))
+#endif
 
 #define __cpu_time__    __cpu_usage__
 
@@ -567,6 +595,7 @@ extern int64_t clock(void);
 /*!
  * \brief try to set a start pointer for the performance counter
  */
+CMSIS_DEPRECATED
 static inline
 void start_cycle_counter(void)
 {
@@ -578,6 +607,7 @@ void start_cycle_counter(void)
  * \note  you can have multiple stop_cycle_counter following one start point
  * \return int32_t the elapsed cycle count
  */
+CMSIS_DEPRECATED
 static inline
 int64_t stop_cycle_counter(void)
 {
@@ -607,11 +637,11 @@ int64_t perfc_convert_ticks_to_ms(int64_t lTick);
 /*!
  * \brief convert millisecond into ticks of the reference timer
  *
- * \param[in] wMS the target time in millisecond
+ * \param[in] nMS the target time in millisecond
  * \return int64_t the ticks
  */
 extern
-int64_t perfc_convert_ms_to_ticks(uint32_t wMS);
+int64_t perfc_convert_ms_to_ticks(int32_t nMS);
 
 /*!
  * \brief convert ticks of a reference timer to microsecond
@@ -915,6 +945,15 @@ extern void update_perf_counter(void);
  *       the Load register and Current Value register to zero.
  */
 extern void before_cycle_counter_reconfiguration(void);
+
+
+/*!
+ * \brief you can use this function to calibrate the system timestamp with a 
+ *        milisecond read from RTC.
+ * \note the maximum error could be around 1ms. 
+ */
+extern
+void perfc_system_ms_calibration(int64_t lRTCMS);
 
 /*! @} */
 
