@@ -13,6 +13,26 @@
 
 extern bsp_leds_t g_bsp_leds;
 
+static void pinToggleTest(int num)
+{
+    bsp_io_level_t pin_level;
+    int i;
+
+    for (i = 0; i < num; i++) {
+        R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_HIGH);
+        R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        while (pin_level != BSP_IO_LEVEL_HIGH) {
+            R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        }
+
+        R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_LOW);
+        R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        while (pin_level != BSP_IO_LEVEL_LOW) {
+            R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        }
+    }
+}
+
 /*******************************************************************************************************************//**
  * @brief  Blinky example application
  *
@@ -58,22 +78,13 @@ void hal_entry (void)
 
     /* Holds level to set for pins */
     bsp_io_level_t pin_level = BSP_IO_LEVEL_LOW;
+    R_BSP_PinAccessEnable();
 
     __cycleof__("PinToggle") {
-        for (int i = 0; i < 10000; i++) {
-            R_IOPORT_PinWrite(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, BSP_IO_LEVEL_HIGH);
-            R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
-            while (pin_level != BSP_IO_LEVEL_HIGH) {
-                R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
-            }
-
-            R_IOPORT_PinWrite(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, BSP_IO_LEVEL_LOW);
-            R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
-            while (pin_level != BSP_IO_LEVEL_LOW) {
-                R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
-            }
-        }
+        pinToggleTest(10000);
     }
+
+    R_BSP_PinAccessDisable();
 
     while (1)
     {

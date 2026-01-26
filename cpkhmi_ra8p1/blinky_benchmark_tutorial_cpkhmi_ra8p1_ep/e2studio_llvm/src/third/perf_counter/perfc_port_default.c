@@ -268,11 +268,6 @@ void __perfc_port_set_sp(uintptr_t nSP)
 }
 #endif
 
-void SysTick_Handler(void)
-{
-    perfc_port_insert_to_system_timer_insert_ovf_handler();
-}
-
 #endif
 
 

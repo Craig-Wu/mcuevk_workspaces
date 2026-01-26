@@ -29,8 +29,6 @@
 
 #if defined(__IS_COMPILER_GCC__)
 #   pragma GCC diagnostic ignored "-Wattributes"
-#	pragma GCC diagnostic ignored "-Wold-style-declaration"
-#	pragma GCC diagnostic ignored "-Wconversion"
 #endif
 
 #if defined(__clang__)
@@ -103,7 +101,7 @@ volatile static struct {
 
     /* millisecond */
     struct {
-        uint32_t    wUnit;
+        uint32_t wUnit;
     #if defined(__PERFC_USE_DEDICATED_MS_AND_US__)
         uint32_t    wResidule;
         struct {
@@ -113,6 +111,7 @@ volatile static struct {
         int64_t     lTimestampBase;
         int64_t     lOldTimestamp;
     #endif
+        int32_t nRTCCalib;
     } MS;
     
     /* Misc */
@@ -375,6 +374,13 @@ void before_cycle_counter_reconfiguration(void)
     }
 }
 
+void perfc_system_ms_calibration(int64_t lRTCMS)
+{
+    __PERFC_SAFE {
+        PERFC.MS.nRTCCalib += lRTCMS - get_system_ms();
+    }
+}
+
 __attribute__((constructor))
 void __perf_counter_init(void)
 {
@@ -431,7 +437,7 @@ void __perfc_delay_ms(uint32_t wMs, perfc_coroutine_t *ptCoroutine)
 void perfc_delay_ms(uint32_t wMs)
 #endif
 {
-    int64_t lTicks = perfc_convert_ms_to_ticks(wMs);
+    int64_t lTicks = perfc_convert_ms_to_ticks((int32_t)wMs);
     int32_t iCompensate = g_nOffset > PERF_CNT_DELAY_US_COMPENSATION
                         ? g_nOffset 
                         : PERF_CNT_DELAY_US_COMPENSATION;
@@ -482,6 +488,10 @@ int64_t get_system_ticks(void)
         }
     }
 
+    if (PERFC.MS.nRTCCalib) {
+        lTemp += perfc_convert_ms_to_ticks(PERFC.MS.nRTCCalib);
+    }
+
     return lTemp;
 }
 
@@ -520,9 +530,9 @@ int64_t perfc_convert_ticks_to_ms(int64_t lTick)
     return lTick / (int64_t)PERFC.MS.wUnit;
 }
 
-int64_t perfc_convert_ms_to_ticks(uint32_t wMS)
+int64_t perfc_convert_ms_to_ticks(int32_t nMS)
 {
-    return (int64_t)PERFC.MS.wUnit * (int64_t)wMS;
+    return (int64_t)PERFC.MS.wUnit * (int64_t)nMS;
 }
 
 
@@ -548,7 +558,7 @@ int64_t perfc_convert_us_to_ticks(uint32_t wUS)
     int64_t lResult;
     
     if (PERFC.bLessThan1MHz) {
-        lResult = INT_TO_Q16((int64_t)wUS) / PERFC.US.q16Unit;
+        lResult = INT_TO_Q16(wUS) / (uint32_t)PERFC.US.q16Unit;
         
     } else {
     #if defined(__PERFC_NO_Q16__)
@@ -577,6 +587,10 @@ int64_t get_system_ms(void)
             PERFC.MS.lOldTimestamp = lTemp;
         }
     }
+    
+    if (PERFC.MS.nRTCCalib) {
+        lTemp += PERFC.MS.nRTCCalib;
+    }
 
     return lTemp;
 }
@@ -596,6 +610,11 @@ int64_t get_system_us(void)
         } else {
             PERFC.US.lOldTimestamp = lTemp;
         }
+    }
+
+    if (PERFC.MS.nRTCCalib) {
+        lTemp += perfc_convert_ticks_to_us(
+                    perfc_convert_ms_to_ticks(PERFC.MS.nRTCCalib));
     }
 
     return lTemp;
@@ -1005,3 +1024,4 @@ int64_t __stop_task_cycle_counter(task_cycle_info_t *ptInfo)
 
     return lCycles;
 }
+

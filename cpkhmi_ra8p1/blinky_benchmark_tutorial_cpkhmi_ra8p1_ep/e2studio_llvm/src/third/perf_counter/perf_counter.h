@@ -27,9 +27,9 @@
 #include "perfc_common.h"
 
 #if __PERFC_USE_PMU_PORTING__
-#   include "perfc_port_pmu.h"
+#	include "perfc_port_pmu.h"
 #else
-#   include "perfc_port_default.h"
+#	include "perfc_port_default.h"
 #endif
 
 #if defined(__C_LANGUAGE_EXTENSIONS_PERFC_PT__) && __C_LANGUAGE_EXTENSIONS_PERFC_PT__
@@ -48,9 +48,9 @@ extern "C" {
  */
 #define __PERF_COUNTER_VER_MAJOR__          2
 #define __PERF_COUNTER_VER_MINOR__          5
-#define __PERF_COUNTER_VER_REVISE__         4
+#define __PERF_COUNTER_VER_REVISE__         5
 
-#define __PERF_COUNTER_VER_STR__            ""
+#define __PERF_COUNTER_VER_STR__            "dev"
 
 #define __PER_COUNTER_VER__    (__PERF_COUNTER_VER_MAJOR__ * 10000ul            \
                                +__PERF_COUNTER_VER_MINOR__ * 100ul              \
@@ -236,27 +236,6 @@ __asm(".global __ensure_systick_wrapper\n\t");
         }
     \endcode
  */
-#if _LANGUAGE == 0x0804
-#define __cycleof__(__STR, ...)                                                 \
-            perfc_using(int64_t _ = get_system_ticks(), __cycle_count__ = _,    \
-                {__perfc_sync_barrier__();},                                    \
-                {                                                               \
-                __perfc_sync_barrier__();                                       \
-                _ = get_system_ticks() - _ - g_nOffset;                         \
-                __cycle_count__ = _;                                            \
-                if (__PLOOC_VA_NUM_ARGS(__VA_ARGS__) == 0) {                    \
-                    __perf_counter_printf__("\r\n");                            \
-                    __perf_counter_printf__("-[时钟周期数报告]");                 \
-                    __perf_counter_printf__(                                    \
-                        "------------------------------------\r\n");            \
-                    __perf_counter_printf__(                                    \
-                        "%s 总周期数: %" PRIi64 " [%08" PRIX64 "]\r\n",\
-                         (const char *)(__STR), (int64_t)_, (int64_t)_);        \
-                } else {                                                        \
-                    __VA_ARGS__                                                 \
-                };                                                              \
-            })
-#else
 #define __cycleof__(__STR, ...)                                                 \
             perfc_using(int64_t _ = get_system_ticks(), __cycle_count__ = _,    \
                 {__perfc_sync_barrier__();},                                    \
@@ -276,7 +255,6 @@ __asm(".global __ensure_systick_wrapper\n\t");
                     __VA_ARGS__                                                 \
                 };                                                              \
             })
-#endif
 
 /*!
  * \brief measure the cpu usage for a given code segment and print out the
@@ -567,6 +545,7 @@ extern int64_t clock(void);
 /*!
  * \brief try to set a start pointer for the performance counter
  */
+CMSIS_DEPRECATED
 static inline
 void start_cycle_counter(void)
 {
@@ -578,6 +557,7 @@ void start_cycle_counter(void)
  * \note  you can have multiple stop_cycle_counter following one start point
  * \return int32_t the elapsed cycle count
  */
+CMSIS_DEPRECATED
 static inline
 int64_t stop_cycle_counter(void)
 {
@@ -607,11 +587,11 @@ int64_t perfc_convert_ticks_to_ms(int64_t lTick);
 /*!
  * \brief convert millisecond into ticks of the reference timer
  *
- * \param[in] wMS the target time in millisecond
+ * \param[in] nMS the target time in millisecond
  * \return int64_t the ticks
  */
 extern
-int64_t perfc_convert_ms_to_ticks(uint32_t wMS);
+int64_t perfc_convert_ms_to_ticks(int32_t nMS);
 
 /*!
  * \brief convert ticks of a reference timer to microsecond
@@ -915,6 +895,15 @@ extern void update_perf_counter(void);
  *       the Load register and Current Value register to zero.
  */
 extern void before_cycle_counter_reconfiguration(void);
+
+
+/*!
+ * \brief you can use this function to calibrate the system timestamp with a 
+ *        milisecond read from RTC.
+ * \note the maximum error could be around 1ms. 
+ */
+extern
+void perfc_system_ms_calibration(int64_t lRTCMS);
 
 /*! @} */
 
