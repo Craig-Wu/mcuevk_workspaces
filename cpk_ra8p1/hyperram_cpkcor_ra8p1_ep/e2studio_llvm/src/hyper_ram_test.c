@@ -28,7 +28,7 @@
 #define HYPER_RAM_RANGE_SIZE        (8388608)     //4 bytes alignment
 #define HYPER_RAM_START_ADDRESS     (0x78000000)
 #define PSRAM_SIZE                  ((uint32_t)0x2000000UL)     // 32MBytes
-#define PSRAM_DATA_WIDTH            32
+#define PSRAM_DATA_WIDTH            8
 #define PSRAM_BANK_ADDR             ((uint32_t)0x78000000UL)    // XSPI1 CS1
 
 
@@ -109,7 +109,7 @@ ospi_b_xspi_command_set_t g_hyper_ram_commands[] =
 {
  {
   .protocol = SPI_FLASH_PROTOCOL_8D_8D_8D,
-  .frame_format = OSPI_B_FRAME_FORMAT_XSPI_PROFILE_2_EXTENDED,
+  .frame_format = OSPI_B_FRAME_FORMAT_XSPI_PROFILE_2,
   .latency_mode = OSPI_B_LATENCY_MODE_FIXED,
   .command_bytes = OSPI_B_COMMAND_BYTES_1,
   .address_bytes = SPI_FLASH_ADDRESS_BYTES_4,
@@ -312,6 +312,9 @@ void hyper_ram_test(void)
      * Currently, the driver doesn't support setting command lengths in the startup mode. */
     R_OSPI_B_Open((spi_flash_ctrl_t *)&ram_ctrl, &ram_cfg);
     R_OSPI_B_SpiProtocolSet(&ram_ctrl, SPI_FLASH_PROTOCOL_8D_8D_8D);
+
+    R_XSPI1 -> LIOCFGCS_b[1].WRMSKMD  = 1;
+
     DWT_init();
     uint16_t cfg_reg = 0;
     hyper_ram_config_get(HYPER_RAM_CR_0_ADDRESS, &cfg_reg);
@@ -349,7 +352,7 @@ void hyper_ram_test(void)
     for (uint32_t i = 0; i < PSRAM_SIZE / 4; i++)
     {
 #if PSRAM_DATA_WIDTH == 8
-        *(__IO uint8_t *)(PSRAM_BANK_ADDR + i * 4) = (uint8_t)0x55;
+        *(__IO uint8_t *)(PSRAM_BANK_ADDR + i) = (uint8_t)0xA5;
 #elif PSRAM_DATA_WIDTH == 16
         *(__IO uint16_t *)(PSRAM_BANK_ADDR + i * 4) = (uint16_t)0x5555;
 #else
@@ -371,29 +374,34 @@ void hyper_ram_test(void)
 
 // read all the hyperRAM test
     test = (uint32_t *)((void *)HYPER_RAM_START_ADDRESS);
+#if PSRAM_DATA_WIDTH == 8
+    uint8_t data = 0;
+#else
     uint32_t data = 0;
+#endif
     DWT_clean_count();
     DWT_pre_count = DWT_get_count();
-
-    for (uint32_t i = 0; i < PSRAM_SIZE / 4; i++)
+    static uint32_t j = 0;
+    for (j = 0; j < PSRAM_SIZE / 4; j++)
     {
 #if PSRAM_DATA_WIDTH == 8
-        data = *(__IO uint8_t *)(PSRAM_BANK_ADDR + i * 4);
-        if (data != 0x55)
+        data = *(__IO uint8_t *)(PSRAM_BANK_ADDR + j);
+        if (data != 0xA5)
         {
-            LOG_E("PSRAM test failed!");
+            //LOG_E("PSRAM test failed!");
+            __BKPT(2);
             break;
         }
 #elif PSRAM_DATA_WIDTH == 16
-        data = *(__IO uint16_t *)(PSRAM_BANK_ADDR + i * 4);
+        data = *(__IO uint16_t *)(PSRAM_BANK_ADDR + j * 4);
         if (data != 0x5555)
         {
             LOG_E("PSRAM test failed!");
             break;
         }
 #else
-        data = *(__IO uint32_t *)(PSRAM_BANK_ADDR + i * 4);
-        if (data != (i ^ 0x5A5AA5A5))
+        data = *(__IO uint32_t *)(PSRAM_BANK_ADDR + j * 4);
+        if (data != (j ^ 0x5A5AA5A5))
         //if (data != (0x5A5AA5A5))
         {
             __BKPT(2);
