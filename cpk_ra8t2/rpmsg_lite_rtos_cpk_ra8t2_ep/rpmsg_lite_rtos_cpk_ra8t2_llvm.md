@@ -19,7 +19,7 @@
 ![图1](images/图1.png)
 
 # 5. FSP 配置
-    5.1	e2 studio使用 solution 方式创建双核 RTOS blinky 工程，选择 CPKNET-RA8T2 板级
+    5.1	e2studio 使用 solution 方式创建双核 RTOS blinky 工程，选择 CPKNET-RA8T2 板级
 ![图2](images/图2.png)
 ![图3](images/图3.png)
      
@@ -35,7 +35,7 @@
     5.5 其他 BSP 的配置，包括 RTOS 设置，堆栈大小等参考示例代码
 
 # 6. 测试
-    6.1 导入示例工程代码到 e2 studio，编译 solution 工程，CPU0 工程和 CPU1 工程依次编译成功
+    6.1 导入示例工程代码到 e2studio，编译 solution 工程，CPU0 工程和 CPU1 工程依次编译成功
 ![图11](images/图11.png)
 
     6.2 Launch Group 下，选择对应的工程文件
@@ -49,5 +49,5 @@
     6.5 调试 CPU1 工程，点击 Resume，此时 CPU1 打印，表示 CPU1 等待与 CPU0 link up 连接
 ![图9](images/图9.png)
 
-    6.6 继续调试 CPU0 工程，点击 Resume，此时 CPU0 和 CPU1 正常运行，功能就是 CPU0 首先给 CPU1 发送数据 0， CPU1 收到数据累加 1 回传给 CPU0， CPU0 收到数据后继续累加 1 回传，如此 ping-pong 实验直到数据超多 100
+    6.6 继续调试 CPU0 工程，点击 Resume，此时 CPU0 和 CPU1 正常运行，功能就是 CPU0 首先给 CPU1 发送数据 0， CPU1 收到数据累加 1 回传给 CPU0， CPU0 收到数据后继续累加 1 回传，如此 ping-pong 实验直到数据超多100
 ![图10](images/图10.jpg)
