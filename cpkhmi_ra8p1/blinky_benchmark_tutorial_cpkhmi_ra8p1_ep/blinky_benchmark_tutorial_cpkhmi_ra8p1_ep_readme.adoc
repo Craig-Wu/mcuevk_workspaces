@@ -225,3 +225,35 @@ image::Snipaste_2026-01-21_14-27-07.png[role="thumb"]
 --
 image::Snipaste_2026-01-21_14-15-46.png[role="thumb"]
 --
+
+== 设置代码和变量的位置
+对于需要高效运行的代码，例如各种算法，可以将算法函数放进 ITCM，变量放进 DTCM 来获得更快速度。在示例工程中，可以添加以下两个预定义宏：
+
+* `__DATA_AREA=DATA_DTCM`: 把数据放在 DTCM。可以根据变量类型使用宏 `DATA_AREA_BSS` 或 `DATA_AREA_DATA` 或 `DATA_AREA_ZERO` 来修饰变量，让变量放在 DTCM 中
+* `__CODE_AREA=CODE_ITCM`: 把代码放在 ITCM。可以用 `CODE_AREA` 来修饰函数定义，这样，如果开启了这个宏，那么这段函数会被放在 ITCM 里。
+
+之后，可以对指定的函数进行修饰如下，这样，被 `CODE_AREA` 修饰的函数将存储在 ITCM 中
+
+[source,c,subs="verbatim,attributes"]
+----
+CODE_AREA
+static void pinToggleTest(int num)
+{
+    bsp_io_level_t pin_level;
+    int i;
+
+    for (i = 0; i < num; i++) {
+        R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_HIGH);
+        R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        while (pin_level != BSP_IO_LEVEL_HIGH) {
+            R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        }
+
+        R_IOPORT_PinWrite(g_ioport.p_ctrl, USER_LED, BSP_IO_LEVEL_LOW);
+        R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        while (pin_level != BSP_IO_LEVEL_LOW) {
+            R_IOPORT_PinRead(g_ioport.p_ctrl, USER_LED, &pin_level);
+        }
+    }
+}
+----
