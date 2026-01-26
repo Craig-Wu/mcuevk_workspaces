@@ -226,6 +226,11 @@ image::Snipaste_2026-01-21_14-27-07.png[role="thumb"]
 image::Snipaste_2026-01-21_14-15-46.png[role="thumb"]
 --
 
+=== 统计 Cache Miss-Rate
+使用 PMU 时，还可以统计 ICache 和 DCache 的 Miss-Rate。只需要将 `+__cycleof__+` 修改为 `+__cpu_perf__+`。下图为使用 `+__cpu_perf__+` 的运行结果
+
+image::Snipaste_2026-01-26_17-29-08.png[role="thumb"]
+
 == 设置代码和变量的位置
 对于需要高效运行的代码，例如各种算法，可以将算法函数放进 ITCM，变量放进 DTCM 来获得更快速度。在示例工程中，可以添加以下两个预定义宏：
 
