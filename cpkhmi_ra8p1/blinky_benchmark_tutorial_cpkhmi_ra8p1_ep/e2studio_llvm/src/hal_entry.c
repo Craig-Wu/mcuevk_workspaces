@@ -59,8 +59,20 @@ void hal_entry (void)
     /* Holds level to set for pins */
     bsp_io_level_t pin_level = BSP_IO_LEVEL_LOW;
 
-    __cycleof__("Fixd Cycle") {
-        while (R_BSP_PinRead(BSP_IO_PORT_01_PIN_10) != pin_level) {}
+    __cycleof__("PinToggle") {
+        for (int i = 0; i < 10000; i++) {
+            R_IOPORT_PinWrite(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, BSP_IO_LEVEL_HIGH);
+            R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
+            while (pin_level != BSP_IO_LEVEL_HIGH) {
+                R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
+            }
+
+            R_IOPORT_PinWrite(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, BSP_IO_LEVEL_LOW);
+            R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
+            while (pin_level != BSP_IO_LEVEL_LOW) {
+                R_IOPORT_PinRead(g_ioport.p_ctrl, BSP_IO_PORT_12_PIN_15, &pin_level);
+            }
+        }
     }
 
     while (1)
@@ -86,10 +98,6 @@ void hal_entry (void)
         /* Update LED that is at the index of this core. */
         R_BSP_PinWrite((bsp_io_port_pin_t) leds.p_leds[_RA_CORE], pin_level);
 #endif
-
-        __cycleof__("Wait Pin Toggle") {
-            while (R_BSP_PinRead(BSP_IO_PORT_01_PIN_10) != pin_level) {}
-        }
 
         /* Protect PFS registers */
         R_BSP_PinAccessDisable();
