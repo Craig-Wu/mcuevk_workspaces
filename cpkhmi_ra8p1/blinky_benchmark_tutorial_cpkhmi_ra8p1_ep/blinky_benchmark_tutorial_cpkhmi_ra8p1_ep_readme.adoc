@@ -1,5 +1,8 @@
 :imagesdir: images
 
+:sectnums:
+:sectnumlevels: 2
+
 = blinky_benchmark_tutorial 工程使用说明
 :toc:
 :toc-title: 目录
@@ -8,7 +11,10 @@
 此样例工程详细说明如何从新建工程到实现代码运行时间测量。
 
 == 新建工程
-新建工程可以参考 e^2^studio 的文档 `Starting Development` -> `Tutorial: Your First RA MCU Project - Blinky` 章节。e^2^studio 的文档可在如下位置找到：
+
+您也可以参考CPKHMI-RA8P1的使用手册，link:../docs/02_unbox.{manual_doc_ext}[02. CPKHMI-RA8P1开箱]章节的内容新建Blinky工程。
+
+可以参考 e^2^studio 的文档 `Starting Development` -> `Tutorial: Your First RA MCU Project - Blinky` 章节。e^2^studio 的文档可在如下位置找到：
 
 * e^2^studio 安装目录下的 `fsp_documentation` 文件夹内
 * 从 https://github.com/renesas/fsp/releases[FSP Release] 页面下载

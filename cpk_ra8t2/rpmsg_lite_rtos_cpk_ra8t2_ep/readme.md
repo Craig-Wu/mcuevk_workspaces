@@ -9,13 +9,13 @@ CPKEXP-RA8T2
 
 # 硬件要求
 
-- 1 块 Renesas RA8T2 开发板：CPKEXP -RA8T2
+- 1 块 Renesas RA8T2 开发板：CPK-RA8T2
 - 1 根 USB Type A->Type C 或 Type-C->Type-C 线（支持 Type-C 2.0 即可）
 - 1 根 USB 转 UART 数据线
 
 # 硬件连接
 
-- 通过 USB Type-C 线连接调试电脑和 CPKEXP -RA8T2 板上的 USB 调试端口
+- 通过 USB Type-C 线连接调试电脑和 CPK-RA8T2 板上的 USB 调试端口
 - USB 转 UART 数据线连接底板的的 J604 中的 P602/RXD， P603/TXD，USB 口连接电脑
 ![图1](images/图1.png)
 

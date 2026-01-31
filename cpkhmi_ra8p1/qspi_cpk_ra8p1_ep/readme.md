@@ -16,7 +16,7 @@
 
 ### 硬件连接：
 
-- 通过 USB Type-C 线连接 CPKCOR-RA8D1B 板上的 USB 调试端口和调试用主机。
+- 通过 USB Type-C 线连接 CPKHMI-RA8P1 板上的 USB 调试端口和调试用主机。
 
 ### 硬件设置注意事项：
 
