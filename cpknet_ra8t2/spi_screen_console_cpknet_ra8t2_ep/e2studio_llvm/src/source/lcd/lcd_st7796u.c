@@ -699,7 +699,7 @@ uint32_t LCD_PortInit(LCD_Device *device)
     pin_cfg_data[4].pin_cfg = (uint32_t)IOPORT_CFG_PERIPHERAL_PIN | (uint32_t)IOPORT_PERIPHERAL_SCI0_2_4_6_8 | (uint32_t)IOPORT_CFG_DRIVE_HIGH;
     /* SCI4 Simple SPI: MISO */
     pin_cfg_data[5].pin = ST7796U_PIN_SPI_MISO;
-    pin_cfg_data[5].pin_cfg = (uint32_t)IOPORT_CFG_PERIPHERAL_PIN | (uint32_t)IOPORT_PERIPHERAL_SCI0_2_4_6_8 | (uint32_t)IOPORT_CFG_DRIVE_HIGH;
+    pin_cfg_data[5].pin_cfg = (uint32_t)IOPORT_CFG_NMOS_ENABLE;
     pin_cfg.number_of_pins = 6;
     pin_cfg.p_pin_cfg_data = (ioport_pin_cfg_t const *)&pin_cfg_data;
     pin_cfg.p_extend = NULL;
