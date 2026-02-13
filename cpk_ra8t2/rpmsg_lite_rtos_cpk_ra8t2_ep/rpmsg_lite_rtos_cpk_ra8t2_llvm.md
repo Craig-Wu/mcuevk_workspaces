@@ -4,22 +4,22 @@
 
 # 2. 支持的开发板/演示板：
 
-- CPKEXP-RA8T2
+- CPK-RA8T2
 
 # 3. 硬件要求
 
-- 1 块 Renesas RA8T2 开发板：CPKEXP -RA8T2
+- 1 块 Renesas RA8T2 开发板：CPK-RA8T2
 - 1 根 USB Type A->Type C 或 Type-C->Type-C 线（支持 Type-C 2.0 即可）
 - 1 根 USB 转 UART 数据线
 
 # 4. 硬件连接
   
-- 通过 USB Type-C 线连接调试电脑和 CPKEXP -RA8T2 板上的 USB 调试端口
+- 通过 USB Type-C 线连接调试电脑和 CPK-RA8T2 板上的 USB 调试端口
 - USB 转 UART 数据线连接底板的的 J604 中的 P602/RXD， P603/TXD，USB 口连接电脑
 ![图1](images/图1.png)
 
 # 5. FSP 配置
-    5.1	e2studio 使用 solution 方式创建双核 RTOS blinky 工程，选择 CPKNET-RA8T2 板级
+    5.1	e2studio 使用 solution 方式创建双核 RTOS blinky 工程，选择 CPK-RA8T2 板级支持包
 ![图2](images/图2.png)
 ![图3](images/图3.png)
      
