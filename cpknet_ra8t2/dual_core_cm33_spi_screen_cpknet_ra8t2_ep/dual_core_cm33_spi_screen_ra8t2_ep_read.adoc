@@ -1,8 +1,8 @@
 :imagesdir: images
 
-= RA8P1 将原运行在 CPU0 上的代码迁移至 CPU1
+= RA8T2 将原运行在 CPU0 上的代码迁移至 CPU1
 
-RA8P1 包含两个 CPU 核心：CPU0(Cortex-M85 1GHz) 和 CPU1(Cortex-M33 250MHz)。在应用中可以将部分任务如 UI 渲染交由 CPU1 运行以让 CPU0 专注于计算任务。本示例即演示如何在已有一个单核 CPU0 工程的情况下将代码迁移到 CPU1
+RA8T2 包含两个 CPU 核心：CPU0(Cortex-M85 1GHz) 和 CPU1(Cortex-M33 250MHz)。在应用中可以将部分任务如 UI 渲染交由 CPU1 运行以让 CPU0 专注于计算任务。本示例即演示如何在已有一个单核 CPU0 工程的情况下将代码迁移到 CPU1
 
 == 新建 FSP Solution
 
