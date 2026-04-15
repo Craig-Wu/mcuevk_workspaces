@@ -2,31 +2,38 @@
 
 == CPKCOR-RA8P1核心板样例程序
 
-本目录下除了readme文件不放置其他文件。
-
 cpkcor_ra8p1 目录下存放CPKCOR-RA8P1核心板的样例程序, 不需要配合任何扩展板。
 请按规则新建样例代码目录。
 
 在样例程序的readme中也要注明对应使用的CPK核心板型号。
 
-[format=csv, cols="3,8,6,8,15,10,15", options="header"]
+RA8P1 MCU有两种规格的产品，对应两个最大运行速度。在芯片手册的Product List表格中，归纳为A/B两组。
+
+[%autowidth,format=csv, options="header"]
 |====
-include::.\cpkcor_ra8p1_ep_list.csv[]
+include::.\ra8p1_speed.csv[]
 |====
+
+#注意：最大运行速度是指某个型号芯片，在支持的温度范围内的速度限制，如R7KA8P1KFDCAC在Tj= -40°C ~ 105°C整个温度范围内，CM85最高只能运行到800MHz，即室温条件下，也只能运行到800MHz。#
+
+CPKHMI-RA8P1核心板上实装的MCU为最高1GHz/250MHz/500MHz的RA8P1双核MCU R7KA8P1KFLCAC。BSP设定也是全部按照最大值进行设定，以获得最高的CPU和NPU性能。
+
+如果您编写的样例程序针对Tj= -40°C ~ 105°C 的目标应用，请对应设定各项时钟的运行速度，并在readme文件中说明。
 
 
 === 样例程序基本框架
 
-. 样例程序的通用考虑
+.. 样例程序的通用考虑
     .. 使用CPK-RA8x1相同的目录结构
-    .. 基于需求文件里注明的FSP版本, 使用CPK-RA8x2核心板配套的BSP (支持FSP 6.2.0或更高版本)
+    .. 基于需求文件里注明的FSP版本, 使用本目录下的CPKCOR-RA8P1核心板配套的BSP (支持FSP 6.2.0或更高版本)
     .. 基于BSP修改的管脚配置，请填入Excel表格，方便客户查询和参考
-    .. 使用LLVM编译器，如果可能，再加入AC6编译器 （LLVM 18.1.3， AC6.23）
+    .. 使用LLVM编译器，如果可能，再加入AC6编译器 （AC6.23或AC6.24）
     .. 提供基于RTT-Viewer和UART console（SCI9_B）的终端控制功能，可以使用编译选项选择使用哪个
         ... 这是为了方便没有JLink的客户和适应最终客户板子上只有串口的情形
+        
     .. 建议加入perf_counter（由ARM提供）作为性能评测工具。
         ... perf_counter支持使用PMU和Tick时钟 （Release版本可以用PMU；调试时某些调试动作可能会影响PMU计数值，可以使用Tick时钟）
-        ... 已经在CPK-RA8x1上porting好了perf-counter，支持LLVM编译器和AC6编译器
+        ... 已经在CPK上porting好了perf-counter，支持LLVM编译器和AC6编译器
         ... perf-counter自带CoreMark，可以简单验证项目配置的的优化程度（编译选项、段地址设定等）
 
 
@@ -50,11 +57,9 @@ include::.\cpkcor_ra8p1_ep_list.csv[]
     .. BSP管脚配置的Excel文件，重要的设置请在项目文档中特别注明（如某些端口需要开漏输出，需要设置片内上拉，驱动能力有特别要求，等等）- 即让用户知道为什么这么配置。Excel文件放在项目根目录下。
     .. Release配置下编译的HEX文件（性能最优），可以直接烧录运行。放在项目根目录下
 
+#以上1,2,3点要求的console和perf-counter等内容，已经在CPKHMI-RA8P1和CPKNET-RA8T2样例程序中有具体实现和教程 （blinky_benchmark_tutorial_xxx，已发布在Github和Gitee） ，可供参考。后续也会添加CPKCOR板的教程#
 
 === 所有正式发布的样例程序基于MP版本的CPK硬件，CPK核心板上的RA8P1/T2 MCU为ES3版本或更新的版本
 
     * 如果必要，可以使用早期版本的CPK进行部分开发，但最终验证请使用MP版本的CPK。
     * 量产MP版本的核心板上有激光打印的核心板型号
-        ** AE手上有几个未打印型号的MP版CPKNET-RA8T2和CPKHMI-RA8P1，板子背面J201通孔附近有飞线。
-
-Ver. 20251124

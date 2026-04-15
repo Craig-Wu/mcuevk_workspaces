@@ -6,13 +6,11 @@
 
 ### 支持的开发板 / 演示板：
 
-- CPKNET-RA8T2 with CPKEXP-ECSMCB
+- CPK-RA8T2 with 
   
 ### 硬件要求：
 
-- 1 块 Renesas RA8 开发板：CPKNET-RA8T2
-
-- 相应的底板：CPKEXP-ECSMCB
+- 1 块 Renesas RA8 开发板套件：CPK-RA8T2（CPKNET-RA8T2 + CPKEXP-ECSMCB）
 
 - 1 块屏幕，分辨率 222x480，型号是H0233S001 V1，驱动芯片是ST7796U
 
@@ -20,7 +18,7 @@
 
 ### 硬件连接：
 
-- 调试主机通过 USB Type-C 线连接 CPKNET-RA8T2 板上的 USB 调试端口JDBG。
+- 调试主机通过 USB Type-C 线连接 CPKNET-RA8T2 核心板上的 USB 调试端口JDBG。
 
 ### 硬件设置注意事项：
 
@@ -41,4 +39,4 @@
 
 **详细的样例程序配置和使用，请参考下面的说明文件。**
 
-[spi_screen_console工程使用说明](spi_screen_console_cpknet_ra8t2_ep_readme.adoc) 
+[spi_screen_console工程使用说明](spi_screen_console_cpk_ra8t2_ep_readme.adoc) 
