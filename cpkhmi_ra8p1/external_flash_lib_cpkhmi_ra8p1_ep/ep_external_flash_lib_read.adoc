@@ -1,0 +1,73 @@
+:imagesdir: images
+
+= 使用外部 Flash 烧录库
+
+外部 Flash 烧录库可以给 RFP（Renesas Flash Programer）使用，让 RFP 可以烧录用户其它 RA 开发板的板上 SPI Flash
+
+== 获取示例工程
+
+示例工程可在 https://www.renesas.com/en/products/ra8p1?tab=software-tools&sampleCode=true 中下载，其中的 `RA Familly External Flash Library for tools`。此示例工程用于 EK-RA8P1 开发板，下面以 CPKHMI-RA8P1 开发板为例，介绍示例工程的使用以及如何添加至 RFP 工具中。
+
+将解压后的文件夹重命名为 `ep_external_flash_lib` 在 e^2^ studio 中导入后，其结构如下
+
+[.text-center]
+--
+image::Snipaste_2026-04-21_11-51-20.png[role="thumb"]
+--
+
+其中主要关注 LoaderInfo.c 和 LoaderFunc.c 这两个文件。示例中还有 MX25LW51245G.h 记录了 EK-RA8P1 上外部 SPI Flash 的命令和设备 ID 等信息，根据实际进行修改即可。
+
+== LoaderInfo.c
+
+该文件内的 `g_loader_info` 结构体记录外部 Flash 的映射地址、大小等信息，需要根据使用的 Flash 型号和实际连接进行修改。以 CPKHMI-RA8P1 为例，板上的 Flash 型号为 W25Q256，连接在 OSPI CS0 上，那么以下字段必须修改
+
+* devAdr：改为 0x80000000，这是 OSPI CS0 的映射地址
+* extFlashSize：改为 0x02000000，W25Q256 是 32MByte 大小
+* pageSize：W25Q256 的页大小为 256 字节
+* sectors：改为 `{ { 0x10000, 512 }, { 0xFFFFFFFF, 0xFFFFFFFF } }`，W25Q256 有 512 个 64K 大小的块
+
+此外 `timeoutProg` 和 `timeoutErase` 可以根据实际情况适当加长，`extFlashDevName` 只是给 RFP 显示使用，不影响实际读写。
+
+== LoaderFunc.c
+
+以下是对外部 Flash 进行读写所使用的入口函数，在读写 Flash 时会调用以下函数
+
+* R_Flash_Initialize：初始化外部 Flash
+* R_Flash_EraseSector：擦除扇区
+* R_Flash_EraseChip：擦除全片
+* R_Flash_ProgramData：写入数据
+* R_Flash_ReadData：读取数据
+
+注意这些入口函数的函数体大小有严格限制，建议像例程一样仅把这些入口函数当作一个跳转入口，而不要在入口函数中编写复杂逻辑
+
+== 使用
+
+工程编译后，在 Build 文件夹下有一个以工程名命名的 ep_external_flash_lib.hex 文件，需要将它复制到 RFP 安装目录下的 `Resources/ExternalMemory/RA` 中。注意，RFP 版本要大于等于 V3.22
+
+[.text-center]
+--
+image::Snipaste_2026-04-21_14-10-54.png[role="thumb"]
+--
+
+打开 RFP，新建工程后，切换到 External Memory Settings 中勾选 Enable external memory settings，在下方的 Target select 中选择刚刚复制到安装目录的 ep_external_flash_lib
+
+[.text-center]
+--
+image::Snipaste_2026-04-21_14-12-42.png[role="thumb"]
+--
+
+然后可以看到右侧有外部 Flash 的信息，对应于 `g_loader_info` 中的信息
+
+选择用于烧录的 bin 文件
+
+[.text-center]
+--
+image::Snipaste_2026-04-21_14-30-50.png[role="thumb"]
+--
+
+选择一个同样初始化了外部 Flash 的工程，在 e^2^ studio 调试界面查看内存
+
+[.text-center]
+--
+image::Snipaste_2026-04-21_14-42-53.png[role="thumb"]
+--
