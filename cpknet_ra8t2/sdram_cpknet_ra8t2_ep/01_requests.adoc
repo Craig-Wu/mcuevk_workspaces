@@ -5,13 +5,13 @@
 Priority: 01
 
 * Hardware: CPKNET-RA8T2 core board only
-* FSP: 6.2.0
+* FSP: 6.3.0
 * BSP: CPKNET-RA8T2 (no additional setting)
 * BSP Excel Sheet: default (no additional setting)
 
 This sample code should achieve: 
 
-. Function: AM initialization
+. Function: SDRAM initialization
 . Benchmark: Show SDRAM data throughput in different configuration
 
 ***
@@ -20,16 +20,11 @@ Target(s): Initialize and confirm SDRAM working +
 Result(s): Show each function's execution result: OK / NG
 ----
 1. 32bit SDRAM initialization
-2. Full memory Write, then full memory read and compare
-    Write: CPU -> Non-Cached SDRAM  
-    Read: Non-Cached SDRAM -> CPU
-    32bit access, patten 
-        0x5A5A5A5A
-        0xA5A5A5A5
-        0x5A5A5A5A
-        0xA5A5A5A5
-         ...
-        (repeat)
+2. Full memory Write, then full memory read and compare, 32bit access
+    Random generate 64K bytes data in DTCM 
+    Write: CPU read from DTCM -> CPU Write to Non-Cached SDRAM  
+    Read: CPU read from Non-Cached SDRAM -> Compare with Data in DTCM
+    (repeat until full memory verified)
 ----
 
 ***
