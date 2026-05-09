@@ -21,7 +21,7 @@ Result(s): Show each function's execution result: OK / NG
 ----
 1. 32bit SDRAM initialization
 2. Full memory Write, then full memory read and compare, 32bit access
-    Random generate 64K bytes data in DTCM 
+    Random generate 64K bytes data in DTCM, with 
     Write: CPU read from DTCM -> CPU Write to Non-Cached SDRAM  
     Read: CPU read from Non-Cached SDRAM -> Compare with Data in DTCM
     (repeat until full memory verified)
