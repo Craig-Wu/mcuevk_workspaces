@@ -46,7 +46,7 @@ uint32_t LCD_PortFillRectangle(LCD_Device *device, uint16_t x, uint16_t y, uint1
 	uint16_t i, j;
 
 	glcdc_instance_ctrl_t *pctrl = (glcdc_instance_ctrl_t *)TFP410_GLCDC_INSTANCE.p_ctrl;
-	uint32_t *p32_bg = pctrl->p_cfg->input[0].p_base;
+	uint8_t *p_bg = (uint8_t *)pctrl->p_cfg->input[0].p_base;
 
 	if ((x >= device->length) || (y >= device->width)) {
 		return FSP_ERR_ASSERTION;
@@ -59,13 +59,23 @@ uint32_t LCD_PortFillRectangle(LCD_Device *device, uint16_t x, uint16_t y, uint1
 		width = device->width - y;
 	}
 
-	p32_bg = &p32_bg[y * device->length];
+#if DISPLAY_BITS_PER_PIXEL_INPUT0 == 16
 	for (i = 0; i < width; i++) {
+		uint16_t *p16_row = (uint16_t *)&p_bg[(y + i) * DISPLAY_BUFFER_STRIDE_BYTES_INPUT0];
+
 		for (j = x; j < (x + length); j++) {
-			p32_bg[j] = color;
+			p16_row[j] = (uint16_t)color;
 		}
-		p32_bg = &p32_bg[device->length];
 	}
+#elif DISPLAY_BITS_PER_PIXEL_INPUT0 == 32
+	for (i = 0; i < width; i++) {
+		uint32_t *p32_row = (uint32_t *)&p_bg[(y + i) * DISPLAY_BUFFER_STRIDE_BYTES_INPUT0];
+
+		for (j = x; j < (x + length); j++) {
+			p32_row[j] = color;
+		}
+	}
+#endif
 
 	return FSP_SUCCESS;
 }
@@ -98,7 +108,7 @@ uint32_t LCD_PortInit(LCD_Device *device)
     R_GLCDC_Open(TFP410_GLCDC_INSTANCE.p_ctrl, TFP410_GLCDC_INSTANCE.p_cfg);
     R_GLCDC_Start(TFP410_GLCDC_INSTANCE.p_ctrl);
 
-    device->color_format = COLOR_FORMAT_RGB888;
+    device->color_format = COLOR_FORMAT_RGB565;
     device->length = DISPLAY_HSIZE_INPUT0;
     device->length_dummy = 0;
     device->orientation = SCREEN_ORIENTATION_HORIZONTAL;

@@ -2,18 +2,11 @@
 
 == 运行结果
 
-在 e^2^ studio 中导入工程，生成并编译，或直接烧录本目录下的 `lcd_hdmi.hex`。烧录后可看到如下结果。当前设置的输出为 1280x720 @45Hz，少数显示器可能不支持该模式，此时需要更换显示器
+在 e^2^ studio 中导入工程，生成并编译，或直接烧录本目录下的 `lcd_hdmi.hex`。烧录后可看到如下结果。当前设置的输出为 1280x720 @50Hz，少数显示器可能不支持该模式，此时需要更换显示器
 
 [.text-center]
 --
-image::IMG_20260625_102111.jpg[role="thumb"]
---
-
-打开显示器的设置，可以看到输出的分辨率和帧率信息
-
-[.text-center]
---
-image::IMG_20260625_102116.jpg[role="thumb"]
+image::IMG_20260717_142719.jpg[role="thumb"]
 --
 
 == FSP Stacks
@@ -24,7 +17,7 @@ TFP410 是 RGB 转 HDMI 芯片，使用 IIC 接口进行配置。因此在 Stack
 
 [.text-center]
 --
-image::Snipaste_2026-06-25_11-25-57.png[role="thumb"]
+image::Snipaste_2026-07-17_15-16-53.png[role="thumb"]
 --
 
 * r_iic_master
@@ -89,3 +82,56 @@ LCD_PortInit(&s_lcd);
 ----
 TestLCD(&s_lcd);
 ----
+
+== 修改到 60Hz 刷新率
+
+GLCDC 在 RA8P1 的手册中写明支持的最高像素时钟为 54MHz，但实测可以运行到更高的频率，如 60MHz。在这个像素时钟下，可以调整参数让刷新率达到 60Hz
+
+. 修改时钟。
+
+在 configuration.xml 的 Clocks 界面将时钟做如下修改
+
+* PLL2 Mul 改为 x300.00
+* PLL2P Div 改为 /4
+* PLL2Q Div 改为 /9
+* PLL2R Div 改为 /5
+* EBCLK Src 改为 BCLKA(Asynchronous)
+* LCDCLK Src 改为 PLL2R
+* LCDCLK Div 改为 /2
+* USBCLK Src 改为 PLL2R
+* USBCLK Div 改为 /10
+* USB60CLK Src 改为 PLL2R
+* USB60CLK Div 改为 /8
+
+[.text-center]
+--
+image::Snipaste_2026-07-17_14-15-25.png[role="thumb"]
+image::Snipaste_2026-07-17_14-15-54.png[role="thumb"]
+--
+
+[start=2]
+. 修改 r_glcdc stack
+
+该 stack 中如下参数需要修改
+
+* Output->Timing->Horizontal total cycles 改为 1355
+* Output->Timing->Horizontal back porch cycles 改为 55
+* Output->Timing->Vertical total lines 改为 738
+* Output->Timing->Vertical back porch lines 改为 10
+* TCON->Panel clock division radio 改为 1/1
+
+[.text-center]
+--
+image::Snipaste_2026-07-17_14-43-15.png[role="thumb"]
+image::Snipaste_2026-07-17_14-18-31.png[role="thumb"]
+--
+
+[start=3]
+. 重新生成并编译工程
+
+烧录后，可以看到显示器显示的刷新率为 60Hz
+
+[.text-center]
+--
+image::IMG_20260717_142023.jpg[role="thumb"]
+--

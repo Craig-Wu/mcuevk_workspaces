@@ -10,7 +10,7 @@
     <option key="#RTOS#" value="_none"/>
     <option key="#pinconfiguration#" value="R7KA8P1KFLCAC.pincfg"/>
     <option key="#FSPVersion#" value="6.4.0"/>
-    <option key="#ConfigurationFragments#" value="Renessa##BSP##Board##ra8p1_cpkcor##"/>
+    <option key="#ConfigurationFragments#" value="Renesas##BSP##Board##ra8p1_cpkcor##"/>
     <option key="#SELECTED_TOOLCHAIN#" value="clang_arm"/>
     <option key="#ToolchainVersion#" value="21.1.1"/>
   </generalSettings>
@@ -318,9 +318,9 @@
     <node id="board.clock.pll1r.display" option="board.clock.pll1r.display.value"/>
     <node id="board.clock.pll2.source" option="board.clock.pll2.source.xtal"/>
     <node id="board.clock.pll2.div" option="board.clock.pll2.div.3"/>
-    <node id="board.clock.pll2.mul" option="board.clock.pll2.mul.300_00"/>
+    <node id="board.clock.pll2.mul" option="board.clock.pll2.mul.270_00"/>
     <node id="board.clock.pll2.display" option="board.clock.pll2.display.value"/>
-    <node id="board.clock.pll2p.div" option="board.clock.pll2p.div.4"/>
+    <node id="board.clock.pll2p.div" option="board.clock.pll2p.div.8"/>
     <node id="board.clock.pll2p.display" option="board.clock.pll2p.display.value"/>
     <node id="board.clock.pll2q.div" option="board.clock.pll2q.div.9"/>
     <node id="board.clock.pll2q.display" option="board.clock.pll2q.display.value"/>
@@ -356,7 +356,7 @@
     <node id="board.clock.bclka.display" option="board.clock.bclka.display.value"/>
     <node id="board.clock.sdclkout.enable" option="board.clock.sdclkout.enable.enabled"/>
     <node id="board.clock.sdclkout.display" option="board.clock.sdclkout.display.value"/>
-    <node id="board.clock.ebclk.source" option="board.clock.ebclk.source.bclka"/>
+    <node id="board.clock.ebclk.source" option="board.clock.ebclk.source.bclk"/>
     <node id="board.clock.bclkout.div" option="board.clock.bclkout.div.0"/>
     <node id="board.clock.bclkout.display" option="board.clock.bclkout.display.value"/>
     <node id="board.clock.clkout.source" option="board.clock.clkout.source.disabled"/>
@@ -376,17 +376,17 @@
     <node id="board.clock.gptclk.display" option="board.clock.gptclk.display.value"/>
     <node id="board.clock.gtclk.source" option="board.clock.gtclk.source.pclkd"/>
     <node id="board.clock.gtclk.display" option="board.clock.gtclk.display.value"/>
-    <node id="board.clock.lcdclk.source" option="board.clock.lcdclk.source.pll2r"/>
-    <node id="board.clock.lcdclk.div" option="board.clock.lcdclk.div.2"/>
+    <node id="board.clock.lcdclk.source" option="board.clock.lcdclk.source.pll2p"/>
+    <node id="board.clock.lcdclk.div" option="board.clock.lcdclk.div.5"/>
     <node id="board.clock.lcdclk.display" option="board.clock.lcdclk.display.value"/>
     <node id="board.clock.i3cclk.source" option="board.clock.i3cclk.source.disabled"/>
     <node id="board.clock.i3cclk.div" option="board.clock.i3cclk.div.4"/>
     <node id="board.clock.i3cclk.display" option="board.clock.i3cclk.display.value"/>
-    <node id="board.clock.uck.source" option="board.clock.uck.source.pll2r"/>
-    <node id="board.clock.uck.div" option="board.clock.uck.div.10"/>
+    <node id="board.clock.uck.source" option="board.clock.uck.source.pll2q"/>
+    <node id="board.clock.uck.div" option="board.clock.uck.div.5"/>
     <node id="board.clock.uck.display" option="board.clock.uck.display.value"/>
-    <node id="board.clock.u60ck.source" option="board.clock.u60ck.source.pll2r"/>
-    <node id="board.clock.u60ck.div" option="board.clock.u60ck.div.8"/>
+    <node id="board.clock.u60ck.source" option="board.clock.u60ck.source.pll2q"/>
+    <node id="board.clock.u60ck.div" option="board.clock.u60ck.div.4"/>
     <node id="board.clock.u60ck.display" option="board.clock.u60ck.display.value"/>
     <node id="board.clock.octaspiclk.source" option="board.clock.octaspiclk.source.disabled"/>
     <node id="board.clock.octaspiclk.div" option="board.clock.octaspiclk.div.2"/>
@@ -422,10 +422,6 @@
       <description>Arm CMSIS Version 6 - Core (M)</description>
       <originalPack>Arm.CMSIS6.6.1.0+fsp.6.4.0.pack</originalPack>
     </component>
-    <component apiversion="" class="BSP" condition="" group="Board" subgroup="ra8p1_cpkcor" variant="" vendor="Renessa" version="6.4.0">
-      <description/>
-      <originalPack>Renesas.RA_board_ra8p1_cpkcor.6.4.0.pack</originalPack>
-    </component>
     <component apiversion="" class="BSP" condition="" group="ra8p1" subgroup="device" variant="R7KA8P1KFLCAC" vendor="Renesas" version="6.4.0">
       <description>Board support package for R7KA8P1KFLCAC</description>
       <originalPack>Renesas.RA_mcu_ra8p1.6.4.0.pack</originalPack>
@@ -457,6 +453,10 @@
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_b_uart" variant="" vendor="Renesas" version="6.4.0">
       <description>SCI UART</description>
       <originalPack>Renesas.RA.6.4.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="BSP" condition="" group="Board" subgroup="ra8p1_cpkcor" variant="" vendor="Renesas" version="6.4.0">
+      <description/>
+      <originalPack>Renesas.RA_board_ra8p1_cpkcor.6.4.0.pack</originalPack>
     </component>
   </raComponentSelection>
   <raElcConfiguration/>
@@ -527,7 +527,7 @@
       <property id="module.driver.display.input0.buffer_name" value="g_framebuffer"/>
       <property id="module.driver.display.input0.buffer_number" value="2"/>
       <property id="module.driver.display.input0.section" value=".sdram_noinit"/>
-      <property id="module.driver.display.input0.format" value="module.driver.display.input0.format.in_format_32bits_rgb888"/>
+      <property id="module.driver.display.input0.format" value="module.driver.display.input0.format.in_format_16bits_rgb565"/>
       <property id="module.driver.display.input0.line_descending_enable" value="module.driver.display.input0.line_descending_enable.false"/>
       <property id="module.driver.display.input0.lines_repeat_enable" value="module.driver.display.input0.lines_repeat_enable.false"/>
       <property id="module.driver.display.input0.lines_repeat_times" value="0"/>
@@ -547,7 +547,7 @@
       <property id="module.driver.display.input1.lines_repeat_times" value="0"/>
       <property id="module.driver.display.layer1.fade_control" value="module.driver.display.layer1.fade_control.fade_control_none"/>
       <property id="module.driver.display.layer1.fade_speed" value="0"/>
-      <property id="module.driver.display.output.htiming.total_cyc" value="1420"/>
+      <property id="module.driver.display.output.htiming.total_cyc" value="1440"/>
       <property id="module.driver.display.output.htiming.display_cyc" value="1280"/>
       <property id="module.driver.display.output.htiming.back_porch" value="80"/>
       <property id="module.driver.display.output.htiming.sync_width" value="40"/>
@@ -572,7 +572,7 @@
       <property id="module.driver.display.tcon_vsync" value="module.driver.display.tcon_vsync.tcon_pin_0"/>
       <property id="module.driver.display.tcon_de" value="module.driver.display.tcon_de.tcon_pin_2"/>
       <property id="module.driver.display.clksrc" value="module.driver.display.clksrc.clk_src_internal"/>
-      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_5"/>
+      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_1"/>
       <property id="module.driver.display.correction_proc_order" value="module.driver.display.correction_proc_order.correction_proc_order_brightness_contrast2gamma"/>
       <property id="module.driver.display.output.brightness.enable" value="module.driver.display.output.brightness.false"/>
       <property id="module.driver.display.output.brightness.r" value="512"/>

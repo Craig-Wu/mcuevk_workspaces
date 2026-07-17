@@ -274,8 +274,8 @@ FSP Configuration
     PLL1R Div /6
     PLL2 Src: XTAL
     PLL2 Div /3
-    PLL2 Mul x280-300|Mul x300|PLL2 Mul x300.00
-    PLL2P Div /4
+    PLL2 Mul x260-279|Mul x270|PLL2 Mul x270.00
+    PLL2P Div /8
     PLL2Q Div /9
     PLL2R Div /5
     Clock Src: PLL1P
@@ -294,7 +294,7 @@ FSP Configuration
     BCLKA Src: PLL2Q
     BCLKA Div /2
     SDCLK Enabled
-    EBCLK Src: BCLKA (Asynchronous)
+    EBCLK Src: BCLK (Synchronous)
     EBCLK Disabled
     CLKOUT Disabled
     CLKOUT Div /1
@@ -307,14 +307,14 @@ FSP Configuration
     GPTCLK Disabled
     GPTCLK Div /2
     GPT Src: PCLKD
-    LCDCLK Src: PLL2R
-    LCDCLK Div /2
+    LCDCLK Src: PLL2P
+    LCDCLK Div /5
     I3CCLK Disabled
     I3CCLK Div /4
-    USBCLK Src: PLL2R
-    USBCLK Div /10
-    USB60CLK Src: PLL2R
-    USB60CLK Div /8
+    USBCLK Src: PLL2Q
+    USBCLK Div /5
+    USB60CLK Src: PLL2Q
+    USB60CLK Div /4
     OCTACLK Disabled
     OCTACLK Div /2
     ADCCLK Disabled
@@ -1000,7 +1000,7 @@ FSP Configuration
       Input: Graphics Layer 1: Framebuffer: Framebuffer name: g_framebuffer
       Input: Graphics Layer 1: Framebuffer: Number of framebuffers: 2
       Input: Graphics Layer 1: Framebuffer: Section for framebuffer allocation: .sdram_noinit
-      Input: Graphics Layer 1: General: Color format: RGB888 (32-bit)
+      Input: Graphics Layer 1: General: Color format: RGB565 (16-bit)
       Input: Graphics Layer 1: General: Line descending mode: Disabled
       Input: Graphics Layer 1: Line Repeat: Enable: Off
       Input: Graphics Layer 1: Line Repeat: Repeat count: 0
@@ -1020,7 +1020,7 @@ FSP Configuration
       Input: Graphics Layer 2: Line Repeat: Repeat count: 0
       Input: Graphics Layer 2: Fading: Mode: None
       Input: Graphics Layer 2: Fading: Speed: 0
-      Output: Timing: Horizontal total cycles: 1420
+      Output: Timing: Horizontal total cycles: 1440
       Output: Timing: Horizontal active video cycles: 1280
       Output: Timing: Horizontal back porch cycles: 80
       Output: Timing: Horizontal sync signal cycles: 40
@@ -1045,7 +1045,7 @@ FSP Configuration
       TCON: Vsync pin select: LCD_TCON0
       TCON: Data enable (DE) pin select: LCD_TCON2
       TCON: Panel clock source: Internal clock (GLCDCLK)
-      TCON: Panel clock division ratio: 1/5
+      TCON: Panel clock division ratio: 1/1
       Color Correction: Process order: Brightness/contrast first
       Color Correction: Brightness: Enabled: No
       Color Correction: Brightness: Red channel: 512
