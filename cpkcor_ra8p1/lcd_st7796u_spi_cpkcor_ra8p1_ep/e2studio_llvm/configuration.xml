@@ -10,7 +10,7 @@
     <option key="#RTOS#" value="_none"/>
     <option key="#pinconfiguration#" value="R7KA8P1KFLCAC.pincfg"/>
     <option key="#FSPVersion#" value="6.4.0"/>
-    <option key="#ConfigurationFragments#" value="Renessa##BSP##Board##ra8p1_cpkcor##"/>
+    <option key="#ConfigurationFragments#" value="Renessa##BSP##Board##ra8p1_cpkcor##|Renesas##BSP##Board##ra8p1_cpkcor##"/>
     <option key="#SELECTED_TOOLCHAIN#" value="clang_arm"/>
     <option key="#ToolchainVersion#" value="21.1.1"/>
   </generalSettings>
@@ -422,10 +422,6 @@
       <description>Arm CMSIS Version 6 - Core (M)</description>
       <originalPack>Arm.CMSIS6.6.1.0+fsp.6.4.0.pack</originalPack>
     </component>
-    <component apiversion="" class="BSP" condition="" group="Board" subgroup="ra8p1_cpkcor" variant="" vendor="Renessa" version="6.4.0">
-      <description/>
-      <originalPack>Renesas.RA_board_ra8p1_cpkcor.6.4.0.pack</originalPack>
-    </component>
     <component apiversion="" class="BSP" condition="" group="ra8p1" subgroup="device" variant="R7KA8P1KFLCAC" vendor="Renesas" version="6.4.0">
       <description>Board support package for R7KA8P1KFLCAC</description>
       <originalPack>Renesas.RA_mcu_ra8p1.6.4.0.pack</originalPack>
@@ -453,6 +449,10 @@
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_b_spi" variant="" vendor="Renesas" version="6.4.0">
       <description>Serial Peripheral Interface on Serial Communications Interface</description>
       <originalPack>Renesas.RA.6.4.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="BSP" condition="" group="Board" subgroup="ra8p1_cpkcor" variant="" vendor="Renesas" version="6.4.0">
+      <description/>
+      <originalPack>Renesas.RA_board_ra8p1_cpkcor.6.4.0.pack</originalPack>
     </component>
   </raComponentSelection>
   <raElcConfiguration/>
