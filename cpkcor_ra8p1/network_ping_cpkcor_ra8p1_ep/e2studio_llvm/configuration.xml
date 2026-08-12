@@ -611,8 +611,8 @@
       <property id="module.driver.ether.padding_offset" value="0"/>
       <property id="module.driver.ether.broadcast_filter" value="0"/>
       <property id="module.driver.ether.mac_address" value="00:11:22:33:44:55"/>
-      <property id="module.driver.rmac.tx_queue_length" value="4"/>
-      <property id="module.driver.rmac.rx_queue_length" value="4"/>
+      <property id="module.driver.rmac.tx_queue_length" value="3"/>
+      <property id="module.driver.rmac.rx_queue_length" value="3"/>
       <property id="module.driver.rmac.tx_queue_num" value="2"/>
       <property id="module.driver.rmac.rx_queue_num" value="2"/>
       <property id="module.driver.ether.num_tx_descriptors" value="12"/>
@@ -704,7 +704,7 @@
       <property id="config.driver.rmac_phy.target_gpy111" value="config.driver.rmac_phy.target_gpy111.disabled"/>
       <property id="config.driver.rmac_phy.target_vsc8541" value="config.driver.rmac_phy.target_vsc8541.disabled"/>
       <property id="config.driver.rmac_phy.use_custom_phy_lsi" value="config.driver.rmac_phy.use_custom_phy_lsi.disabled"/>
-      <property id="config.driver.rmac_phy.use_reference_clock" value="config.driver.rmac_phy.use_reference_clock.default"/>
+      <property id="config.driver.rmac_phy.use_reference_clock" value="config.driver.rmac_phy.use_reference_clock.enabled"/>
     </config>
     <config id="config.driver.layer3_switch">
       <property id="config.driver.layer3_switch.param_checking_enable" value="config.driver.layer3_switch.param_checking_enable.bsp"/>
@@ -851,8 +851,8 @@
       <configSetting altId="cgc.xcin.p215" configurationId="cgc.xcin"/>
       <configSetting altId="cgc.xcout.p214" configurationId="cgc.xcout"/>
       <configSetting altId="cgc.xtal.p213" configurationId="cgc.xtal"/>
-      <configSetting altId="eswm_rgmii1.et1_mdc.p415" configurationId="eswm_rgmii1.et1_mdc"/>
-      <configSetting altId="eswm_rgmii1.et1_mdio.p414" configurationId="eswm_rgmii1.et1_mdio"/>
+      <configSetting altId="eswm_rgmii1.et1_mdc.p806" configurationId="eswm_rgmii1.et1_mdc"/>
+      <configSetting altId="eswm_rgmii1.et1_mdio.p805" configurationId="eswm_rgmii1.et1_mdio"/>
       <configSetting altId="eswm_rgmii1.mode.custom.free" configurationId="eswm_rgmii1.mode"/>
       <configSetting altId="eswm_rgmii1.rgmii1_rx_ctl.p206" configurationId="eswm_rgmii1.rgmii1_rx_ctl"/>
       <configSetting altId="eswm_rgmii1.rgmii1_rxc.p905" configurationId="eswm_rgmii1.rgmii1_rxc"/>
@@ -1005,12 +1005,10 @@
       <configSetting altId="p412.gpio_irq.gpio_irq_enabled" configurationId="p412.gpio_irq"/>
       <configSetting altId="p412.gpio_mode.gpio_mode_irq" configurationId="p412.gpio_mode"/>
       <configSetting altId="p412.gpio_pupd.gpio_pupd_ip_up" configurationId="p412.gpio_pupd"/>
-      <configSetting altId="p414.eswm_rgmii1.et1_mdio" configurationId="p414"/>
-      <configSetting altId="p414.gpio_speed.gpio_speed_h" configurationId="p414.gpio_drivecapacity"/>
-      <configSetting altId="p414.gpio_mode.gpio_mode_peripheral" configurationId="p414.gpio_mode"/>
-      <configSetting altId="p415.eswm_rgmii1.et1_mdc" configurationId="p415"/>
-      <configSetting altId="p415.gpio_speed.gpio_speed_h" configurationId="p415.gpio_drivecapacity"/>
-      <configSetting altId="p415.gpio_mode.gpio_mode_peripheral" configurationId="p415.gpio_mode"/>
+      <configSetting altId="p500.sci8.rxd8" configurationId="p500"/>
+      <configSetting altId="p500.gpio_mode.gpio_mode_peripheral" configurationId="p500.gpio_mode"/>
+      <configSetting altId="p501.sci8.txd8" configurationId="p501"/>
+      <configSetting altId="p501.gpio_mode.gpio_mode_peripheral" configurationId="p501.gpio_mode"/>
       <configSetting altId="p503.sdram.a6" configurationId="p503"/>
       <configSetting altId="p503.gpio_speed.gpio_speed_h" configurationId="p503.gpio_drivecapacity"/>
       <configSetting altId="p503.gpio_mode.gpio_mode_peripheral" configurationId="p503.gpio_mode"/>
@@ -1077,6 +1075,12 @@
       <configSetting altId="p615.output.high" configurationId="p615"/>
       <configSetting altId="p615.gpio_speed.gpio_speed_m" configurationId="p615.gpio_drivecapacity"/>
       <configSetting altId="p615.gpio_mode.gpio_mode_out.high" configurationId="p615.gpio_mode"/>
+      <configSetting altId="p805.eswm_rgmii1.et1_mdio" configurationId="p805"/>
+      <configSetting altId="p805.gpio_speed.gpio_speed_h" configurationId="p805.gpio_drivecapacity"/>
+      <configSetting altId="p805.gpio_mode.gpio_mode_peripheral" configurationId="p805.gpio_mode"/>
+      <configSetting altId="p806.eswm_rgmii1.et1_mdc" configurationId="p806"/>
+      <configSetting altId="p806.gpio_speed.gpio_speed_h" configurationId="p806.gpio_drivecapacity"/>
+      <configSetting altId="p806.gpio_mode.gpio_mode_peripheral" configurationId="p806.gpio_mode"/>
       <configSetting altId="p813.sdram.sdcs" configurationId="p813"/>
       <configSetting altId="p813.gpio_speed.gpio_speed_h" configurationId="p813.gpio_drivecapacity"/>
       <configSetting altId="p813.gpio_mode.gpio_mode_peripheral" configurationId="p813.gpio_mode"/>
@@ -1192,6 +1196,9 @@
       <configSetting altId="pd07.sdhi0.sd0cd" configurationId="pd07"/>
       <configSetting altId="pd07.gpio_mode.gpio_mode_peripheral" configurationId="pd07.gpio_mode"/>
       <configSetting altId="pd07.gpio_pupd.gpio_pupd_ip_up" configurationId="pd07.gpio_pupd"/>
+      <configSetting altId="sci8.mode.asynchronousuart.free" configurationId="sci8.mode"/>
+      <configSetting altId="sci8.rxd8.p500" configurationId="sci8.rxd8"/>
+      <configSetting altId="sci8.txd8.p501" configurationId="sci8.txd8"/>
       <configSetting altId="sci9.mode.asynchronousuart.free" configurationId="sci9.mode"/>
       <configSetting altId="sci9.rxd9.p208" configurationId="sci9.rxd9"/>
       <configSetting altId="sci9.txd9.p209" configurationId="sci9.txd9"/>
