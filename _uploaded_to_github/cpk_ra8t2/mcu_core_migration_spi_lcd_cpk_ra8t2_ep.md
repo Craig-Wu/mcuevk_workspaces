@@ -1,0 +1,3 @@
+该样例工程已上传至 cpk_ra8t2/mcu_core_migration_spi_lcd_cpknet_ra8t2_ep
+
+由 李昌壕 提供，2026年8月14日

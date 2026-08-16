@@ -1,0 +1,3 @@
+该样例工程已上传至 cpkhmi_ra8p1_ek8x2/hdmi_rgb_cpkhmi_ra8p1_ek8x2_ep/
+
+由 李昌壕 提供，2026年6月25日

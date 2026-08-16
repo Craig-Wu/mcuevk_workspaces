@@ -1,0 +1,3 @@
+该样例工程已上传至 cpkmini_ra8p1/st7796u_spi_lcd_cpkmini_ra8p1_ep
+
+由 李昌壕 提供，2026年6月16日

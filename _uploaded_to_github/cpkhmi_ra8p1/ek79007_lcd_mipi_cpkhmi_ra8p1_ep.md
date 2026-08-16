@@ -1,0 +1,3 @@
+该样例工程已上传至 cpkhmi_ra8p1/ek79007_lcd_mipi_cpkhmi_ra8p1_ep
+
+由 李昌壕 提供，2026年6月26日

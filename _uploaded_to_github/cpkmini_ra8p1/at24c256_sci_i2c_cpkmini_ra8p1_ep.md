@@ -1,0 +1,3 @@
+该样例工程已上传至 cpkmini_ra8p1/at24c256_sci_i2c_cpkmini_ra8p1_ep
+
+由 李昌壕 提供，2026年8月4日

@@ -1,0 +1,3 @@
+该样例工程已上传至 cpkcor_ra8t2/microsd_basic_rw_cpkcor_ra8t2_ep
+
+由 李昌壕 提供，2026年7月29日
