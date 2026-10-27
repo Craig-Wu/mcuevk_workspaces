@@ -1,0 +1,151 @@
+:imagesdir: images
+
+== 运行
+
+在 e^2^ studio 中导入工程，生成并编译，或直接烧录本文件夹下的 dual_core_camera_hdmi_CPU0_cpkcor_ra8p1.hex 和 dual_core_camera_hdmi_CPU1_cpkcor_ra8p1.hex。用 HDMI 线缆连接底板的 HDMI 接口和通用显示器的 HDMI 接口，即可在屏幕上看到摄像头的输出和由 ARM2D 绘制的终端：
+
+[.text-center]
+--
+image::IMG_20261023_152029.jpg[role="thumb"]
+--
+
+其中 Press cnt: 0 等信息由 CPU0 发送，然后由 CPU1 显示
+
+== 驱动代码
+
+=== FSP 配置：屏幕
+
+configuration.xml 中与屏幕有关的 stack 如下：
+
+[.text-center]
+--
+image::Snipaste_2026-10-16_13-38-54.png[role="thumb"]
+image::Snipaste_2026-10-16_13-39-06.png[role="thumb"]
+--
+
+g_i2c_master0 用于读写 RGB 转 HDMI 输出的芯片 TFP410 的寄存器。g_lcdc_tfp410 配置 GLCDC 如何输出 RGB 格式的信号。为了解释此工程的实现方式，下面会先介绍 GLCDC 屏幕显示画面合成的方式，下图是 GLCDC 对屏幕的定义：
+
+[.text-center]
+--
+image::Snipaste_2026-10-16_13-49-04.png[role="thumb"]
+--
+
+图中黑色的矩形即为一个屏幕，橙色区域对应屏幕实际的可显示区域，蓝色部分则对应 GLCDC 的显示层区域。可显示区域与完整的屏幕间还有同步时钟、消隐前沿、消隐后沿参数，对于一般的 RGB 屏幕来说，这些参数需要根据使用的驱动芯片的数据手册来设置。当前例程是使用 TFP410 将 GLCDC 的 RGB 输出转为 HDMI，此时这些参数的设置需要根据 HDMI 的显示标准来填写，例程中已根据标准填写一组参数，将 HDMI 输出的格式设置为了 1280x720 @54Hz，相关参数可以点开 g_lcdc_tfp410 stack，在属性界面依次点开 `Output -> Timing` 和 `Output -> Format` 查看。
+
+GLCDC 将可显示区域再次分为垂直的三层：
+
+* 图层二：大小可在指定范围内任意设定，不一定要与屏幕可显示区域的大小一致。GLCDC 将范围限制为水平、垂直方向都为 16-2040 像素
+* 图层一：大小可在指定范围内任意设定，不一定要与屏幕可显示区域的大小一致。GLCDC 将范围限制为水平、垂直方向都为 16-2040 像素
+* 背景层：大小固定为屏幕的可显示区域的大小，该层的颜色在 `Output -> Background` 进行配置
+
+图层一和二还能设置相对于屏幕可显示区域起点的位置。显示时，颜色从上往下覆盖，不被图层一和二覆盖的区域，则显示背景层的颜色。根据 GLCDC 的特性，可以将图层一放置于左侧，图层二放置在右侧，然后使用图层一来显示摄像头的画面，图层二用于给 ARM2D 绘图。下面是图层的具体配置：
+
+* 图层一：
+
+[.text-center]
+--
+image::Snipaste_2026-10-26_10-11-37.png[role="thumb"]
+--
+
+* 图层二：
+
+[.text-center]
+--
+image::Snipaste_2026-10-26_10-12-45.png[role="thumb"]
+--
+
+注意图层二里将属性 `Horizontal position` 配置成了 760，`Vertical position` 保持为 0，即表示图层二的显示起点是在屏幕可显示区域的 (760, 0) 位置
+
+=== FSP 配置：摄像头
+
+configuration.xml 中与摄像头有关的 stack 如下：
+
+[.text-center]
+--
+image::Snipaste_2026-10-16_14-35-30.png[role="thumb"]
+--
+
+VIN 外设有三个接收缓冲地址槽位，MB1、MB2、MB3，当 VIN 启动后，硬件会自动按照 MB1->MB2->MB3->MB1 的顺序写入捕获的图像，因此当前例程直接配置三个缓冲区，显示时，在这三个缓冲区中轮换，以获得较好的显示效果。
+
+=== 驱动文件：屏幕
+
+与屏幕有关的驱动文件位于 `src/lcd` 文件夹下。屏幕的使用较为简单，配置逻辑与 FSP 对外设的配置逻辑类似：
+
+* 定义控制结构体和配置结构体变量：
+
+[source,c,subs="verbatim,attributes"]
+----
+static LCD_DeviceType s_lcd_tfp410;
+----
+
+* 填写配置结构体的字段，然后调用初始化
+
+[source,c,subs="verbatim,attributes"]
+----
+void hal_entry(void)
+{
+    ...
+    LCD_ConfigType tfp410_cfg;
+    tfp410_cfg.model = LCD_MODEL_TFP410PAPR;
+    tfp410_cfg.peri_1 = &g_lcdc_tfp410;
+    tfp410_cfg.peri_model_1 = LCD_PERI_GLCDC;
+    tfp410_cfg.peri_2 = NULL;
+    tfp410_cfg.peri_model_2 = LCD_PERI_UNUSED;
+    tfp410_cfg.iicWrite = tfp410IicWrite;
+    tfp410_cfg.iicRead = tfp410IicRead;
+    err = LCD_Initialize(&s_lcd_tfp410, &tfp410_cfg);
+    REPORT_ERROR(err, 0, "LCD_Initialize() failed: %u", err);
+    ...
+}
+----
+
+=== 驱动文件：摄像头
+
+与摄像头有关的驱动文件位于 `src/camera` 下。配置逻辑也与 FSP 对外设的配置逻辑类似。
+
+* 定义控制结构体和填写配置结构体变量对摄像头进行配置：
+
+[source,c,subs="verbatim,attributes"]
+----
+static Camera s_camera_ov5640_mipi;
+
+void hal_entry(void)
+{
+    ...
+	CameraConfig ov5640_config_mipi;
+    ov5640_config_mipi.model = CAMERA_MODEL_OV5640;
+    ov5640_config_mipi.interface = CAMERA_INTERFACE_MIPI_CSI;
+    ov5640_config_mipi.length = g_vin_ov5640_cfg_extend.conversion_data.uds_clipping_bits.cl_hsize;
+    ov5640_config_mipi.width = g_vin_ov5640_cfg_extend.conversion_data.uds_clipping_bits.cl_vsize;
+    ov5640_config_mipi.peripheral_inst = &g_vin_ov5640;
+    err = CameraInit(&s_camera_ov5640_mipi, &ov5640_config_mipi);
+    REPORT_ERROR(err, 0, "OV5640 MIPI interface init failed: %u", err);
+    err = CameraSetFPS(&s_camera_ov5640_mipi, 30, NULL, false);
+    REPORT_ERROR(err, 0, "OV5640 MIPI interface set FPS failed: %u", err);
+    err = CameraStartCapture(&s_camera_ov5640_mipi, NULL);
+    REPORT_ERROR(err, 0, "OV5640 MIPI interface start capture failed: %u", err);
+    ...
+}
+----
+
+* 对 ARM2D 和基于 ARM2D 的 console 进行初始化
+
+[source,c,subs="verbatim,attributes"]
+----
+arm_2d_init();
+disp_adapter0_init();
+CONSOLE_Init();
+arm_2d_scene_player_set_switching_mode(&DISP0_ADAPTER, ARM_2D_SCENE_SWITCH_MODE_FADE_WHITE);
+arm_2d_scene_player_switch_to_next_scene(&DISP0_ADAPTER);
+----
+
+* 最后，在 while 循环中，执行 console 输出任务、arm2d 显示任务、更新摄像头显示地址到 GLCDC
+
+[source,c,subs="verbatim,attributes"]
+----
+while (1) {
+    CONSOLE_Task();
+    disp_adapter0_task();
+    updateCameraToLCD();
+}
+----
