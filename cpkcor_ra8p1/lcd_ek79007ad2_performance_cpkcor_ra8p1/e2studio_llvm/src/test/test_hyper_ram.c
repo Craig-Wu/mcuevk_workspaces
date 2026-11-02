@@ -1,0 +1,2665 @@
+#include "test.h"
+
+#if TEST_EN_HYPER_RAM
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "hal_data.h"
+#include "hyper_ram.h"
+#include "perf_counter/perf_counter.h"
+#include "utils/log.h"
+
+#ifndef TEST_HYPER_RAM_EN_64BIT
+#define TEST_HYPER_RAM_EN_64BIT		1
+#endif
+
+#ifndef TEST_HYPER_RAM_EN_DMA
+#define TEST_HYPER_RAM_EN_DMA		0
+#endif
+
+#ifndef TEST_HYPER_RAM_EN_FULL
+#define TEST_HYPER_RAM_EN_FULL		0
+#endif
+
+#ifndef TEST_HYPER_RAM_EN_OPTIMIZE
+#define TEST_HYPER_RAM_EN_OPTIMIZE	0
+#endif
+
+#define ENABLE_VOLATILE	1
+
+#define CHECK_RESULT(r, mp, mf)	do { if (r) { if (mf != NULL) { puts(mf); } return r; } if (mp != NULL) { puts(mp); } } while(0)
+
+#define CACHE_SIZE		(1024 * 16)
+
+#if ENABLE_VOLATILE
+#define VOLATILE	volatile
+#else
+#define VOLATILE
+#endif
+
+static VOLATILE uint8_t s_cache[CACHE_SIZE] __attribute__((section(".dtcm_noinit"))) __attribute__((aligned(4)));
+static VOLATILE uint8_t s_hyper_ram[CACHE_SIZE] __attribute__((section(".ospi1_cs0_noinit")));
+static VOLATILE uint8_t s_ram[CACHE_SIZE] __attribute__((section(".ram_noinit")));
+
+#if BSP_CFG_DCACHE_ENABLED
+static VOLATILE uint8_t s_hyper_ram_nc[CACHE_SIZE] __attribute__((section(".ospi1_cs0_noinit_nocache")));
+static VOLATILE uint8_t s_ram_nc[CACHE_SIZE] __attribute__((section(".ram_noinit_nocache")));
+#endif
+
+#if TEST_HYPER_RAM_EN_DMA
+/* 位于 hal_data.c 中，FSP 生成 */
+extern transfer_info_t g_dma1_info;
+static VOLATILE uint8_t s_dma_done;
+#endif
+
+#if TEST_HYPER_RAM_EN_FULL
+static uint8_t checkFullChipNoCache(void);
+static uint8_t checkFullChipWithSeq(void);
+#endif
+
+static void checkSpeedRead(void);
+static void checkSpeedWrite(void);
+static void measureSpeed(float *speed, VOLATILE void *dst, VOLATILE void *src, TestHR_WidthEnum width);
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+static void copyCpu0Incr4(volatile uint32_t *p_dst, volatile const uint32_t *p_src, uint32_t block_count);
+#endif
+
+uint32_t TestHyperRAM(uint32_t start_addr, uint32_t size)
+{
+	uint8_t result;
+
+	(void)result;
+	(void)start_addr;
+	(void)size;
+
+	if (SCB->CCR & SCB_CCR_DC_Msk) {
+		SCB_DisableDCache();
+		puts("Turn off DCache");
+	}
+	else {
+		puts("DCache already disable");
+	}
+
+#if TEST_HYPER_RAM_EN_FULL
+	result = checkFullChipNoCache();
+	CHECK_RESULT(result, "Full chip check PASS", "Full chip check FAILED");
+
+	result = checkFullChipWithSeq();
+	CHECK_RESULT(result, "Full chip check with ordered sequence PASS", "Full chip check with ordered sequence FAILED");
+#endif
+
+	R_BSP_SoftwareDelay(150, BSP_DELAY_UNITS_MILLISECONDS);
+	checkSpeedWrite();
+	R_BSP_SoftwareDelay(150, BSP_DELAY_UNITS_MILLISECONDS);
+	checkSpeedRead();
+
+#if BSP_CFG_DCACHE_ENABLED
+
+	volatile uint32_t reg;
+
+#if BSP_CFG_DCACHE_FORCE_WRITETHROUGH
+	/* DCache 进入 write-through 模式 */
+	SCB_DisableDCache();
+	MEMSYSCTL->MSCR |= MEMSYSCTL_MSCR_FORCEWT_Msk;
+	__DSB();
+	__ISB();
+	reg = MEMSYSCTL->MSCR;
+	SCB_EnableDCache();
+	if ((reg & MEMSYSCTL_MSCR_FORCEWT_Msk) == 0) {
+		LOG_E(__FUNCTION__, "Set write-through failed");
+		return 1;
+	}
+#else
+	/* 关闭 forced write-through，进入 write-back 模式 */
+	MEMSYSCTL->MSCR &= ~(MEMSYSCTL_MSCR_FORCEWT_Msk);
+	__DSB();
+	__ISB();
+	reg = MEMSYSCTL->MSCR;
+	if (reg & MEMSYSCTL_MSCR_FORCEWT_Msk) {
+		LOG_E(__FUNCTION__, "Set write-back failed");
+		return 1;
+	}
+	SCB_EnableDCache();
+#endif
+
+#endif
+
+	return 0;
+}
+
+void TestHyperRAM_Speed(float *speed, TestHR_WidthEnum width, TestHR_DirEnum dir)
+{
+	switch (dir) {
+	case TEST_HR_DIR_DTCM_TO_HR:
+		measureSpeed(speed, s_hyper_ram, s_cache, width);
+		break;
+	case TEST_HR_DIR_SRAM_TO_HR:
+		measureSpeed(speed, s_hyper_ram, s_ram, width);
+		break;
+	case TEST_HR_DIR_HR_TO_DTCM:
+		measureSpeed(speed, s_cache, s_hyper_ram, width);
+		break;
+	case TEST_HR_DIR_HR_TO_SRAM:
+		measureSpeed(speed, s_ram, s_hyper_ram, width);
+		break;
+#if BSP_CFG_DCACHE_ENABLED
+	case TEST_HR_DIR_DTCM_TO_HR_NC:
+		measureSpeed(speed, s_hyper_ram_nc, s_cache, width);
+		break;
+	case TEST_HR_DIR_SRAM_TO_HR_NC:
+		measureSpeed(speed, s_hyper_ram_nc, s_ram, width);
+		break;
+	case TEST_HR_DIR_SRAM_NC_TO_HR:
+		measureSpeed(speed, s_hyper_ram, s_ram_nc, width);
+		break;
+	case TEST_HR_DIR_SRAM_NC_TO_HR_NC:
+		measureSpeed(speed, s_hyper_ram_nc, s_ram_nc, width);
+		break;
+	case TEST_HR_DIR_HR_TO_SRAM_NC:
+		measureSpeed(speed, s_ram_nc, s_hyper_ram, width);
+		break;
+	case TEST_HR_DIR_HR_NC_TO_DTCM:
+		measureSpeed(speed, s_cache, s_hyper_ram_nc, width);
+		break;
+	case TEST_HR_DIR_HR_NC_TO_SRAM:
+		measureSpeed(speed, s_ram, s_hyper_ram, width);
+		break;
+	case TEST_HR_DIR_HR_NC_TO_SRAM_NC:
+		measureSpeed(speed, s_ram_nc, s_hyper_ram_nc, width);
+		break;
+#endif
+	default:
+		*speed = -0.1f;
+		break;
+	}
+}
+
+#if TEST_HYPER_RAM_EN_DMA
+void DMA1_Callback(transfer_callback_args_t *p_args)
+{
+	(void)p_args;
+
+	s_dma_done = 1;
+}
+#endif
+
+#if TEST_HYPER_RAM_EN_FULL
+static uint8_t checkFullChipNoCache(void)
+{
+	uint8_t bit_num;
+	uint8_t i8;
+	uint32_t i, t;
+	uint32_t val_r, expect;
+	uint32_t mask;
+
+	uint32_t mask_src = 0xA5A5A5A5;
+	uint32_t *p32 = (uint32_t *)HYPER_RAM_MAP_START_ADDR;
+
+	/* 先清理 SDRAM */
+	memset(p32, 0xFF, HYPER_RAM_SIZE);
+	__DSB();
+	__ISB();
+
+	for (i = 0; i < (HYPER_RAM_SIZE / 4); i++) {
+		/* 计算 i 的有效位数 */
+		bit_num = 0;
+		t = i;
+		while (t) {
+			t >>= 0x01;
+			bit_num++;
+		}
+		/* 按字节调整 */
+		if (bit_num < 8) {
+			bit_num = 8;
+		}
+		else if ((bit_num > 8) && (bit_num < 16)) {
+			bit_num = 16;
+		}
+		else if ((bit_num > 16) && (bit_num < 24)) {
+			bit_num = 24;
+		}
+		else if ((bit_num > 24) && (bit_num < 32)) {
+			bit_num = 32;
+		}
+		/* 通过 i 的有效位数调整掩码，i 的高位写入 mask_src */
+		mask = 0xFFFFFFFF;
+		for (i8 = 0; i8 < bit_num; i8++) {
+			mask <<= 0x01;
+		}
+		p32[i] = ((mask & mask_src) | i);
+	}
+
+	for (i = 0; i < (HYPER_RAM_SIZE / 4); i++) {
+		/* 计算 i 的有效位数 */
+		bit_num = 0;
+		t = i;
+		while (t) {
+			t >>= 0x01;
+			bit_num++;
+		}
+		/* 按字节调整 */
+		if (bit_num < 8) {
+			bit_num = 8;
+		}
+		else if ((bit_num > 8) && (bit_num < 16)) {
+			bit_num = 16;
+		}
+		else if ((bit_num > 16) && (bit_num < 24)) {
+			bit_num = 24;
+		}
+		else if ((bit_num > 24) && (bit_num < 32)) {
+			bit_num = 32;
+		}
+		/* 通过 i 的有效位数调整掩码，i 的高位写入 mask_src */
+		mask = 0xFFFFFFFF;
+		for (i8 = 0; i8 < bit_num; i8++) {
+			mask <<= 0x01;
+		}
+		expect = ((mask & mask_src) | i);
+		val_r = p32[i];
+		if (val_r != expect) {
+			printf("%s => Failed at 0x%X\r\n", __FUNCTION__, HYPER_RAM_MAP_START_ADDR + i * 4);
+			printf("Expect: 0x%X, Read: 0x%X\r\n", expect, val_r);
+			printf("CMCFG1: 0x%X\r\n", R_XSPI1->CMCFGCS[0].CMCFG1);
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+static uint8_t checkFullChipWithSeq(void)
+{
+	uint32_t i, j;
+	uint32_t repeat, remain;
+	uint32_t val_r;
+
+	uint8_t failed = 0;
+	uint32_t *p32_cache = (uint32_t *)s_cache;
+	uint32_t *p32_w = (uint32_t *)HYPER_RAM_MAP_START_ADDR;
+	uint32_t *p32_r = (uint32_t *)HYPER_RAM_MAP_START_ADDR;
+
+	/* 由于是先写入数据到 DTCM 的缓存，然后再写入 SDRAM，因此需要根据缓存的大小计算循环次数 */
+	repeat = HYPER_RAM_SIZE / CACHE_SIZE;
+	remain = HYPER_RAM_SIZE % CACHE_SIZE / 4;
+	for (i = 0; i < repeat; i++) {
+		for (j = 0; j < (CACHE_SIZE / 4); j++) {
+			p32_cache[j] = i * CACHE_SIZE / 4 + j;
+		}
+		memcpy(p32_w, p32_cache, CACHE_SIZE);
+
+		for (j = 0; j < (CACHE_SIZE / 4); j++) {
+			val_r = *p32_r;
+			if (val_r != p32_cache[j]) {
+				printf("%s => Faild at 0x%X\r\n", __FUNCTION__, i * CACHE_SIZE + j * 4 + HYPER_RAM_MAP_START_ADDR);
+				printf("%s => Write: 0x%X, Read: 0x%X\r\n", __FUNCTION__, p32_cache[j], val_r);
+				failed = 1;
+				break;
+			}
+			p32_r++;
+		}
+
+		if (failed) {
+			break;
+		}
+		p32_w = p32_r;
+	}
+
+	if (failed == 0) {
+		for (j = 0; j < remain; j++) {
+			p32_cache[j] = i * CACHE_SIZE / 4 + j;
+			*p32_w = p32_cache[j];
+			p32_w++;
+		}
+		for (j = 0; j < remain; j++) {
+			val_r = *p32_r;
+			if (val_r != p32_cache[j]) {
+				printf("%s => Faild at 0x%X\r\n", __FUNCTION__, i * CACHE_SIZE + j * 4 + HYPER_RAM_MAP_START_ADDR);
+
+				failed = 1;
+				break;
+			}
+			p32_r++;
+		}
+	}
+
+	return failed;
+}
+#endif /* #if TEST_HYPER_RAM_EN_FULL */
+
+static void checkSpeedRead(void)
+{
+	uint32_t i;
+	float speed;
+	VOLATILE int64_t time_start, time_end;
+	VOLATILE int64_t tick_start, tick_end;
+
+	VOLATILE uint8_t *p8_dtcm = s_cache;
+	VOLATILE uint8_t *p8_ram = s_ram;
+	VOLATILE uint8_t *p8_hyper_ram = s_hyper_ram;
+	VOLATILE uint16_t *p16_dtcm = (VOLATILE uint16_t *)s_cache;
+	VOLATILE uint16_t *p16_ram = (VOLATILE uint16_t *)s_ram;
+	VOLATILE uint16_t *p16_hyper_ram = (VOLATILE uint16_t *)s_hyper_ram;
+	VOLATILE uint32_t *p32_dtcm = (VOLATILE uint32_t *)s_cache;
+	VOLATILE uint32_t *p32_ram = (VOLATILE uint32_t *)s_ram;
+	VOLATILE uint32_t *p32_hyper_ram = (VOLATILE uint32_t *)s_hyper_ram;
+
+#if TEST_HYPER_RAM_EN_64BIT
+	VOLATILE uint64_t *p64_dtcm = (VOLATILE uint64_t *)s_cache;
+	VOLATILE uint64_t *p64_ram = (VOLATILE uint64_t *)s_ram;
+	VOLATILE uint64_t *p64_hyper_ram = (VOLATILE uint64_t *)s_hyper_ram;
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	VOLATILE uint32_t reg;
+	VOLATILE uint8_t *p8_ram_nc = s_ram_nc;
+	VOLATILE uint8_t *p8_hyper_ram_nc = s_hyper_ram_nc;
+	VOLATILE uint16_t *p16_ram_nc = (VOLATILE uint16_t *)s_ram_nc;
+	VOLATILE uint16_t *p16_hyper_ram_nc = (VOLATILE uint16_t *)s_hyper_ram_nc;
+	VOLATILE uint32_t *p32_ram_nc = (VOLATILE uint32_t *)s_ram_nc;
+	VOLATILE uint32_t *p32_hyper_ram_nc = (VOLATILE uint32_t *)s_hyper_ram_nc;
+#if TEST_HYPER_RAM_EN_64BIT
+	VOLATILE uint64_t *p64_ram_nc = (VOLATILE uint64_t *)s_ram_nc;
+	VOLATILE uint64_t *p64_hyper_ram_nc = (VOLATILE uint64_t *)s_hyper_ram_nc;
+#endif
+#endif
+
+	i = (uint32_t)s_hyper_ram;
+	if ((i < HYPER_RAM_MAP_START_ADDR) || (i > HYPER_RAM_MAP_END_ADDR)) {
+		printf("s_sdram[at 0x%X] not in SDRAM range\r\n", i);
+		return;
+	}
+#if BSP_CFG_DCACHE_ENABLED
+	i = (uint32_t)s_hyper_ram_nc;
+	if ((i < HYPER_RAM_MAP_START_ADDR) || (i > HYPER_RAM_MAP_END_ADDR)) {
+		printf("s_sdram_nc[at 0x%X] not in SDRAM range\r\n", i);
+		return;
+	}
+
+	/* 关闭 forced write-through，进入 write-back 模式 */
+	MEMSYSCTL->MSCR &= ~(MEMSYSCTL_MSCR_FORCEWT_Msk);
+	__DSB();
+	__ISB();
+	reg = MEMSYSCTL->MSCR;
+	if (reg & MEMSYSCTL_MSCR_FORCEWT_Msk) {
+		puts("Set write-back failed");
+		return;
+	}
+	SCB_EnableDCache();
+	puts("Turn on DCache, write-back mode");
+#endif
+
+	/* 可缓存的 HyperRAM 区域 -> DTCM，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_dtcm[i] = p8_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with  8bit width, ");
+	#else
+		printf("Read from HyperRAM to DTCM with  8bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> DTCM，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_dtcm[i] = p16_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with 16bit width, ");
+	#else
+		printf("Read from HyperRAM to DTCM with 16bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> DTCM，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_dtcm[i] = p32_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with 32bit width, ");
+	#else
+		printf("Read from HyperRAM to DTCM with 32bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* 可缓存的 HyperRAM 区域 -> DTCM，64bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_dtcm[i] = p64_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with 64bit width, ");
+	#else
+		printf("Read from HyperRAM to DTCM with 64bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+	/* 可缓存的 HyperRAM 区域 -> DTCM，32bit 宽度，优化 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	copyCpu0Incr4(p32_dtcm, p32_hyper_ram, CACHE_SIZE / 32);
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with optimize, ");
+	#else
+		printf("Read from HyperRAM to DTCM with optimize, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_dtcm[i] = p8_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_dtcm[i] = p16_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_dtcm[i] = p32_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，32bit 宽度，优化 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	copyCpu0Incr4(p32_dtcm, p32_hyper_ram_nc, CACHE_SIZE / 32);
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with optimize, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，64bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_dtcm[i] = p64_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#endif /* #if BSP_CFG_DCACHE_ENABLED */
+
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram[i] = p8_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with  8bit width, ");
+	#else
+		printf("Read from HyperRAM to RAM  with  8bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram[i] = p16_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with 16bit width, ");
+	#else
+		printf("Read from HyperRAM to RAM  with 16bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram[i] = p32_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with 32bit width, ");
+	#else
+		printf("Read from HyperRAM to RAM  with 32bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_ram[i] = p64_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with 64bit width, ");
+	#else
+		printf("Read from HyperRAM to RAM  with 64bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度，优化 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	copyCpu0Incr4(p32_ram, p32_hyper_ram, CACHE_SIZE / 32);
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with optimize, ");
+	#else
+		printf("Read from HyperRAM to RAM  with optimize, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram[i] = p8_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram[i] = p16_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram[i] = p32_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度，优化 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	copyCpu0Incr4(p32_ram, p32_hyper_ram_nc, CACHE_SIZE / 32);
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with optimize, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_ram[i] = p64_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+	/* 可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram_nc[i] = p8_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram_nc[i] = p16_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram_nc[i] = p32_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram_nc[i] = p8_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram_nc[i] = p16_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram_nc[i] = p32_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+	/* 不可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，32bit 宽度，优化 */
+	SCB_InvalidateDCache();
+	memset((void *)p32_ram_nc, 0, CACHE_SIZE);
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	copyCpu0Incr4(p32_ram_nc, p32_hyper_ram_nc, CACHE_SIZE / 32);
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		for (i = 0; i < (CACHE_SIZE / 4); i++) {
+			if (p32_ram_nc[i] != p32_hyper_ram_nc[i]) {
+				printf("ERROR: compare failed\r\n");
+			}
+		}
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with optimize, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+	/* 不可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_ram_nc[i] = p64_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+	R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
+
+#if TEST_HYPER_RAM_EN_DMA
+	puts("DMA  Operation");
+	R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
+
+	/* DMA 读取：不可缓存的 HyperRAM -> 不可缓存的 RAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	s_dma_done = 0;
+	g_dma1_info.num_blocks = 8;
+	g_dma1_info.length = 1024;
+	g_dma1_info.p_dest = (void *)p8_ram_nc;
+	g_dma1_info.p_src = (void *)p8_hyper_ram_nc;
+	g_dma1_info.transfer_settings_word_b.size = TRANSFER_SIZE_8_BYTE;
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	R_DMAC_Open(g_dma1.p_ctrl, g_dma1.p_cfg);
+	R_DMAC_Reconfigure(g_dma1.p_ctrl, &g_dma1_info);
+	R_DMAC_Enable(g_dma1.p_ctrl);
+	R_DMAC_SoftwareStart(g_dma1.p_ctrl, TRANSFER_START_MODE_REPEAT);
+	while (s_dma_done == 0) {
+		__NOP();
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	R_DMAC_Close(g_dma1.p_ctrl);
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("DMA  from HyperRAM (uncacheable area) to RAM(uncacheable area) with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	/* DCache 进入 write-through 模式 */
+	SCB_DisableDCache();
+	MEMSYSCTL->MSCR |= MEMSYSCTL_MSCR_FORCEWT_Msk;
+	__DSB();
+	__ISB();
+	reg = MEMSYSCTL->MSCR;
+	SCB_EnableDCache();
+	if ((reg & MEMSYSCTL_MSCR_FORCEWT_Msk) == 0) {
+		puts("Set write-through failed");
+		return;
+	}
+	puts("Turn on DCache, write-through mode");
+
+	/* 可缓存的 HyperRAM 区域 -> DTCM，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_dtcm[i] = p8_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> DTCM，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_dtcm[i] = p16_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> DTCM，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_dtcm[i] = p32_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to DTCM                   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_dtcm[i] = p8_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_dtcm[i] = p16_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> DTCM，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_dtcm[i] = p32_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to DTCM                   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram[i] = p8_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram[i] = p16_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram[i] = p32_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+	/* 可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度，优化 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	copyCpu0Incr4(p32_ram, p32_hyper_ram, CACHE_SIZE / 32);
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (cacheable area)   with optimize, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram[i] = p8_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram[i] = p16_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram[i] = p32_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，32bit 宽度，优化 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	copyCpu0Incr4(p32_ram, p32_hyper_ram_nc, CACHE_SIZE / 32);
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with optimize, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* 不可缓存的 HyperRAM 区域 -> 可缓存的 RAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_ram[i] = p64_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (cacheable area)   with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+	/* 可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram_nc[i] = p8_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram_nc[i] = p16_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram_nc[i] = p32_hyper_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(cacheable area)   to RAM (uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_ram_nc[i] = p8_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 HyperRAM 区域 -> 不可缓存的 RAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_ram_nc[i] = p16_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 SDRAM 区域 -> 不可缓存的 RAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram_nc[i] = p32_hyper_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Read from HyperRAM(uncacheable area) to RAM (uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+}
+
+static void checkSpeedWrite(void)
+{
+	uint32_t i;
+	float speed;
+	VOLATILE int64_t time_start, time_end;
+	VOLATILE int64_t tick_start, tick_end;
+
+	VOLATILE uint8_t *p8_dtcm = s_cache;
+	VOLATILE uint8_t *p8_ram = s_ram;
+	VOLATILE uint8_t *p8_hyper_ram = s_hyper_ram;
+	VOLATILE uint16_t *p16_dtcm = (VOLATILE uint16_t *)s_cache;
+	VOLATILE uint16_t *p16_ram = (VOLATILE uint16_t *)s_ram;
+	VOLATILE uint16_t *p16_hyper_ram = (VOLATILE uint16_t *)s_hyper_ram;
+	VOLATILE uint32_t *p32_dtcm = (VOLATILE uint32_t *)s_cache;
+	VOLATILE uint32_t *p32_ram = (VOLATILE uint32_t *)s_ram;
+	VOLATILE uint32_t *p32_hyper_ram = (VOLATILE uint32_t *)s_hyper_ram;
+
+#if TEST_HYPER_RAM_EN_64BIT
+	VOLATILE uint64_t *p64_dtcm = (VOLATILE uint64_t *)s_cache;
+	VOLATILE uint64_t *p64_ram = (VOLATILE uint64_t *)s_ram;
+	VOLATILE uint64_t *p64_hyper_ram = (VOLATILE uint64_t *)s_hyper_ram;
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	VOLATILE uint32_t reg;
+	VOLATILE uint8_t *p8_ram_nc = s_ram_nc;
+	VOLATILE uint8_t *p8_hyper_ram_nc = s_hyper_ram_nc;
+	VOLATILE uint16_t *p16_ram_nc = (VOLATILE uint16_t *)s_ram_nc;
+	VOLATILE uint16_t *p16_hyper_ram_nc = (VOLATILE uint16_t *)s_hyper_ram_nc;
+	VOLATILE uint32_t *p32_ram_nc = (VOLATILE uint32_t *)s_ram_nc;
+	VOLATILE uint32_t *p32_hyper_ram_nc = (VOLATILE uint32_t *)s_hyper_ram_nc;
+#if TEST_HYPER_RAM_EN_64BIT
+	VOLATILE uint64_t *p64_ram_nc = (VOLATILE uint64_t *)s_ram_nc;
+	VOLATILE uint64_t *p64_hyper_ram_nc = (VOLATILE uint64_t *)s_hyper_ram_nc;
+#endif
+#endif
+
+	i = (uint32_t)s_hyper_ram;
+	if ((i < HYPER_RAM_MAP_START_ADDR) || (i > HYPER_RAM_MAP_END_ADDR)) {
+		printf("s_sdram[at 0x%X] not in SDRAM range\r\n", i);
+		return;
+	}
+#if BSP_CFG_DCACHE_ENABLED
+	i = (uint32_t)s_hyper_ram_nc;
+	if ((i < HYPER_RAM_MAP_START_ADDR) || (i > HYPER_RAM_MAP_END_ADDR)) {
+		printf("s_sdram_nc[at 0x%X] not in SDRAM range\r\n", i);
+		return;
+	}
+#endif
+
+	srand(71);
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_dtcm[i] = (uint32_t)rand();
+	}
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram[i] = (uint32_t)rand();
+	}
+#if BSP_CFG_DCACHE_ENABLED
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_ram_nc[i] = (uint32_t)rand();
+	}
+
+	/* 关闭 forced write-through，进入 write-back 模式 */
+	MEMSYSCTL->MSCR &= ~(MEMSYSCTL_MSCR_FORCEWT_Msk);
+	__DSB();
+	__ISB();
+	reg = MEMSYSCTL->MSCR;
+	if (reg & MEMSYSCTL_MSCR_FORCEWT_Msk) {
+		puts("Set write-back failed");
+		return;
+	}
+	SCB_EnableDCache();
+	puts("Turn on DCache, write-back mode");
+#endif
+
+	/* DTCM -> 可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram[i] = p8_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from DTCM                   to HyperRAM(cacheable area)   with  8bit width, ");
+	#else
+		printf("Write from DTCM to HyperRAM with  8bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+	fflush(stdout);
+
+	/* DTCM -> 可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram[i] = p16_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from DTCM                   to HyperRAM(cacheable area)   with 16bit width, ");
+	#else
+		printf("Write from DTCM to HyperRAM with 16bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+	fflush(stdout);
+
+	/* DTCM -> 可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram[i] = p32_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from DTCM                   to HyperRAM(cacheable area)   with 32bit width, ");
+	#else
+		printf("Write from DTCM to HyperRAM with 32bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* DTCM -> 可缓存的 HyperRAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_hyper_ram[i] = p64_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from DTCM                   to HyperRAM(cacheable area)   with 64bit width, ");
+	#else
+		printf("Write from DTCM to HyperRAM with 64bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	/* DTCM -> 不可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram_nc[i] = p8_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* DTCM -> 不可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram_nc[i] = p16_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* DTCM -> 不可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram_nc[i] = p32_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram[i] = p8_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with  8bit width, ");
+	#else
+		printf("Write from RAM  to HyperRAM with  8bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram[i] = p16_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with 16bit width, ");
+	#else
+		printf("Write from RAM  to HyperRAM with 16bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram[i] = p32_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with 32bit width, ");
+	#else
+		printf("Write from RAM  to HyperRAM with 32bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_hyper_ram[i] = p64_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+	#if BSP_CFG_DCACHE_ENABLED
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with 64bit width, ");
+	#else
+		printf("Write from RAM  to HyperRAM with 64bit width, ");
+	#endif
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	/* 可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram_nc[i] = p8_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram_nc[i] = p16_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram_nc[i] = p32_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram[i] = p8_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(cacheable area)   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram[i] = p16_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(cacheable area)   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram[i] = p32_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(cacheable area)   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram_nc[i] = p8_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram_nc[i] = p16_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram_nc[i] = p32_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_hyper_ram_nc[i] = p64_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if TEST_HYPER_RAM_EN_DMA
+	puts("DMA  Operation");
+	R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
+
+	/* DMA 写入：不可缓存的 RAM -> 不可缓存的 HyperRAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	s_dma_done = 0;
+	g_dma1_info.num_blocks = 8;
+	g_dma1_info.length = 1024;
+	g_dma1_info.p_dest = (void *)p8_hyper_ram_nc;
+	g_dma1_info.p_src = (void *)p8_ram_nc;
+	g_dma1_info.transfer_settings_word_b.size = TRANSFER_SIZE_8_BYTE;
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	R_DMAC_Open(g_dma1.p_ctrl, g_dma1.p_cfg);
+	R_DMAC_Reconfigure(g_dma1.p_ctrl, &g_dma1_info);
+	R_DMAC_Enable(g_dma1.p_ctrl);
+	R_DMAC_SoftwareStart(g_dma1.p_ctrl, TRANSFER_START_MODE_REPEAT);
+	while (s_dma_done == 0) {
+		__NOP();
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	R_DMAC_Close(g_dma1.p_ctrl);
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("DMA  from RAM (uncacheable area) to HyperRAM(uncacheable area) with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+	/* 上位机使用 100ms 的时间戳，这个延时仅为了内容分在两个时间戳里 */
+	R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
+
+	/* DCache 进入 write-through 模式 */
+	SCB_DisableDCache();
+	MEMSYSCTL->MSCR |= MEMSYSCTL_MSCR_FORCEWT_Msk;
+	__DSB();
+	__ISB();
+	reg = MEMSYSCTL->MSCR;
+	SCB_EnableDCache();
+	if ((reg & MEMSYSCTL_MSCR_FORCEWT_Msk) == 0) {
+		puts("Set write-through failed");
+		return;
+	}
+	puts("Turn on DCache, write-through mode");
+
+	/* DTCM -> 可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram[i] = p8_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(cacheable area)   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* DTCM -> 可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram[i] = p16_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(cacheable area)   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* DTCM -> 可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram[i] = p32_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(cacheable area)   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* DTCM -> 不可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram_nc[i] = p8_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* DTCM -> 不可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram_nc[i] = p16_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* DTCM -> 不可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	tick_start = get_system_ticks();
+	time_start = get_system_us();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram_nc[i] = p32_dtcm[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from DTCM                   to HyperRAM(uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram[i] = p8_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram[i] = p16_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram[i] = p32_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+#if TEST_HYPER_RAM_EN_64BIT
+	/* 可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_hyper_ram[i] = p64_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(cacheable area)   with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+	/* 可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram_nc[i] = p8_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram_nc[i] = p16_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram_nc[i] = p32_ram[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (cacheable area)   to HyperRAM(uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram[i] = p8_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(cacheable area)   with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram[i] = p16_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(cacheable area)   with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram[i] = p32_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(cacheable area)   with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，8bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < CACHE_SIZE; i++) {
+		p8_hyper_ram_nc[i] = p8_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with  8bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，16bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 2); i++) {
+		p16_hyper_ram_nc[i] = p16_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with 16bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，32bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 4); i++) {
+		p32_hyper_ram_nc[i] = p32_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with 32bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+
+	/* 不可缓存的 RAM 区域 -> 不可缓存的 HyperRAM 区域，64bit 宽度 */
+	SCB_InvalidateDCache();
+	time_start = get_system_us();
+	tick_start = get_system_ticks();
+	for (i = 0; i < (CACHE_SIZE / 8); i++) {
+		p64_hyper_ram_nc[i] = p64_ram_nc[i];
+	}
+	tick_end = get_system_ticks();
+	time_end = get_system_us();
+	if (time_start != time_end) {
+		speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		speed = speed * 1000000 / 1024 / 1024;
+		printf("Write from RAM (uncacheable area) to HyperRAM(uncacheable area) with 64bit width, ");
+		printf("using cycle: %llu, ", tick_end - tick_start);
+		printf("using time: %llu us, ", time_end - time_start);
+		printf("speed: %.2f MB/s\r\n", speed);
+	}
+	else {
+		puts("Test size is too small with this case");
+	}
+#endif
+
+}
+
+static void measureSpeed(float *speed, VOLATILE void *dst, VOLATILE void *src, TestHR_WidthEnum width)
+{
+	uint32_t i;
+	int64_t time_start;
+	int64_t time_end;
+
+	VOLATILE uint8_t *p8_dst = (VOLATILE uint8_t *)dst;
+	VOLATILE uint8_t *p8_src = (VOLATILE uint8_t *)src;
+	VOLATILE uint16_t *p16_dst = (VOLATILE uint16_t *)dst;
+	VOLATILE uint16_t *p16_src = (VOLATILE uint16_t *)src;
+	VOLATILE uint32_t *p32_dst = (VOLATILE uint32_t *)dst;
+	VOLATILE uint32_t *p32_src = (VOLATILE uint32_t *)src;
+	VOLATILE uint64_t *p64_dst = (VOLATILE uint64_t *)dst;
+	VOLATILE uint64_t *p64_src = (VOLATILE uint64_t *)src;
+
+#if BSP_CFG_DCACHE_ENABLED
+	SCB_CleanInvalidateDCache();
+#endif
+
+	switch (width) {
+	case TEST_HYPER_RAM_WIDTH_8BIT:
+		time_start = get_system_us();
+		for (i = 0; i < CACHE_SIZE; i++) {
+			p8_dst[i] = p8_src[i];
+		}
+		time_end = get_system_us();
+		break;
+	case TEST_HYPER_RAM_WIDTH_16BIT:
+		time_start = get_system_us();
+		for (i = 0; i < (CACHE_SIZE / 2); i++) {
+			p16_dst[i] = p16_src[i];
+		}
+		time_end = get_system_us();
+		break;
+	case TEST_HYPER_RAM_WIDTH_32BIT:
+		time_start = get_system_us();
+		for (i = 0; i < (CACHE_SIZE / 4); i++) {
+			p32_dst[i] = p32_src[i];
+		}
+		time_end = get_system_us();
+		break;
+	case TEST_HYPER_RAM_WIDTH_64BIT:
+		time_start = get_system_us();
+		for (i = 0; i < (CACHE_SIZE / 8); i++) {
+			p64_dst[i] = p64_src[i];
+		}
+		time_end = get_system_us();
+		break;
+	default:
+		break;
+	}
+
+	if (time_end > time_start) {
+		*speed = (float)CACHE_SIZE / (float)(time_end - time_start);
+		*speed = *speed * 1000000.0f / 1024.0f / 1024.0f;
+	}
+	else {
+		LOG_E(__FUNCTION__, "Test size if too small");
+	}
+}
+
+#if TEST_HYPER_RAM_EN_OPTIMIZE
+/**
+ * 每次从源地址读取 32 字节，然后向目标地址写入 32 字节。
+ *
+ * 要求：
+ * - p_src 和 p_dst 至少 32 字节对齐；
+ * - block_count 表示 32 字节块的数量。
+ */
+static __attribute__((noinline)) void copyCpu0Incr4(volatile uint32_t *p_dst, volatile const uint32_t *p_src, uint32_t block_count)
+{
+    while (block_count > 0U)
+    {
+        __asm__ volatile (
+            "ldmia %[src]!, {r4-r11}\n"
+            "stmia %[dst]!, {r4-r11}\n"
+            : [dst] "+r" (p_dst),
+              [src] "+r" (p_src)
+            :
+            : "r4", "r5", "r6", "r7",
+              "r8", "r9", "r10", "r11",
+              "memory"
+        );
+
+        block_count--;
+    }
+}
+#endif /* #if TEST_HYPER_RAM_EN_OPTIMIZE */
+
+#endif /* #if TEST_EN_HYPER_RAM */

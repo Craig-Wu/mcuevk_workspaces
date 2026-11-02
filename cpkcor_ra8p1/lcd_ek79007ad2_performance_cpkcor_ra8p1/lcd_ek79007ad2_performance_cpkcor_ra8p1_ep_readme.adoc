@@ -1,0 +1,59 @@
+:imagesdir: images
+
+== 运行
+
+在 e^2^ studio 中导入工程，生成并编译，或直接烧录本文件夹下的 lcd_ek79007ad2_performance_cpkcor_re8p1_ep.hex。打开一个串口终端，波特率 2000000，数据位 8bit，停止位 1bit，无奇偶校验。烧录后屏幕会先显示彩条，随后进行刷新率的测试，注意在刷新率测试时屏幕会快速闪烁，测试结果将在串口终端中进行输出
+
+[.text-center]
+--
+image::IMG_20261030_161821.jpg[role="thumb"]
+image::Snipaste_2026-10-30_16-15-07.png[role="thumb"]
+image::Snipaste_2026-10-30_16-15-25.png[role="thumb"]
+image::Snipaste_2026-10-30_16-15-47.png[role="thumb"]
+--
+
+== 驱动代码
+
+=== FSP 配置
+
+configuration.xml 中与屏幕有关的 stack 如下：
+
+[.text-center]
+--
+image::Snipaste_2026-10-30_16-27-15.png[role="thumb"]
+--
+
+=== 驱动文件
+
+与屏幕有关的驱动文件位于 `src/lcd` 文件夹下。屏幕的使用较为简单，配置逻辑与 FSP 对外设的配置逻辑类似：
+
+* 定义控制结构体和配置结构体变量：
+
+[source,c,subs="verbatim,attributes"]
+----
+static LCD_DeviceType s_lcd_ek79007ad2;
+static LCD_ConfigType s_ek79007ad2_cfg;
+----
+
+* 填写配置结构体的字段，然后调用初始化
+
+[source,c,subs="verbatim,attributes"]
+----
+void hal_entry(void)
+{
+    ...
+    s_ek79007ad2_cfg.model = LCD_MODEL_EK79007AD2;
+    s_ek79007ad2_cfg.peri_1 = &g_lcdc_ek79007;
+    s_ek79007ad2_cfg.peri_model_1 = LCD_PERI_GLCDC;
+    s_ek79007ad2_cfg.peri_2 = &g_mipi_dsi_ek79007;
+    s_ek79007ad2_cfg.peri_model_2 = LCD_PERI_MIPI;
+    uint32_t err = LCD_Initialize(&s_lcd_ek79007ad2, &s_ek79007ad2_cfg);
+    if (FSP_SUCCESS == err) {
+        TestLCD(&s_lcd_ek79007ad2);
+    }
+    else {
+        LOG_E(__FUNCTION__, "LCD initialization failed: %lu", (unsigned long)err);
+    }
+    ...
+}
+----

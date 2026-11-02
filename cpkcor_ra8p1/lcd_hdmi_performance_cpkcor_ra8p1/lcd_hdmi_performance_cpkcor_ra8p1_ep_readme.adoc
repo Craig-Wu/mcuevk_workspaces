@@ -1,0 +1,60 @@
+:imagesdir: images
+
+== 运行
+
+在 e^2^ studio 中导入工程，生成并编译，或直接烧录本文件夹下的 lcd_hdmi_performance_cpkcor_re8p1_ep.hex。用 HDMI 线缆连接底板的 HDMI 接口和通用显示器的 HDMI 接口。打开一个串口终端，波特率 2000000，数据位 8bit，停止位 1bit，无奇偶校验。烧录后屏幕会先显示彩条，随后进行刷新率的测试，注意在刷新率测试时屏幕会快速闪烁，测试结果将在串口终端中进行输出
+
+[.text-center]
+--
+image::IMG_20261030_104943.jpg[role="thumb"]
+image::Snipaste_2026-10-30_14-44-08.png[role="thumb"]
+image::Snipaste_2026-10-30_14-44-27.png[role="thumb"]
+image::Snipaste_2026-10-30_14-44-45.png[role="thumb"]
+--
+
+== 驱动代码
+
+=== FSP 配置
+
+configuration.xml 中与屏幕有关的 stack 如下：
+
+[.text-center]
+--
+image::Snipaste_2026-10-16_13-38-54.png[role="thumb"]
+image::Snipaste_2026-10-16_13-39-06.png[role="thumb"]
+--
+
+g_i2c_master0 用于读写 RGB 转 HDMI 输出的芯片 TFP410 的寄存器。g_lcdc_tfp410 配置 GLCDC 如何输出 RGB 格式的信号。
+
+=== 驱动文件
+
+与屏幕有关的驱动文件位于 `src/lcd` 文件夹下。屏幕的使用较为简单，配置逻辑与 FSP 对外设的配置逻辑类似：
+
+* 定义控制结构体和配置结构体变量：
+
+[source,c,subs="verbatim,attributes"]
+----
+static LCD_DeviceType s_lcd_tfp410;
+static LCD_ConfigType s_tfp410_cfg;
+----
+
+* 填写配置结构体的字段，然后调用初始化
+
+[source,c,subs="verbatim,attributes"]
+----
+void hal_entry(void)
+{
+    ...
+    s_tfp410_cfg.model = LCD_MODEL_TFP410PAPR;
+    s_tfp410_cfg.peri_1 = &g_lcdc_tfp410;
+    s_tfp410_cfg.peri_model_1 = LCD_PERI_GLCDC;
+    s_tfp410_cfg.peri_2 = NULL;
+    s_tfp410_cfg.peri_model_2 = LCD_PERI_UNUSED;
+    s_tfp410_cfg.iicWrite = tfp410IicWrite;
+    s_tfp410_cfg.iicRead = tfp410IicRead;
+    if (LCD_Initialize(&s_lcd_tfp410, &s_tfp410_cfg) == FSP_SUCCESS) {
+        TestLCD(&s_lcd_tfp410);
+    }
+    ...
+}
+----
