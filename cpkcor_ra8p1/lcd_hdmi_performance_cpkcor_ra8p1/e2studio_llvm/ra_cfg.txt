@@ -993,7 +993,7 @@ FSP Configuration
       Interrupts: Underflow 1 Interrupt Priority: Priority 12
       Interrupts: Underflow 2 Interrupt Priority: Priority 12
       Input: Graphics Layer 1: General: Enabled: Yes
-      Input: Graphics Layer 1: General: Horizontal size: 1024
+      Input: Graphics Layer 1: General: Horizontal size: 800
       Input: Graphics Layer 1: General: Vertical size: 720
       Input: Graphics Layer 1: General: Horizontal position: 0
       Input: Graphics Layer 1: General: Vertical position: 0

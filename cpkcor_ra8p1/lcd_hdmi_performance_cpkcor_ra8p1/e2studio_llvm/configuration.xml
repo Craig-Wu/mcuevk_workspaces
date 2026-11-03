@@ -520,7 +520,7 @@
       <property id="module.driver.display.underflow_1_ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.display.underflow_2_ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.display.input0.enable" value="module.driver.display.input0.enable.true"/>
-      <property id="module.driver.display.input0.hsize" value="1024"/>
+      <property id="module.driver.display.input0.hsize" value="800"/>
       <property id="module.driver.display.input0.vsize" value="720"/>
       <property id="module.driver.display.layer0.coordinate.x" value="0"/>
       <property id="module.driver.display.layer0.coordinate.y" value="0"/>
