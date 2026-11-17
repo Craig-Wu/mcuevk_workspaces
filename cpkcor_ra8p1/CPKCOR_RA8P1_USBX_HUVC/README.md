@@ -58,4 +58,4 @@
 
 **详细的样例程序配置和使用，请参考下面的说明文件。**
 
-[CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate 工程使用说明](CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate_readme.adoc)
+[CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate 工程使用说明](CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate_工程使用说明.adoc)
