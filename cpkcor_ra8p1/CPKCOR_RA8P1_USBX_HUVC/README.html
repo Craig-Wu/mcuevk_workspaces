@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated HTML</title>
+    <style>
+        body {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate</h1>
+<p><strong>该示例工程由 瑞萨电子-阎志刚 提供，2026年11月12日</strong></p>
+<h2>工程概述</h2>
+<ul>
+<li>该示例工程演示了基于瑞萨 FSP、Azure RTOS ThreadX 和 USBX Host Video Class，使用 RA8P1 MCU 驱动 USB UVC 摄像头进行 MJPEG 视频取流。</li>
+<li>工程可自动识别摄像头 VideoStreaming 接口使用的 Isochronous 或 Bulk 传输方式，扫描摄像头支持的 MJPEG 分辨率和帧率，并完成模式协商、兼容性评估、性能统计、JPEG 抓图及热插拔处理。</li>
+<li>工程不根据摄像头型号或 VID/PID 固定取流路径，而是根据 VideoStreaming Endpoint 的类型自动选择 Isochronous 或 Bulk 处理流程。</li>
+<li>工程支持 J-Link RTT Viewer 和 SCI9_B UART 两种 Debug Console，可通过编译配置选择 Console 类型，并使用相同的命令接口进行模式选择、视频取流、JPEG 抓图和状态查询。</li>
+<li>关于如何烧录已编译的镜像文件，请参考 <a href="">RA8 MCU 的程序烧录</a>。</li>
+<li>如果不需要同步代码库及版本控制，也可以直接下载本样例程序的 ZIP 压缩包，其中包含工程文档和代码。</li>
+</ul>
+<h2>支持的开发板 / 开发套件 / 演示板</h2>
+<ul>
+<li>CPKCOR-RA8P1 核心板</li>
+</ul>
+<h2>硬件要求</h2>
+<ul>
+<li>1 块 CPKCOR-RA8P1 核心板</li>
+<li>1 个支持 USB Video Class（UVC）和 MJPEG 格式的 USB 摄像头</li>
+<li>1 根用于摄像头连接的 USB 数据线或转接线，具体接口形式根据摄像头接口确定</li>
+<li>1 根 USB Type-A 转 Type-C 或 Type-C 转 Type-C 数据线，用于连接 CPKCOR-RA8P1 的 JDBG 调试端口</li>
+<li>1 台安装了 J-Link RTT Viewer、串口终端工具和 e² studio 的调试主机</li>
+</ul>
+<h2>硬件连接</h2>
+<ul>
+<li>调试主机通过 USB Type-C 数据线连接 CPKCOR-RA8P1 板上的 USB 调试端口 JDBG。</li>
+<li>USB UVC 摄像头连接至 CPKCOR-RA8P1 的 USB High-Speed Host Type-C 接口。</li>
+<li>运行后可根据工程配置，通过 J-Link RTT Viewer 或 SCI9_B UART Console 查看摄像头信息、模式列表、取流状态和性能报告，并输入操作命令。</li>
+</ul>
+<h2>硬件设置注意事项</h2>
+<ul>
+<li>工程使用 RA8P1 CPU0，运行 Azure RTOS ThreadX；CPU1 和 NPU 不参与本示例功能。</li>
+<li>USB 使用 USBHS Module 1，配置为 Host 和 High-Speed 模式。</li>
+<li>USBHS VBUS 和 VBUS Enable 分别使用 P408 和 P407；P615 配置为 <code>FUSB_EN_N</code> 并输出高电平。</li>
+<li>USB 摄像头属于总线供电设备。频繁物理插拔时应保证开发板和摄像头供电稳定，避免因瞬态电压扰动导致 J-Link、RTT 或 UART Console 连接异常。</li>
+<li>默认 JPEG Frame Buffer 位于内部 SRAM，每个 Buffer 为 384 KB，共 2 个。2560 × 1440 MJPEG @ 30 fps 已完成实机验证；复杂场景下，4K 分辨率的单帧 JPEG 数据可能超过单个默认缓冲区的容量。未启用 SDRAM 时，软件将根据 Frame Buffer 容量把预计超出缓冲区的 Mode 标记为 <code>NG-B</code>。</li>
+<li>SDRAM Frame Buffer 默认关闭。</li>
+</ul>
+<h2>软件开发环境</h2>
+<ul>
+<li>FSP 版本<ul>
+<li>FSP 6.6.0</li>
+</ul>
+</li>
+<li>RTOS 和中间件<ul>
+<li>Azure RTOS ThreadX 6.4.0 + FSP 6.6.0</li>
+<li>Azure RTOS USBX HUVC 6.4.0 + FSP 6.6.0</li>
+</ul>
+</li>
+<li>集成开发环境和编译器<ul>
+<li>e² studio Version: 2026-04.2 (26.4.2)</li>
+<li>LLVM for Arm 21.1.1</li>
+</ul>
+</li>
+<li>工程配置<ul>
+<li>MCU：R7KA8P1KFLCAC</li>
+<li>CPU Core：CPU0 / Arm Cortex-M85</li>
+<li>USB：USBHS Host，High-Speed</li>
+<li>DMAC：Channel 0/1，传输数据宽度：4 字节</li>
+<li>Debug Console：J-Link RTT / SCI9_B UART</li>
+<li>SCI9_B UART：Channel 9，115200 baud，8N1</li>
+</ul>
+</li>
+</ul>
+<p><strong>详细的样例程序配置和使用，请参考下面的说明文件。</strong></p>
+<p><a href="CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate_%E5%B7%A5%E7%A8%8B%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.adoc">CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate 工程使用说明</a></p>
+
+</body>
+</html>
