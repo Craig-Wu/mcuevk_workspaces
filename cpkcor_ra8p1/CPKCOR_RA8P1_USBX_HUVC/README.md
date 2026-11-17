@@ -8,7 +8,6 @@
 - 工程可自动识别摄像头 VideoStreaming 接口使用的 Isochronous 或 Bulk 传输方式，扫描摄像头支持的 MJPEG 分辨率和帧率，并完成模式协商、兼容性评估、性能统计、JPEG 抓图及热插拔处理。
 - 工程不根据摄像头型号或 VID/PID 固定取流路径，而是根据 VideoStreaming Endpoint 的类型自动选择 Isochronous 或 Bulk 处理流程。
 - 工程支持 J-Link RTT Viewer 和 SCI9_B UART 两种 Debug Console，可通过编译配置选择 Console 类型，并使用相同的命令接口进行模式选择、视频取流、JPEG 抓图和状态查询。
-- 关于如何烧录已编译的镜像文件，请参考 [RA8 MCU 的程序烧录]()。
 - 如果不需要同步代码库及版本控制，也可以直接下载本样例程序的 ZIP 压缩包，其中包含工程文档和代码。
 
 ## 支持的开发板 / 开发套件 / 演示板
