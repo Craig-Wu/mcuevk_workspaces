@@ -343,7 +343,7 @@ Result : FAIL - frames up to xxx KB do not fit the xxx KB buffer (USB link is OK
 #define UVC_CAPTURE_TIMEOUT_MS      (500U)
 ----
 
-输入 `c` 后，程序优先等待下一个 Frame Boundary 并停止 Streaming。具体 Console 命令及功能参考表 1。正常情况下下一帧完成后立即退出；如果摄像头没有继续产生完整帧，最多等待约 500 ms，随后退出测试并返回菜单。
+键盘输入 `c` 后，程序优先等待下一个 Frame Boundary 并停止 Streaming。(具体其他 Console 命令及功能参考表 1。)正常情况下下一帧完成后立即退出；如果摄像头没有继续产生完整帧，最多等待约 500 ms，随后退出测试并返回菜单。
 
 === PASS / FAIL 判定
 
