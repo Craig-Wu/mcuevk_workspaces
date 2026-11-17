@@ -29,7 +29,7 @@ USB host ready. Waiting for a USB camera ...
 . 根据用户选择开始视频取流，并实时显示帧率、完整帧数、无效帧数和 USB 数据率。
 . 执行 JPEG Capture，并通过 `fb_data.p_pointer` 在 e² studio Memory View 中查看图像。
 
-*_● Figure 1. USB 摄像头运行结果_*
+*_● 图 1. USB 摄像头运行结果_*
 
 image::image.png[USB 摄像头运行结果,width=85%]
 
@@ -73,7 +73,8 @@ Frames  : 169 complete, 0 invalid
 
 本工程基于 Azure RTOS ThreadX 和 USBX HUVC。在 FSP Configuration 的 Stacks 选项卡中创建 USB Camera Thread，并添加 Azure RTOS USBX HUVC Stack。
 
-.在 Stacks 选项卡中添加 Azure RTOS USBX HUVC
+*_● 图 2. 在 Stacks 选项卡中添加 Azure RTOS USBX HUVC_*
+
 image::Stacks选项卡添加HUVC.jpg[在 Stacks 选项卡中添加 Azure RTOS USBX HUVC,width=85%]
 
 USB Camera Thread 使用以下 Stack：
@@ -87,7 +88,8 @@ USB Camera Thread 使用以下 Stack：
 
 完整的 HUVC Stack 配置如下图所示：
 
-.FSP Stack 配置
+*_● 图 3. FSP Stack 配置_*
+
 image::FSP Stacks.jpg[FSP Stack 配置,width=85%]
 
 主要配置如下：
@@ -121,14 +123,18 @@ image::FSP Stacks.jpg[FSP Stack 配置,width=85%]
 
 工程还创建了以下 ThreadX 对象：
 
-* Payload Semaphore：`g_payload_semaphore`
-* Device Insert Event Flags：`g_device_insert_eventflag`
+* Payload Semaphore：`g_payload_semaphore` +
+用于同步 USB Video Payload 的接收与处理。USB Transfer 完成后由 Callback 释放 Semaphore，USB Camera Thread 获取 Semaphore 后处理接收到的数据，并执行 UVC Payload 解析、MJPEG Frame Assembly 和后续 Transfer 提交。
+
+* Device Insert Event Flags：`g_device_insert_eventflag` +
+用于通知 USB UVC Camera 的插入和移除状态。摄像头插入后触发设备初始化、Descriptor Scan 和 Mode 评估；摄像头移除后执行 Streaming Stop、Bulk Pipe 释放和相关资源清理，用于实现 Camera Hot-Plug。
 
 == USB 和引脚配置
 
 本工程使用 RA8P1 USB High-Speed Module 1 作为 USB Host。`g_basic0` 的主要属性配置如下图所示：
 
-.USB Basic（g_basic0）主要属性配置
+*_● 图 4. USB Basic（g_basic0）主要属性配置_*
+
 image::g_basic0 USB(r_usb_basic)部分属性配置.jpg[USB Basic 属性配置,width=85%]
 
 USB High-Speed Host 使用以下配置：
@@ -446,7 +452,8 @@ NOTE: Mode 编号可能为两位数字，例如 `15`、`41`。建议使用完整
 
 === J-Link RTT Viewer
 
-.J-Link RTT Viewer 配置
+*_● 图 5. J-Link RTT Viewer 配置_*
+
 image::RTT Viewer setting.jpg[J-Link RTT Viewer 配置,width=80%]
 
 === SCI9_B UART Console
