@@ -436,6 +436,7 @@ Mode 列表中的状态用于软件预评估，实际运行后的结论以测试
 本工程支持 J-Link RTT Viewer 和 SCI9_B UART Console 显示摄像头信息、MJPEG Mode、实时性能和测试报告，同时接收用户输入。两种 Console 使用相同的命令接口。
 
 NOTE: Mode 编号可能为两位数字，例如 `15`、`41`。建议使用完整输入后发送的方式，避免 `15` 被拆分成 `1` 和 `5`。
+
 *_● 表 1. Console 命令说明_*
 
 [cols="1,4",options="header"]
