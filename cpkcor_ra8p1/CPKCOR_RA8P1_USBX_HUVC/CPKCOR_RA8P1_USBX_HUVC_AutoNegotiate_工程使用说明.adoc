@@ -1,6 +1,6 @@
 = CPKCOR_RA8P1_USBX_HUVC_AutoNegotiate 工程使用说明
 瑞萨电子-阎志刚
-v1.2, 2026-11-12
+v1.2, 2026-11-17
 :toc: left
 :toclevels: 3
 :sectnums:
@@ -343,7 +343,7 @@ Result : FAIL - frames up to xxx KB do not fit the xxx KB buffer (USB link is OK
 #define UVC_CAPTURE_TIMEOUT_MS      (500U)
 ----
 
-输入 `c` 后，程序优先等待下一个 Frame Boundary 并停止 Streaming。正常情况下下一帧完成后立即退出；如果摄像头没有继续产生完整帧，最多等待约 500 ms，随后退出测试并返回菜单。
+输入 `c` 后，程序优先等待下一个 Frame Boundary 并停止 Streaming。具体 Console 命令及功能参考表 1。正常情况下下一帧完成后立即退出；如果摄像头没有继续产生完整帧，最多等待约 500 ms，随后退出测试并返回菜单。
 
 === PASS / FAIL 判定
 
@@ -436,6 +436,7 @@ Mode 列表中的状态用于软件预评估，实际运行后的结论以测试
 本工程支持 J-Link RTT Viewer 和 SCI9_B UART Console 显示摄像头信息、MJPEG Mode、实时性能和测试报告，同时接收用户输入。两种 Console 使用相同的命令接口。
 
 NOTE: Mode 编号可能为两位数字，例如 `15`、`41`。建议使用完整输入后发送的方式，避免 `15` 被拆分成 `1` 和 `5`。
+*_● 表 1. Console 命令说明_*
 
 [cols="1,4",options="header"]
 |===
@@ -470,7 +471,7 @@ No parity
 1 stop bit
 ----
 
-SCI9_B UART Console 与 RTT Viewer 使用相同的命令，包括 `<No.>`、`c`、`x`、`l`、`p`、`d`、`s` 和 `h`。
+SCI9_B UART Console 与 RTT Viewer 使用相同的命令，具体命令及功能参考表 1。
 
 字符输入由 `uvc_console_uart_callback()` 接收。数字 Mode 输入建议按 Enter 确认，例如：
 
