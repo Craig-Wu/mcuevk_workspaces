@@ -29,7 +29,7 @@ USB host ready. Waiting for a USB camera ...
 . 根据用户选择开始视频取流，并实时显示帧率、完整帧数、无效帧数和 USB 数据率。
 . 执行 JPEG Capture，并通过 `fb_data.p_pointer` 在 e² studio Memory View 中查看图像。
 
-**Figure 1.** _USB 摄像头运行结果_
+==== USB 摄像头运行结果
 image::image.png[USB 摄像头运行结果,width=85%]
 
 示例输出如下：
