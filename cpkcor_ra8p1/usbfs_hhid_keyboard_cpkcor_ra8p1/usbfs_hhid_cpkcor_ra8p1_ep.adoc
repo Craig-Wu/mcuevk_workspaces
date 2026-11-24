@@ -1,0 +1,52 @@
+:imagesdir: images
+
+== 运行
+
+在 e^2^ studio 中导入工程，生成并编译，或直接烧录本文件夹下的 usbfs_hhid_cpkcor_ra8p1_ep.hex。打开一个串口调试工具，波特率 2000000，数据位 8bit，停止位 1bit，无奇偶校验。并插入 USB 键盘，按下 USB 按键上的按键，会输出类似如下信息
+
+[.text-center]
+--
+image::Snipaste_2026-11-23_09-46-08.png[role="thumb"]
+--
+
+当前仅能识别通用的按键，媒体按键如音量控制、亮度控制、快捷方式、Fn 功能键不能识别
+
+== 驱动
+
+=== FSP
+
+在 configuration.xml 的 stack 界面添加一个 r_usb_pcdc stack，如下图，具体属性可打开工程查看
+
+[.text-center]
+--
+image::Snipaste_2026-11-23_10-05-35.png[role="thumb"]
+--
+
+=== 代码
+
+* 此工程还使用 FUSB303B 来设置 USB TypeC 中的 SOURCE 和 SINK，相关例程可以参考 link:../ep_fusb303b_bsp640/readme.md[fusb303b_cpkcor_ra8p1_ep]
+
+* r_usb_hhid
+
+使用时先执行初始化，当前使用 FreeRTOS，然后将 FSP 提供的 USB 事件通过消息队列发送给 USB 事件处理线程
+
+[source,c,subs="verbatim,attributes"]
+----
+err = R_USB_Open(g_usbfs_hhid_basic.p_ctrl, g_usbfs_hhid_basic.p_cfg);
+HANDLE_ERR(err, "R_USB_Open() failed: %u", err);
+----
+
+随后在应用循环中处理 USB 事件：
+[source,c,subs="verbatim,attributes"]
+----
+while (1) {
+    os_err = xQueueReceive(s_usb_event_queue, &usb_event, portMAX_DELAY);
+    switch (usb_event->event) {
+        ...
+    }
+}
+----
+
+* 设备描述符
+
+FSP 会生成一个默认的 PCDC 设备描述符模板，位于 `{e2studio工程位置}\ra\fsp\src\r_usb_pcdc\r_usb_pcdc_descriptor.c.template`。此模板默认可直接用于测试使用，但注意若要实际生产使用，需要修改 VID、描述字符串等信息。
