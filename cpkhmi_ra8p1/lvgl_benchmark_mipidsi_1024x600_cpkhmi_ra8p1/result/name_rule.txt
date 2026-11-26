@@ -1,0 +1,17 @@
+显存格式_编译器-优化等级_是否锁帧_[是否可缓存]
+
+显存格式：
+	- ARGB8888
+	- RGB565
+编译器：
+	- LLVM
+	- AC6(keil 5.43a AC6.24)
+优化等级：
+	- O2
+	- O3
+是否锁帧：
+	- Lock30FPS LVGL 设置软件刷新率 30FPS，且屏幕硬件刷新率设为 30FPS
+	- NoLock LVGL 设置软件刷新率 1000FPS，屏幕硬件刷新率设为 60FPS
+是否可缓存：
+	- NC 仅指 GLCDC 的帧缓冲位于不可缓存区域，DCache 保持开启，使用 Write-Back 模式
+	- 未填写时指 GLCDC 的帧缓冲位于可缓存区域，DCache 保持开启，使用 Write-Back 模式

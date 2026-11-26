@@ -1,0 +1,18 @@
+Name, Avg. CPU, Avg. FPS, Avg. time, render time, flush time
+Empty screen, 20%, 27, 25, 6, 19
+Moving wallpaper, 20%, 29, 29, 19, 10
+Single rectangle, 13%, 29, 24, 0, 24
+Multiple rectangles, 20%, 29, 7, 3, 4
+Multiple RGB images, 20%, 29, 24, 5, 19
+Multiple ARGB images, 20%, 29, 24, 6, 18
+Rotated ARGB images, 15%, 29, 25, 4, 21
+Multiple labels, 34%, 29, 25, 10, 15
+Screen sized text, 31%, 14, 60, 30, 30
+Multiple arcs, 21%, 29, 26, 7, 19
+Containers, 32%, 29, 21, 5, 16
+Containers with overlay, 35%, 29, 28, 26, 2
+Containers with opa, 32%, 29, 21, 6, 15
+Containers with opa_layer, 58%, 24, 28, 18, 10
+Containers with scrolling, 52%, 29, 27, 24, 3
+Widgets demo, 44%, 28, 24, 20, 4
+All scenes avg.,29%, 27, 25, 11, 14

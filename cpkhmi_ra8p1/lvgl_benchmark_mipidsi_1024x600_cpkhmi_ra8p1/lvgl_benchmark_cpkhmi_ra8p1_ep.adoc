@@ -1,0 +1,70 @@
+:imagesdir: images
+
+== 运行
+
+e2studio_llvm 文件夹下是 e2studio 工程，可用 e2studio 导入并构建、编译。keil 文件夹下是 keil 工程，先使用 rasc 打开其中的 configuration.xml，生成工程，再用 keil v5.43 打开工程编译。或直接烧录本目录下的 hex 文件：
+
+* cpkhmi_ra8p1_mipidsi_1024x600_argb8888_2drw_hwswlock30fps_ac6o3.hex: Keil 编译，颜色格式 ARGB8888，Keil 工程默认配置
+* cpkhmi_ra8p1_mipidsi_1024x600_rgb565_2drw_hwswlock30fps_ac6o3.hex: Keil 编译，颜色格式 RGB565
+* cpkhmi_ra8p1_mipidsi_1024x600_argb8888_2drw_hwswlock30fps.hex: e2studio 编译，颜色格式 ARGB8888，e2studio 工程默认配置
+* cpkhmi_ra8p1_mipidsi_1024x600_rgb565_2drw_hwswlock30fps.hex: e2studio 编译，颜色格式 RGB565
+
+再打开一个串口终端，波特率 2000000，数据位 8bit，停止位 1bit，无奇偶校验。所有 hex 文件和工程都运行 LVGL Benchmark，最终都会在屏幕上显示如下结果
+
+[.text-center]
+--
+image::IMG_20261126_171927.jpg[role="thumb"]
+--
+
+屏幕支持触摸，可拖动屏幕查看列表其它信息。在串口终端中，也会以 csv 格式输出相同的数据信息，并额外输出对 GLCDC 的一些监控信息：
+
+[.text-center]
+--
+image::Snipaste_2026-11-26_16-58-05.png[role="thumb"]
+--
+
+可以烧录不同的 hex 文件，查看在不同颜色格式下 LVGL Benchmark 的效果和性能表现
+
+== 调整颜色格式
+
+e2studio 和 keil 工程默认都使用 ARGB8888 的颜色格式，要修改颜色格式为 RGB565，只需在 FSP 配置中修改
+
+=== e2studio
+
+* 打开工程的 configuration.xml，在 Stacks 选项卡里选择 LVGL stack，点击整个 LVGL stack 最上方的 stack
+
+[.text-center]
+--
+image::Snipaste_2026-11-26_17-02-25.png[role="thumb"]
+--
+
+* 点击下方的属性，依次展开 `Common` -> `LVGL` -> `Display`，将其中的 LV_COLOR_DEPTH 从 32 改为 16
+
+[.text-center]
+--
+image::Snipaste_2026-11-26_17-05-38.png[role="thumb"]
+--
+
+* 再点击整个 LVGL stack 中的 r_glcdc
+
+[.text-center]
+--
+image::Snipaste_2026-11-26_17-09-23.png[role="thumb"]
+--
+
+* 在属性中，依次展开 `Module glcdc_ek79007 Graphics LCD(r_glcdc)` -> `Input` -> `Graphics Layer 1` -> `General`，将其中的 Color format 从 ARGB8888(32-bit) 改为 RGB565(16-bit)
+
+[.text-center]
+--
+image::Snipaste_2026-11-26_17-11-32.png[role="thumb"]
+--
+
+* 重新生成工程并编译
+
+=== keil
+
+在 rasc 中的操作与 e2studio 相同，只是在生成后，编译优化等级会被 rasc 重新覆盖，因此还需要额外操作
+
+* keil 编译一次工程
+* 修改 `via/rasc_armclang.via`，将其中的优化等级从 -Os 改为 -O3
+* 重新编译工程

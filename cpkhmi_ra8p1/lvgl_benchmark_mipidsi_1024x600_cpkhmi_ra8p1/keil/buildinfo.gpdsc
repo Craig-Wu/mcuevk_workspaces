@@ -1,0 +1,1723 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<package xmlns:xs="http://www.w3.org/2001/XMLSchema-instance">
+  <vendor>Renesas</vendor>
+  <name>Project Content</name>
+  <description>Project content managed by the Renesas Smart Configurator</description>
+  <url/>
+  <releases>
+    <release version="1.0.0"/>
+  </releases>
+  <generators>
+    <generator id="Renesas RA Smart Configurator">
+      <project_files>
+        <file category="include" name="src/"/>
+        <file category="source" name="src/hal_warmstart.c"/>
+        <file category="source" name="src/lvgl_thread_entry.c"/>
+      </project_files>
+    </generator>
+  </generators>
+  <components generator="Renesas RA Smart Configurator">
+    <component Cclass="Flex Software" Cgroup="Components" Csub="ra">
+      <files>
+        <file category="include" name="ra/arm/CMSIS_6/CMSIS/Core/Include/"/>
+        <file category="include" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/"/>
+        <file category="include" name="ra/fsp/inc/"/>
+        <file category="include" name="ra/fsp/inc/api/"/>
+        <file category="include" name="ra/fsp/inc/instances/"/>
+        <file category="include" name="ra/fsp/src/r_drw/"/>
+        <file category="include" name="ra/fsp/src/r_usb_basic/src/driver/inc/"/>
+        <file category="include" name="ra/fsp/src/rm_freertos_port/"/>
+        <file category="include" name="ra/fsp/src/rm_lvgl_port/"/>
+        <file category="include" name="ra/lvgl/lvgl/"/>
+        <file category="include" name="ra/lvgl/lvgl/demos/"/>
+        <file category="include" name="ra/lvgl/lvgl/examples/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/core/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/display/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/draw/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/drivers/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/font/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/indev/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/layouts/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/libs/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/misc/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/osal/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/others/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/stdlib/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/themes/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/3dtexture/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/animimage/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/arc/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/arclabel/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/bar/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/button/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/buttonmatrix/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/calendar/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/canvas/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/chart/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/checkbox/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/dropdown/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/gif/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/image/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/imagebutton/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/ime/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/keyboard/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/label/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/led/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/line/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/list/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/lottie/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/menu/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/msgbox/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/objx_templ/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/property/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/roller/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/scale/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/slider/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/span/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/spinbox/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/spinner/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/switch/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/table/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/tabview/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/textarea/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/tileview/"/>
+        <file category="include" name="ra/lvgl/lvgl/src/widgets/win/"/>
+        <file category="include" name="ra/tes/dave2d/inc/"/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_armclang_a.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_clang_a.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_cp15.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_gcc_a.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_iccarm_a.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/irq_ctrl.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_armclang.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_clang.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_compiler.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_gcc.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_version.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_ca.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm0.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm0plus.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm1.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm23.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm3.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm33.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm35p.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm4.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm52.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm55.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm7.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm85.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_sc000.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_sc300.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/core_starmc1.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv7m_cachel1.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv7m_mpu.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv81m_pac.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv8m_mpu.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv8m_pmu.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_armclang_m.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_clang_m.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_gcc_m.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_iccarm_m.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_tiarmclang_m.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_armclang_r.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_clang_r.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_gcc_r.h" path=""/>
+        <file category="header" name="ra/arm/CMSIS_6/CMSIS/Core/Include/tz_context.h" path=""/>
+        <file category="other" name="ra/arm/CMSIS_6/LICENSE"/>
+        <file category="source" name="ra/aws/FreeRTOS/FreeRTOS/Source/event_groups.c"/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/atomic.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/croutine.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/deprecated_definitions.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/event_groups.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/FreeRTOS.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/list.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/message_buffer.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/mpu_prototypes.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/mpu_wrappers.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/newlib-freertos.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/picolibc-freertos.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/portable.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/projdefs.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/queue.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/semphr.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/stack_macros.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/stream_buffer.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/task.h" path=""/>
+        <file category="header" name="ra/aws/FreeRTOS/FreeRTOS/Source/include/timers.h" path=""/>
+        <file category="other" name="ra/aws/FreeRTOS/FreeRTOS/Source/LICENSE.md"/>
+        <file category="source" name="ra/aws/FreeRTOS/FreeRTOS/Source/list.c"/>
+        <file category="source" name="ra/aws/FreeRTOS/FreeRTOS/Source/portable/MemMang/heap_4.c"/>
+        <file category="source" name="ra/aws/FreeRTOS/FreeRTOS/Source/queue.c"/>
+        <file category="source" name="ra/aws/FreeRTOS/FreeRTOS/Source/stream_buffer.c"/>
+        <file category="source" name="ra/aws/FreeRTOS/FreeRTOS/Source/tasks.c"/>
+        <file category="source" name="ra/aws/FreeRTOS/FreeRTOS/Source/timers.c"/>
+        <file category="other" name="ra/aws/FreeRTOS/LICENSE.md"/>
+        <file category="header" name="ra/board/ra8p1_cpkhmi/board.h" path=""/>
+        <file category="source" name="ra/board/ra8p1_cpkhmi/board_init.c"/>
+        <file category="header" name="ra/board/ra8p1_cpkhmi/board_init.h" path=""/>
+        <file category="source" name="ra/board/ra8p1_cpkhmi/board_leds.c"/>
+        <file category="header" name="ra/board/ra8p1_cpkhmi/board_leds.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/bsp_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/fsp_common_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_display_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_elc_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_external_irq_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_i2c_master_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_ioport_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_mipi_cmd_types.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_mipi_dsi_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_spi_flash_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_transfer_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_uart_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_usb_basic_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_usb_hhid_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/fsp_features.h" path=""/>
+        <file category="header" name="ra/fsp/inc/fsp_version.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/rm_lvgl_port.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_glcdc.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_icu.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_iic_master.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_ioport.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_mipi_dsi.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_mipi_phy.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_ospi_b.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_sci_b_uart.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_usb_basic.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_usb_hhid.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7KA8P1KF_core0.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7KA8P1KF_core1.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/renesas.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/system.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/startup.c"/>
+        <file category="source" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/system.c"/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_clocks.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_clocks.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_common.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_common.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_compiler_support.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_delay.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_delay.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_exceptions.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_group_irq.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_group_irq.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_guard.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_guard.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_io.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_io.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_ipc.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_ipc.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_irq.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_irq.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_macl.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_macl.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_mcu_api.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_mmf.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_module_stop.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_ospi_b.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_ospi_b.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_register_protection.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_register_protection.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_sbrk.c"/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_sdram.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_sdram.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/all/bsp_security.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_security.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/all/bsp_tfu.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/ra8p1/bsp_elc.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/ra8p1/bsp_feature.h" path=""/>
+        <file category="source" name="ra/fsp/src/bsp/mcu/ra8p1/bsp_linker.c"/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/ra8p1/bsp_mcu_info.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/ra8p1/bsp_override.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/ra8p1/bsp_peripheral.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/ra8p1/r_adc_device_types.h" path=""/>
+        <file category="header" name="ra/fsp/src/bsp/mcu/ra8p1/r_lpm_device_types.h" path=""/>
+        <file category="source" name="ra/fsp/src/rm_freertos_port/port.c"/>
+        <file category="header" name="ra/fsp/src/rm_freertos_port/portmacro.h" path=""/>
+        <file category="source" name="ra/fsp/src/rm_lvgl_port/rm_lvgl_port.c"/>
+        <file category="source" name="ra/fsp/src/r_drw/r_drw_base.c"/>
+        <file category="header" name="ra/fsp/src/r_drw/r_drw_base.h" path=""/>
+        <file category="source" name="ra/fsp/src/r_drw/r_drw_irq.c"/>
+        <file category="source" name="ra/fsp/src/r_drw/r_drw_memory.c"/>
+        <file category="source" name="ra/fsp/src/r_glcdc/r_glcdc.c"/>
+        <file category="source" name="ra/fsp/src/r_icu/r_icu.c"/>
+        <file category="source" name="ra/fsp/src/r_iic_master/r_iic_master.c"/>
+        <file category="source" name="ra/fsp/src/r_ioport/r_ioport.c"/>
+        <file category="source" name="ra/fsp/src/r_mipi_dsi/r_mipi_dsi.c"/>
+        <file category="source" name="ra/fsp/src/r_mipi_phy/r_mipi_phy.c"/>
+        <file category="source" name="ra/fsp/src/r_ospi_b/r_ospi_b.c"/>
+        <file category="source" name="ra/fsp/src/r_sci_b_uart/r_sci_b_uart.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/r_usb_basic.c"/>
+        <file category="header" name="ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_basic_define.h" path=""/>
+        <file category="header" name="ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_cstd_rtos.h" path=""/>
+        <file category="header" name="ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_extern.h" path=""/>
+        <file category="header" name="ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_typedef.h" path=""/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_cdataio.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_clibusbip.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_cstd_rtos.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hbc.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hcontrolrw.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hdriver.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hhubsys.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hintfifo.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hinthandler_usbip0.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hinthandler_usbip1.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hlibusbip.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hmanager.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hscheduler.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hsignal.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_hstdfunction.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_pbc.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_pcontrolrw.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_pdriver.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_pintfifo.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_pinthandler_usbip0.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_plibusbip.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_psignal.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_pstdfunction.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/driver/r_usb_pstdrequest.c"/>
+        <file category="header" name="ra/fsp/src/r_usb_basic/src/hw/inc/r_usb_bitdefine.h" path=""/>
+        <file category="header" name="ra/fsp/src/r_usb_basic/src/hw/inc/r_usb_dmac.h" path=""/>
+        <file category="header" name="ra/fsp/src/r_usb_basic/src/hw/inc/r_usb_reg_access.h" path=""/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_creg_abs.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_creg_access.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_dma.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_hostelectrical.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_hreg_abs.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_hreg_access.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_mcu.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_preg_abs.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_basic/src/hw/r_usb_preg_access.c"/>
+        <file category="source" name="ra/fsp/src/r_usb_hhid/r_usb_hhid.c"/>
+        <file category="header" name="ra/fsp/src/r_usb_hhid/src/inc/r_usb_hhid_driver.h" path=""/>
+        <file category="source" name="ra/fsp/src/r_usb_hhid/src/r_usb_hhid_driver.c"/>
+        <file category="other" name="ra/lvgl/lvgl/COPYRIGHTS.md"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/img_benchmark_avatar.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/img_benchmark_lvgl_logo_argb.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/img_benchmark_lvgl_logo_rgb.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_12_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_14_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_16_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_18_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_20_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_24_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_26_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/benchmark/lv_demo_benchmark.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/benchmark/lv_demo_benchmark.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/gltf/lv_demo_gltf.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/gltf/lv_demo_gltf.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/keypad_encoder/lv_demo_keypad_encoder.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/keypad_encoder/lv_demo_keypad_encoder.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/demos/keypad_encoder/README.md"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/lv_demos.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/lv_demos.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_corner_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_list_pause.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_list_pause_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_list_play.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_list_play_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_loop.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_loop_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_next.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_next_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_pause.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_pause_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_play.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_play_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_prev.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_prev_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_rnd.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_btn_rnd_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_corner_left.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_corner_left_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_corner_right.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_corner_right_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_cover_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_cover_1_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_cover_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_cover_2_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_cover_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_cover_3_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_1_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_2_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_3_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_icon_4_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_list_border.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_list_border_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_logo.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_slider_knob.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_slider_knob_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_wave_bottom.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_wave_bottom_large.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_wave_top.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/assets/img_lv_demo_music_wave_top_large.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/music/assets/spectrum_1.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/demos/music/assets/spectrum_2.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/demos/music/assets/spectrum_3.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/lv_demo_music.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/music/lv_demo_music.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/lv_demo_music_list.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/music/lv_demo_music_list.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/music/lv_demo_music_main.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/music/lv_demo_music_main.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/demos/music/README.md"/>
+        <file category="other" name="ra/lvgl/lvgl/demos/README.md"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_arc_bg.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_argb8888.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_argb8888_premultiplied.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_i1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_l8.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_rgb565.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_rgb565a8.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_rgb565_swapped.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_rgb888.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/assets/img_render_lvgl_logo_xrgb8888.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/render/lv_demo_render.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/render/lv_demo_render.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/stress/lv_demo_stress.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/stress/lv_demo_stress.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/demos/stress/README.md"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/vector_graphic/assets/img_demo_vector_avatar.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/vector_graphic/lv_demo_vector_graphic.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/vector_graphic/lv_demo_vector_graphic.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/demos/widgets/assets/font/montserrat-12.fnt"/>
+        <file category="other" name="ra/lvgl/lvgl/demos/widgets/assets/font/montserrat-14.fnt"/>
+        <file category="other" name="ra/lvgl/lvgl/demos/widgets/assets/font/montserrat-16.fnt"/>
+        <file category="other" name="ra/lvgl/lvgl/demos/widgets/assets/font/montserrat-18.fnt"/>
+        <file category="other" name="ra/lvgl/lvgl/demos/widgets/assets/font/montserrat-20.fnt"/>
+        <file category="other" name="ra/lvgl/lvgl/demos/widgets/assets/font/montserrat-24.fnt"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/assets/img_clothes.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/assets/img_demo_widgets_avatar.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/assets/img_demo_widgets_needle.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/assets/img_lvgl_logo.c"/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_analytics.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_analytics.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_components.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_components.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_profile.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_profile.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_shop.c"/>
+        <file category="header" name="ra/lvgl/lvgl/demos/widgets/lv_demo_widgets_shop.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/anim/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/anim/lv_example_anim.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/anim/lv_example_anim_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/anim/lv_example_anim_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/anim/lv_example_anim_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/anim/lv_example_anim_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/anim/lv_example_anim_timeline_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/animimg001.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/animimg002.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/animimg003.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/assets/circle.svg"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/emoji/img_emoji_F617.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/imgbtn_left.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/imgbtn_mid.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/imgbtn_right.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_caret_down.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_cogwheel_argb.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_cogwheel_indexed16.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_cogwheel_rgb.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_hand.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_multilang_like.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_skew_strip.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_star.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_svg_img.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/assets/img_transform_avatar_15.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/event/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/event/lv_example_event.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/event/lv_example_event_bubble.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/event/lv_example_event_button.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/event/lv_example_event_click.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/event/lv_example_event_draw.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/event/lv_example_event_streak.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/event/lv_example_event_trickle.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/get_started/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/get_started/lv_example_get_started.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/get_started/lv_example_get_started_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/get_started/lv_example_get_started_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/get_started/lv_example_get_started_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/get_started/lv_example_get_started_4.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/grad/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/grad/lv_example_grad.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/grad/lv_example_grad_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/grad/lv_example_grad_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/grad/lv_example_grad_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/grad/lv_example_grad_4.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/index.rst"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/layouts/flex/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/layouts/flex/lv_example_flex.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/flex/lv_example_flex_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/flex/lv_example_flex_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/flex/lv_example_flex_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/flex/lv_example_flex_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/flex/lv_example_flex_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/flex/lv_example_flex_6.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/layouts/grid/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/layouts/grid/lv_example_grid.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/grid/lv_example_grid_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/grid/lv_example_grid_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/grid/lv_example_grid_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/grid/lv_example_grid_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/grid/lv_example_grid_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/layouts/grid/lv_example_grid_6.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/layouts/lv_example_layout.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/barcode/lv_example_barcode.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/bmp/lv_example_bmp.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/ffmpeg/lv_example_ffmpeg.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/freetype/lv_example_freetype.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/libs/freetype/OFL.txt"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/gif/lv_example_gif.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/gltf/lv_example_gltf.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/gstreamer/lv_example_gstreamer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/libjpeg_turbo/lv_example_libjpeg_turbo.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/libpng/lv_example_libpng.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/libwebp/lv_example_libwebp.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/lodepng/lv_example_lodepng.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/lv_example_libs.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/qrcode/lv_example_qrcode.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/rlottie/lv_example_rlottie.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/svg/lv_example_svg.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/tiny_ttf/lv_example_tiny_ttf.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/libs/tjpgd/lv_example_tjpgd.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/examples/lv_examples.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/file_explorer/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/file_explorer/lv_example_file_explorer.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/file_explorer/lv_example_file_explorer_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/file_explorer/lv_example_file_explorer_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/file_explorer/lv_example_file_explorer_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/font_manager/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/font_manager/lv_example_font_manager.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/font_manager/lv_example_font_manager_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/font_manager/lv_example_font_manager_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/font_manager/lv_example_font_manager_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/fragment/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/fragment/lv_example_fragment.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/fragment/lv_example_fragment_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/fragment/lv_example_fragment_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/gestures/lv_example_gestures.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/gestures/lv_example_gestures.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/gridnav/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/gridnav/lv_example_gridnav.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/gridnav/lv_example_gridnav_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/gridnav/lv_example_gridnav_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/gridnav/lv_example_gridnav_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/gridnav/lv_example_gridnav_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/gridnav/lv_example_gridnav_5.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/ime/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/ime/lv_example_ime_pinyin.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/ime/lv_example_ime_pinyin_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/ime/lv_example_ime_pinyin_2.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/imgfont/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/imgfont/lv_example_imgfont.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/imgfont/lv_example_imgfont_1.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/lv_example_others.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/monkey/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/monkey/lv_example_monkey.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/monkey/lv_example_monkey_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/monkey/lv_example_monkey_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/monkey/lv_example_monkey_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/observer/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/observer/lv_example_observer_7.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/snapshot/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/snapshot/lv_example_snapshot.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/snapshot/lv_example_snapshot_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/others/translation/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/others/translation/lv_example_translation.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/translation/lv_example_translation_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/others/translation/lv_example_translation_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/porting/lv_port_disp_template.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/porting/lv_port_disp_template.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/porting/lv_port_fs_template.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/porting/lv_port_fs_template.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/porting/lv_port_indev_template.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/porting/lv_port_indev_template.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/porting/lv_port_lcd_stm32_template.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/porting/lv_port_lcd_stm32_template.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/porting/osal/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/porting/osal/lv_example_osal.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/porting/osal/lv_example_osal.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/README.md"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/scroll/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_7.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_8.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/scroll/lv_example_scroll_9.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/styles/index.rst"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/styles/lv_example_style.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_10.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_11.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_12.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_13.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_14.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_15.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_16.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_17.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_18.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_19.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_20.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_21.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_7.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_8.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/styles/lv_example_style_9.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/animimg/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/animimg/lv_example_animimg_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/arc/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/arc/lv_example_arc_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/arc/lv_example_arc_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/arc/lv_example_arc_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/arclabel/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/arclabel/lv_example_arclabel_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/bar/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/bar/lv_example_bar_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/bar/lv_example_bar_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/bar/lv_example_bar_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/bar/lv_example_bar_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/bar/lv_example_bar_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/bar/lv_example_bar_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/bar/lv_example_bar_7.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/button/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/button/lv_example_button_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/button/lv_example_button_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/button/lv_example_button_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/buttonmatrix/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/buttonmatrix/lv_example_buttonmatrix_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/buttonmatrix/lv_example_buttonmatrix_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/buttonmatrix/lv_example_buttonmatrix_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/calendar/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/calendar/lv_example_calendar_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/calendar/lv_example_calendar_2.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/canvas/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_10.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_11.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_12.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_7.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_8.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/canvas/lv_example_canvas_9.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/chart/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_7.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/chart/lv_example_chart_8.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/checkbox/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/checkbox/lv_example_checkbox_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/checkbox/lv_example_checkbox_2.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/dropdown/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/dropdown/lv_example_dropdown_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/dropdown/lv_example_dropdown_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/dropdown/lv_example_dropdown_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/image/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/image/lv_example_image_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/image/lv_example_image_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/image/lv_example_image_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/image/lv_example_image_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/image/lv_example_image_5.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/imagebutton/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/imagebutton/lv_example_imagebutton_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/index.rst"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/keyboard/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/keyboard/lv_example_keyboard_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/keyboard/lv_example_keyboard_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/keyboard/lv_example_keyboard_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/label/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/label/lv_example_label_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/label/lv_example_label_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/label/lv_example_label_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/label/lv_example_label_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/label/lv_example_label_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/label/lv_example_label_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/label/lv_example_label_7.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/led/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/led/lv_example_led_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/line/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/line/lv_example_line_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/list/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/list/lv_example_list_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/list/lv_example_list_2.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/lottie/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/lottie/lv_example_lottie_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/lottie/lv_example_lottie_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/lottie/lv_example_lottie_approve.c"/>
+        <file category="header" name="ra/lvgl/lvgl/examples/widgets/lv_example_widgets.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/menu/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/menu/lv_example_menu_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/menu/lv_example_menu_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/menu/lv_example_menu_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/menu/lv_example_menu_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/menu/lv_example_menu_5.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/msgbox/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/msgbox/lv_example_msgbox_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/msgbox/lv_example_msgbox_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/msgbox/lv_example_msgbox_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/obj/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/obj/lv_example_obj_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/obj/lv_example_obj_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/obj/lv_example_obj_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/roller/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/roller/lv_example_roller_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/roller/lv_example_roller_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/roller/lv_example_roller_3.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/scale/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_10.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_11.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_12.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_4.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_5.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_6.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_7.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_8.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/scale/lv_example_scale_9.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/slider/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/slider/lv_example_slider_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/slider/lv_example_slider_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/slider/lv_example_slider_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/slider/lv_example_slider_4.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/span/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/span/lv_example_span_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/spinbox/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/spinbox/lv_example_spinbox_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/spinner/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/spinner/lv_example_spinner_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/switch/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/switch/lv_example_switch_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/switch/lv_example_switch_2.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/table/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/table/lv_example_table_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/table/lv_example_table_2.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/tabview/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/tabview/lv_example_tabview_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/tabview/lv_example_tabview_2.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/textarea/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/textarea/lv_example_textarea_1.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/textarea/lv_example_textarea_2.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/textarea/lv_example_textarea_3.c"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/textarea/lv_example_textarea_4.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/tileview/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/tileview/lv_example_tileview_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/examples/widgets/win/index.rst"/>
+        <file category="source" name="ra/lvgl/lvgl/examples/widgets/win/lv_example_win_1.c"/>
+        <file category="other" name="ra/lvgl/lvgl/LICENCE.txt"/>
+        <file category="header" name="ra/lvgl/lvgl/lvgl.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/lvgl_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/lv_conf_template.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/lv_version.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/DejaVuSans/LICENSE"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/FontAwesome/LICENSE.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/FontAwesome5/LICENSE.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/Lato/OFL.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/Montserrat/OFL.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/NotoColorEmoji/OFL.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/NotoSansSC/OFL.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/SourceHanSansSC/LICENSE.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/UbuntuMedium/UFL.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/scripts/built_in_font/font_license/unscii/unscii.html"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_global.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_group.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_group.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_group_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_class.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_class.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_class_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_draw.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_draw.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_draw_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_event.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_event.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_event_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_id_builtin.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_pos.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_pos.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_property.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_property.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_scroll.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_scroll.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_scroll_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_style.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_style.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_style_gen.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_style_gen.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_style_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_obj_tree.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_obj_tree.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_observer.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_observer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_observer_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/core/lv_refr.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_refr.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/core/lv_refr_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/monkey/lv_monkey.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/monkey/lv_monkey.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/monkey/lv_monkey_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/sysmon/lv_sysmon.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/sysmon/lv_sysmon.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/sysmon/lv_sysmon_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/test/lv_test_display.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test_display.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/test/lv_test_fs.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test_fs.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/test/lv_test_helpers.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test_helpers.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/test/lv_test_indev.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test_indev.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/test/lv_test_indev_gesture.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test_indev_gesture.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/debugging/test/lv_test_screenshot_compare.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/debugging/test/lv_test_screenshot_compare.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/display/lv_display.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/display/lv_display.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/display/lv_display_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/convert/lv_draw_buf_convert.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/convert/lv_draw_buf_convert.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_arc.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_fill.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_image.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_letter.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_line.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_ram_g.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_ram_g.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_target.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_draw_eve_triangle.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/eve/lv_eve.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/eve/lv_eve.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_3d.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_3d.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_arc.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_arc.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_blur.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_blur.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_buf.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_buf.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_buf_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_image.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_image.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_image_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_label.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_label.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_label_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_line.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_line.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_mask.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_mask.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_rect.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_rect.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_rect_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_triangle.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_triangle.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_triangle_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_draw_vector.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_vector.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_draw_vector_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/lv_image_decoder.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_image_decoder.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_image_decoder_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/lv_image_dsc.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_arc.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_border.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_fill.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_image.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_label.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_line.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_mask_rectangle.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_triangle.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_utils.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/renesas/dave2d/lv_draw_dave2d_utils.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/snapshot/lv_snapshot.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/snapshot/lv_snapshot.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_a8.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_a8.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_al88.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_al88.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_argb8888.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_argb8888.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_argb8888_premultiplied.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_argb8888_premultiplied.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_i1.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_i1.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_l8.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_l8.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_rgb565.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_rgb565.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_rgb565_swapped.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_rgb565_swapped.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_rgb888.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/blend/lv_draw_sw_blend_to_rgb888.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_arc.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_blur.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_border.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_box_shadow.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_fill.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_grad.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_grad.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_img.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_letter.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_line.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_mask.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_mask.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_mask_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_mask_rect.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_transform.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_triangle.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_utils.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_utils.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/draw/sw/lv_draw_sw_vector.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/drm/lv_linux_drm.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/drm/lv_linux_drm_egl_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/fb/lv_linux_fbdev.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/ft81x/lv_ft81x.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/ft81x/lv_ft81x_defines.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/ili9341/lv_ili9341.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/lcd/lv_lcd_generic_mipi.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/lovyan_gfx/lv_lgfx_user.hpp" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/lovyan_gfx/lv_lovyan_gfx.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/nv3007/lv_nv3007.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/nxp_elcdif/lv_nxp_elcdif.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/renesas_glcdc/lv_renesas_glcdc.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/st7735/lv_st7735.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/st7789/lv_st7789.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/st7796/lv_st7796.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/st_ltdc/lv_st_ltdc.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/display/tft_espi/lv_tft_espi.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/draw/eve/lv_draw_eve_display.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/draw/eve/lv_draw_eve_display_defines.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/evdev/lv_evdev.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/evdev/lv_evdev_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/libinput/lv_libinput.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/libinput/lv_libinput_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/libinput/lv_xkb.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/libinput/lv_xkb_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/lv_drivers.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_cache.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_entry.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_fbdev.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_image_cache.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_lcd.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_libuv.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_mouse.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_profiler.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/nuttx/lv_nuttx_touchscreen.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/assets/lv_opengles_shader.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/drivers/opengles/glad/README.md"/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_debug.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_driver.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_egl.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_egl_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_glfw.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_texture.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_texture_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/lv_opengles_window.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/opengles/opengl_shader/lv_opengl_shader_internal.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/qnx/lv_qnx.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/drivers/README.md"/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/sdl/lv_sdl_keyboard.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/sdl/lv_sdl_mouse.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/sdl/lv_sdl_mousewheel.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/sdl/lv_sdl_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/sdl/lv_sdl_window.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi_context.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi_display.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi_edk2.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi_gnu_efi.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi_indev.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/uefi/lv_uefi_std_wrapper.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wayland.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wayland_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wl_backend_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wl_keyboard.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wl_pointer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wl_pointer_axis.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wl_touch.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/wayland/lv_wl_window.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/windows/lv_windows_context.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/windows/lv_windows_display.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/windows/lv_windows_input.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/windows/lv_windows_input_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/drivers/x11/lv_x11.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/binfont_loader/lv_binfont_loader.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/binfont_loader/lv_binfont_loader.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/fmt_txt/lv_font_fmt_txt.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/fmt_txt/lv_font_fmt_txt.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/fmt_txt/lv_font_fmt_txt_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/font_manager/lv_font_manager.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/font_manager/lv_font_manager.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/font_manager/lv_font_manager_recycle.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/font_manager/lv_font_manager_recycle.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/imgfont/lv_imgfont.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/imgfont/lv_imgfont.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/lv_font.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_dejavu_16_persian_hebrew.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_10.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_12.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_14.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_14_aligned.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_16.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_18.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_20.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_22.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_24.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_26.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_28.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_28_compressed.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_30.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_32.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_34.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_36.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_38.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_40.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_42.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_44.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_46.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_48.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_montserrat_8.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_source_han_sans_sc_14_cjk.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_source_han_sans_sc_16_cjk.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_unscii_16.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/font/lv_font_unscii_8.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/font/lv_symbol_def.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/indev/lv_gridnav.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/indev/lv_gridnav.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/indev/lv_indev.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/indev/lv_indev.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/indev/lv_indev_gesture.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/indev/lv_indev_gesture.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/indev/lv_indev_gesture_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/indev/lv_indev_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/indev/lv_indev_scroll.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/indev/lv_indev_scroll.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/layouts/flex/lv_flex.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/layouts/flex/lv_flex.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/layouts/grid/lv_grid.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/layouts/grid/lv_grid.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/layouts/lv_layout.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/layouts/lv_layout.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/layouts/lv_layout_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/barcode/code128.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/barcode/code128.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/barcode/LICENSE.txt"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/barcode/lv_barcode.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/barcode/lv_barcode.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/barcode/lv_barcode_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/bin_decoder/lv_bin_decoder.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/bin_decoder/lv_bin_decoder.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/bmp/lv_bmp.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/bmp/lv_bmp.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/ffmpeg/lv_ffmpeg.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/ffmpeg/lv_ffmpeg_private.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/freetype/freetype-LICENSE.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/freetype/LiberationSans-LICENSE.txt"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/freetype/lv_freetype.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/freetype/lv_freetype_private.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/frogfs/LICENSE.txt"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fsdrv.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_arduino_esp_littlefs.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_arduino_sd.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_cbfs.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_fatfs.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_frogfs.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_littlefs.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_memfs.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_posix.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_stdio.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_uefi.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/fsdrv/lv_fs_win32.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/FT800-FT813/EVE.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/FT800-FT813/EVE_commands.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/FT800-FT813/EVE_commands.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/FT800-FT813/EVE_config.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/FT800-FT813/EVE_supplemental.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/FT800-FT813/EVE_suppplemental.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/FT800-FT813/EVE_target.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/FT800-FT813/LICENSE"/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/FT800-FT813/README.md"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/fastgltf/lv_fastgltf.hpp" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_animations.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_cache.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_injest.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_internal.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_internal.hpp" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_mesh.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_primitive.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_shader.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_skin.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_data_texture.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_model.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_model_node.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_model_node.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_data/lv_gltf_uniform_locations.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_environment/lv_gltf_environment.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_environment/lv_gltf_environment_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_environment/lv_gltf_ibl_sampler.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/assets/chromatic.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/assets/lv_gltf_view_shader.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/assets/lv_gltf_view_shader.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/lv_gltf.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/lv_gltf_view.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/lv_gltf_view_internal.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/lv_gltf_view_render.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/gltf_view/lv_gltf_view_shader.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/math/lv_3dmath.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/math/lv_3dmath.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/gltf/math/lv_gltf_math.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/math/lv_gltf_math.hpp" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gltf/stb_image/stb_image.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gstreamer/lv_gstreamer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/gstreamer/lv_gstreamer_internal.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/libjpeg_turbo/lv_libjpeg_turbo.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/libpng/lv_libpng.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/libwebp/lv_libwebp.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/lodepng/LICENSE.txt"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/lodepng/lodepng.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/lodepng/lodepng.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/lodepng/lv_lodepng.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/lodepng/lv_lodepng.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/lz4/LICENSE.txt"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/lz4/lz4.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/lz4/lz4.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/nanovg/LICENSE.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/qrcode/LICENSE.txt"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/qrcode/lv_qrcode.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/qrcode/lv_qrcode.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/qrcode/lv_qrcode_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/qrcode/qrcodegen.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/qrcode/qrcodegen.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/rle/lv_rle.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/rle/lv_rle.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/rlottie/lv_rlottie.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/rlottie/lv_rlottie_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/svg/lv_svg.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/svg/lv_svg.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_decoder.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_decoder.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_parser.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_parser.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_render.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_render.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_token.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/svg/lv_svg_token.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/thorvg/add_lvgl_if.sh"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/config.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/thorvg/LICENSE.txt"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/allocators.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/cursorstreamwrapper.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/document.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/encodedstream.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/encodings.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/error/en.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/error/error.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/filereadstream.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/filewritestream.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/fwd.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/biginteger.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/clzll.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/diyfp.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/dtoa.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/ieee754.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/itoa.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/meta.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/pow10.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/regex.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/stack.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/strfunc.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/strtod.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/internal/swap.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/istreamwrapper.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/memorybuffer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/memorystream.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/msinttypes/inttypes.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/msinttypes/stdint.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/ostreamwrapper.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/pointer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/prettywriter.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/rapidjson.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/reader.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/schema.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/stream.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/stringbuffer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/uri.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/rapidjson/writer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/thorvg.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/thorvg_capi.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/thorvg_lottie.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgAccessor.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgAnimation.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgAnimation.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgArray.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgBinaryDesc.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgCanvas.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgCanvas.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgCapi.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgCommon.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgCompressor.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgCompressor.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgFill.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgFill.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgFrameModule.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgGlCanvas.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgInitializer.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgInlist.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgIteratorAccessor.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLoader.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLoader.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLoadModule.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLock.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieAnimation.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieBuilder.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieBuilder.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieCommon.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieExpressions.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieExpressions.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieInterpolator.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieInterpolator.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieLoader.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieLoader.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieModel.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieModel.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieModifier.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieModifier.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieParser.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieParser.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieParserHandler.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieParserHandler.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieProperty.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgLottieRenderPooler.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgMath.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgMath.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgPaint.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgPaint.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgPicture.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgPicture.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgRawLoader.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgRawLoader.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgRender.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgRender.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSaveModule.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSaver.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgScene.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgScene.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgShape.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgShape.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgStr.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgStr.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgCssStyle.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgCssStyle.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgLoader.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgLoader.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgLoaderCommon.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgPath.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgPath.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgSceneBuilder.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgSceneBuilder.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgUtil.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSvgUtil.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwCanvas.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwCommon.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwFill.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwImage.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwMath.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwMemPool.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwPostEffect.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRaster.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRasterAvx.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRasterC.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRasterNeon.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRasterTexmap.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRenderer.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRenderer.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwRle.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwShape.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgSwStroke.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgTaskScheduler.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgTaskScheduler.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgText.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgText.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgWgCanvas.cpp"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/thorvg/tvgXmlParser.cpp"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/thorvg/tvgXmlParser.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/tiny_ttf/LICENSE.txt"/>
+        <file category="source" name="ra/lvgl/lvgl/src/libs/tiny_ttf/lv_tiny_ttf.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/tiny_ttf/lv_tiny_ttf.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/tiny_ttf/stb_rect_pack.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/tiny_ttf/stb_truetype_htcw.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/tjpgd/LICENSE.txt"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/tjpgd/lv_tjpgd.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/libs/vg_lite_driver/LICENSE.txt"/>
+        <file category="header" name="ra/lvgl/lvgl/src/libs/vg_lite_driver/lv_vg_lite_hal/vg_lite_platform.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lvgl.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lvgl_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_api_map_v8.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_api_map_v9_0.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_api_map_v9_1.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_api_map_v9_2.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_api_map_v9_3.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_api_map_v9_4.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_conf_internal.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_conf_kconfig.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/lv_init.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/lv_init.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/class/lv_cache_class.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/cache/class/lv_cache_lru_ll.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/class/lv_cache_lru_ll.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/cache/class/lv_cache_lru_rb.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/class/lv_cache_lru_rb.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/cache/class/lv_cache_sc_da.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/class/lv_cache_sc_da.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/instance/lv_cache_instance.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/cache/instance/lv_image_cache.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/instance/lv_image_cache.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/cache/instance/lv_image_header_cache.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/instance/lv_image_header_cache.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/cache/lv_cache.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/lv_cache.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/cache/lv_cache_entry.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/lv_cache_entry.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/lv_cache_entry_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/cache/lv_cache_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_anim.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_anim.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_anim_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_anim_timeline.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_anim_timeline.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_anim_timeline_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_area.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_area.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_area_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_array.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_array.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_assert.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_async.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_async.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_bidi.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_bidi.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_bidi_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_circle_buf.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_circle_buf.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_color.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_color.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_color_op.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_color_op.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_color_op_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_event.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_event.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_event_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_ext_data.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_fs.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_fs.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_fs_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_grad.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_grad.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_iter.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_iter.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_ll.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_ll.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_log.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_log.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_lru.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_lru.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_math.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_math.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_matrix.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_matrix.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_palette.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_palette.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_pending.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_pending.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_profiler.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_profiler_builtin.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_profiler_builtin.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_profiler_builtin_posix.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_profiler_builtin_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_rb.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_rb.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_rb_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_style.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_style.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_style_gen.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_style_gen.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_style_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_templ.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_templ.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_text.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_text.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_text_ap.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_text_ap.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_text_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_timer.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_timer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_timer_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_tree.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_tree.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_types.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/misc/lv_utils.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/misc/lv_utils.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_cmsis_rtos2.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_cmsis_rtos2.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_freertos.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_freertos.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_linux.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_linux.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_mqx.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_mqx.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_os.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_os.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_os_none.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_os_none.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_os_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_pthread.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_pthread.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_rtthread.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_rtthread.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_sdl2.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_sdl2.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/osal/lv_windows.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/osal/lv_windows.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/others/file_explorer/lv_file_explorer.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/others/file_explorer/lv_file_explorer.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/others/file_explorer/lv_file_explorer_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/others/fragment/lv_fragment.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/others/fragment/lv_fragment.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/others/fragment/lv_fragment_manager.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/others/fragment/lv_fragment_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/others/translation/lv_translation.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/others/translation/lv_translation.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/others/translation/lv_translation_private.h" path=""/>
+        <file category="other" name="ra/lvgl/lvgl/src/stdlib/builtin/LICENSE_SPRINTF.txt"/>
+        <file category="other" name="ra/lvgl/lvgl/src/stdlib/builtin/LICENSE_TLSF.txt"/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/builtin/lv_mem_core_builtin.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/builtin/lv_sprintf_builtin.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/builtin/lv_string_builtin.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/builtin/lv_tlsf.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/stdlib/builtin/lv_tlsf.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/stdlib/builtin/lv_tlsf_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/clib/lv_mem_core_clib.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/clib/lv_sprintf_clib.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/clib/lv_string_clib.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/lv_mem.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/stdlib/lv_mem.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/stdlib/lv_mem_private.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/stdlib/lv_sprintf.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/stdlib/lv_string.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/stdlib/uefi/lv_mem_core_uefi.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/themes/default/lv_theme_default.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/themes/default/lv_theme_default.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/themes/lv_theme.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/themes/lv_theme.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/themes/lv_theme_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/themes/mono/lv_theme_mono.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/themes/mono/lv_theme_mono.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/themes/simple/lv_theme_simple.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/themes/simple/lv_theme_simple.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/tick/lv_tick.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/tick/lv_tick.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/tick/lv_tick_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/3dtexture/lv_3dtexture.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/3dtexture/lv_3dtexture.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/3dtexture/lv_3dtexture_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/animimage/lv_animimage.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/animimage/lv_animimage.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/animimage/lv_animimage_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/arc/lv_arc.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/arc/lv_arc.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/arc/lv_arc_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/arclabel/lv_arclabel.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/arclabel/lv_arclabel.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/arclabel/lv_arclabel_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/bar/lv_bar.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/bar/lv_bar.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/bar/lv_bar_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/button/lv_button.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/button/lv_button.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/button/lv_button_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/buttonmatrix/lv_buttonmatrix.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/buttonmatrix/lv_buttonmatrix.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/buttonmatrix/lv_buttonmatrix_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar_chinese.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar_chinese.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar_header_arrow.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar_header_arrow.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar_header_dropdown.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar_header_dropdown.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/calendar/lv_calendar_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/canvas/lv_canvas.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/canvas/lv_canvas.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/canvas/lv_canvas_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/chart/lv_chart.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/chart/lv_chart.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/chart/lv_chart_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/checkbox/lv_checkbox.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/checkbox/lv_checkbox.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/checkbox/lv_checkbox_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/dropdown/lv_dropdown.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/dropdown/lv_dropdown.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/dropdown/lv_dropdown_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/gif/lv_gif.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/gif/lv_gif.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/image/lv_image.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/image/lv_image.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/image/lv_image_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/imagebutton/lv_imagebutton.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/imagebutton/lv_imagebutton.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/imagebutton/lv_imagebutton_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/ime/lv_ime_pinyin.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/ime/lv_ime_pinyin.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/ime/lv_ime_pinyin_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/keyboard/lv_keyboard.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/keyboard/lv_keyboard.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/keyboard/lv_keyboard_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/label/lv_label.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/label/lv_label.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/label/lv_label_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/led/lv_led.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/led/lv_led.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/led/lv_led_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/line/lv_line.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/line/lv_line.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/line/lv_line_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/list/lv_list.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/list/lv_list.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/lottie/lv_lottie.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/lottie/lv_lottie.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/lottie/lv_lottie_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/menu/lv_menu.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/menu/lv_menu.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/menu/lv_menu_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/msgbox/lv_msgbox.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/msgbox/lv_msgbox.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/msgbox/lv_msgbox_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/objx_templ/lv_objx_templ.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/objx_templ/lv_objx_templ.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_animimage_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_arc_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_bar_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_buttonmatrix_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_chart_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_checkbox_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_dropdown_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_image_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_keyboard_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_label_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_led_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_line_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_menu_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_obj_properties.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/property/lv_obj_property_names.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_roller_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_scale_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_slider_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_span_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_spinbox_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_spinner_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_style_properties.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/property/lv_style_properties.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_switch_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_table_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_tabview_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/property/lv_textarea_properties.c"/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/roller/lv_roller.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/roller/lv_roller.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/roller/lv_roller_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/scale/lv_scale.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/scale/lv_scale.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/scale/lv_scale_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/slider/lv_slider.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/slider/lv_slider.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/slider/lv_slider_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/span/lv_span.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/span/lv_span.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/span/lv_span_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/spinbox/lv_spinbox.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/spinbox/lv_spinbox.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/spinbox/lv_spinbox_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/spinner/lv_spinner.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/spinner/lv_spinner.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/spinner/lv_spinner_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/switch/lv_switch.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/switch/lv_switch.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/switch/lv_switch_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/table/lv_table.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/table/lv_table.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/table/lv_table_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/tabview/lv_tabview.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/tabview/lv_tabview.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/tabview/lv_tabview_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/textarea/lv_textarea.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/textarea/lv_textarea.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/textarea/lv_textarea_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/tileview/lv_tileview.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/tileview/lv_tileview.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/tileview/lv_tileview_private.h" path=""/>
+        <file category="source" name="ra/lvgl/lvgl/src/widgets/win/lv_win.c"/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/win/lv_win.h" path=""/>
+        <file category="header" name="ra/lvgl/lvgl/src/widgets/win/lv_win_private.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/inc/dave_base.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/inc/dave_driver.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/inc/dave_errorcodes.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/inc/dave_math.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/inc/dave_types.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_64bitoperation.c"/>
+        <file category="source" name="ra/tes/dave2d/src/dave_base.c"/>
+        <file category="source" name="ra/tes/dave2d/src/dave_blit.c"/>
+        <file category="source" name="ra/tes/dave2d/src/dave_box.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_box.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_circle.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_circle.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_context.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_context.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_curve.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_curve.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_dlist.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_dlist.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_driver.c"/>
+        <file category="source" name="ra/tes/dave2d/src/dave_edge.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_edge.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_errorcodes.c"/>
+        <file category="source" name="ra/tes/dave2d/src/dave_gradient.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_gradient.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_hardware.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_hardware.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/src/dave_intern.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_line.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_line.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_math.c"/>
+        <file category="source" name="ra/tes/dave2d/src/dave_memory.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_memory.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_pattern.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_pattern.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_perfcount.c"/>
+        <file category="source" name="ra/tes/dave2d/src/dave_polyline.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_polyline.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_quad.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_quad.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_rbuffer.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_rbuffer.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/src/dave_registermap.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_render.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_render.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_texture.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_texture.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_triangle.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_triangle.h" path=""/>
+        <file category="header" name="ra/tes/dave2d/src/dave_triarray.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_utility.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_utility.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_viewport.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_viewport.h" path=""/>
+        <file category="source" name="ra/tes/dave2d/src/dave_wedge.c"/>
+        <file category="header" name="ra/tes/dave2d/src/dave_wedge.h" path=""/>
+      </files>
+    </component>
+    <component Cclass="Flex Software" Cgroup="Build Configuration">
+      <files>
+        <file category="include" name="ra_cfg/aws/"/>
+        <file category="include" name="ra_cfg/fsp_cfg/"/>
+        <file category="include" name="ra_cfg/fsp_cfg/bsp/"/>
+        <file category="include" name="ra_cfg/fsp_cfg/lvgl/lvgl/"/>
+        <file category="include" name="ra_cfg/fsp_cfg/middleware/"/>
+        <file category="header" name="ra_cfg/aws/FreeRTOSConfig.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/bsp/board_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_mcu_device_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_mcu_device_pn_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_mcu_ofs_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_pin_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/lvgl/lvgl/lv_conf.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/middleware/rm_lvgl_port_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_drw_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_glcdc_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_icu_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_iic_master_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_ioport_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_mipi_dsi_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_ospi_b_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_sci_b_uart_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_usb_basic_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_usb_class_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_usb_hhid_cfg.h" path=""/>
+      </files>
+    </component>
+    <component Cclass="Flex Software" Cgroup="Generated Data">
+      <files>
+        <file category="include" name="ra_gen/"/>
+        <file category="header" name="ra_gen/bsp_clock_cfg.h" path=""/>
+        <file category="source" name="ra_gen/common_data.c"/>
+        <file category="header" name="ra_gen/common_data.h" path=""/>
+        <file category="source" name="ra_gen/hal_data.c"/>
+        <file category="header" name="ra_gen/hal_data.h" path=""/>
+        <file category="source" name="ra_gen/lvgl_thread.c"/>
+        <file category="header" name="ra_gen/lvgl_thread.h" path=""/>
+        <file category="source" name="ra_gen/main.c"/>
+        <file category="source" name="ra_gen/pin_data.c"/>
+        <file category="source" name="ra_gen/vector_data.c"/>
+        <file category="header" name="ra_gen/vector_data.h" path=""/>
+      </files>
+    </component>
+    <component Cclass="Flex Software" Cgroup="Linker Script">
+      <files>
+        <file category="linkerScript" name="script/fsp.scat"/>
+      </files>
+    </component>
+  </components>
+</package>

@@ -1,0 +1,20 @@
+Name, Avg. CPU, Avg. FPS, Avg. time, render time, flush time
+Empty screen, 27%, 26, 24, 10, 14
+Moving wallpaper, 13%, 14, 61, 31, 30
+Single rectangle, 16%, 29, 8, 1, 7
+Multiple rectangles, 16%, 29, 22, 6, 16
+Multiple RGB images, 20%, 29, 25, 6, 19
+Multiple ARGB images, 20%, 29, 26, 7, 19
+Rotated ARGB images, 18%, 29, 8, 5, 3
+Multiple labels, 33%, 29, 23, 12, 11
+Screen sized text, 36%, 14, 61, 42, 19
+Multiple arcs, 24%, 29, 27, 15, 12
+Containers, 26%, 29, 21, 5, 16
+Containers with overlay, 27%, 14, 54, 32, 22
+Containers with opa, 24%, 29, 23, 7, 16
+Containers with opa_layer, 43%, 29, 19, 11, 8
+Containers with scrolling, 24%, 14, 62, 31, 31
+Widgets demo, 27%, 14, 57, 33, 24
+All scenes avg.,24%, 24, 31, 15, 16
+GLCDC underflow count:
+GR1 underflow: 342
