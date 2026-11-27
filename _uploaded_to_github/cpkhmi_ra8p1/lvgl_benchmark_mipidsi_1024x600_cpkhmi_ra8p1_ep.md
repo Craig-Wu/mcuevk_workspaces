@@ -1,0 +1,3 @@
+该样例工程已上传至 cpkhmi_ra8p1/lvgl_benchmark_mipidsi_1024x600_cpkhmi_ra8p1_ep/
+
+由 李昌壕 提供，2026年11月26日
